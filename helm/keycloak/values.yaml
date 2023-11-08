@@ -1,0 +1,18 @@
+auth:
+  adminUser: admin
+  adminPassword: admin
+
+service:
+  type: LoadBalancer
+  ports:
+    http: 7080
+    https: 443
+
+postgresql:
+  enabled: false
+externalDatabase:
+  host: postgresql
+  port: 5432
+  user: easybank
+  password: root
+  database: keycloak

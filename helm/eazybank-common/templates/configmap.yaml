@@ -1,0 +1,18 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  SPRING_PROFILES_ACTIVE: {{ .Values.global.activeProfile }}
+  SPRING_CONFIG_IMPORT: {{ .Values.global.configServerURL }}
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: {{ .Values.global.eurekaServerURL }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: {{ .Values.global.keyCloakURL }}
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.kafkaBrokerURL }}
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: {{ .Values.global.zipkinTracingEndpoint }}
+  SPRING_DATA_REDIS_HOST: {{ .Values.global.redis.host }}
+  SPRING_DATA_REDIS_PORT: {{ .Values.global.redis.port | quote }}
+  SPRING_DATA_REDIS_PASSWORD: {{ .Values.global.redis.password }}
+  SPRING_DATA_REDIS_TIMEOUT: {{ .Values.global.redis.timeout }}
+  SPRING_DATA_REDIS_CONNECT-TIMEOUT: {{ .Values.global.redis.connectTimeout }}
+{{- end -}}

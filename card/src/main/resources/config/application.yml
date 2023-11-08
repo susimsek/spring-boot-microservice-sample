@@ -1,0 +1,82 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: card
+  profiles:
+    active: prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/carddb
+    username: easybank
+    password: root
+  liquibase:
+    change-log: classpath:config/liquibase/master.xml
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+  config:
+    import: optional:configserver:http://localhost:8071/
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  kafka:
+    bootstrap-servers: http://localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: false
+
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "card"
+    description: "Eazy Bank Card Application"
+    version: "1.0.0"
+
+logging:
+  level:
+    io:
+      github:
+        susimsek:
+          card: DEBUG
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

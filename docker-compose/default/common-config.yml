@@ -1,0 +1,50 @@
+services:
+  network-deploy-service:
+    networks:
+      - eazybank
+
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      MANAGEMENT_TRACING_ENABLED: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
+
+  microservice-db-config:
+    extends:
+      service: network-deploy-service
+    image: docker.io/bitnami/postgresql:15.4.0
+    healthcheck:
+      test: pg_isready -U postgres
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      POSTGRESQL_PASSWORD: root
+
+  microservice-config-server-config:
+    extends:
+      service: microservice-base-config
+    depends_on:
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
+      SPRING_DATASOURCE_USERNAME: easybank
+      SPRING_DATASOURCE_PASSWORD: root
+
+  microservice-eureka-config:
+    extends:
+      service: microservice-config-server-config
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8070/eureka/

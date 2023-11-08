@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: eureka-server
+  config:
+    import: optional:configserver:http://localhost:8071/
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  kafka:
+    bootstrap-servers: http://localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: false
+server:
+  port: 8070
+
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

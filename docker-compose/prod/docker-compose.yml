@@ -1,0 +1,195 @@
+services:
+  redis:
+    container_name: redis
+    image: docker.io/bitnami/redis:7.0.13
+    ports:
+      - 6379:6379
+    environment:
+      REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
+    volumes:
+      - redis:/bitnami/redis/data
+    healthcheck:
+      test: redis-cli --no-auth-warning -a $$REDIS_PASSWORD ping | grep PONG
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  postgresql:
+    container_name: postgresql
+    ports:
+      - 5432:5432
+    volumes:
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+      - postgresql:/bitnami/postgresql
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  kafka:
+    image: docker.io/bitnami/kafka:3.5.1
+    container_name: kafka
+    ports:
+      - 9094:9094
+    environment:
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_KRAFT_CLUSTER_ID: s_vb8yLzRnyOVW3Ko2mUbg
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_LISTENERS: CLIENT://:9092,EXTERNAL://:9094,CONTROLLER://:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CFG_ADVERTISED_LISTENERS: CLIENT://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: CLIENT
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CFG_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    volumes:
+      - kafka:/bitnami/kafka
+    healthcheck:
+      test: kafka-cluster.sh cluster-id --bootstrap-server localhost:9092 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  config-server:
+    image: suayb/config-server:s10
+    container_name: config-server-ms
+    ports:
+      - 8071:8071
+    environment:
+      SPRING_APPLICATION_NAME: eureka-server
+    depends_on:
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  eureka-server:
+    image: suayb/eureka-server:s10
+    container_name: eureka-server-ms
+    ports:
+      - 8070:8070
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-config-server-config
+
+  account:
+    image: suayb/account:s10
+    container_name: account-ms
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_APPLICATION_NAME: account
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/accountdb
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  loan:
+    image: suayb/loan:s10
+    container_name: loan-ms
+    ports:
+      - 8090:8090
+    environment:
+      SPRING_APPLICATION_NAME: loan
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/loandb
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  card:
+    image: suayb/card:s10
+    container_name: card-ms
+    ports:
+      - 9000:9000
+    environment:
+      SPRING_APPLICATION_NAME: card
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/carddb
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  gateway-server:
+    image: suayb/gateway-server:s10
+    container_name: gateway-server-ms
+    ports:
+      - 8072:8072
+    depends_on:
+      redis:
+        condition: service_healthy
+      account:
+        condition: service_healthy
+      loan:
+        condition: service_healthy
+      card:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: gateway-server
+      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
+      SPRING_DATA_REDIS_TIMEOUT: 1s
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+networks:
+  eazybank:
+    driver: "bridge"
+
+volumes:
+  kafka:
+  postgresql:
+  redis:

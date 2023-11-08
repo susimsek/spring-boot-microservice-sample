@@ -1,0 +1,14 @@
+global:
+  configMapName: eazybankqa-configmap
+  activeProfile: qa
+  configServerURL: configserver:http://config-server:8071/
+  eurekaServerURL: http://eureka-server:8070/eureka/
+  keyCloakURL: http://keycloak:7080/realms/master/protocol/openid-connect/certs
+  zipkinTracingEndpoint: http://tempo-grafana-tempo-distributor:9411
+  kafkaBrokerURL: kafka:9092
+  redis:
+    host: redis-master
+    port: 6379
+    password: d41d8cd98f00b204e9800998ecf8427e
+    timeout: 1s
+    connectTimeout: 2s
