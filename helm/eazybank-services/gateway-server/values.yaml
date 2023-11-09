@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: suayb/gateway-server
-  tag: s14
+  tag: s17
 
 containerPort: 8072
 
@@ -22,7 +22,8 @@ service:
 appname_enabled: true
 profile_enabled: true
 config_enabled: true
-eureka_enabled: true
+eureka_enabled: false
+discovery_enabled: true
 resouceserver_enabled: true
 tracing_enabled: true
 kafka_enabled: true

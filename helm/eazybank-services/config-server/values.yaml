@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: suayb/config-server
-  tag: s14
+  tag: s17
 
 containerPort: 8071
 
@@ -23,6 +23,7 @@ appname_enabled: true
 profile_enabled: false
 config_enabled: false
 eureka_enabled: false
+discovery_enabled: false
 resouceserver_enabled: false
 tracing_enabled: true
 kafka_enabled: true

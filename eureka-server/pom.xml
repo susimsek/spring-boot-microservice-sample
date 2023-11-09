@@ -78,7 +78,7 @@
                 <version>${jib-maven-plugin.version}</version>
                 <configuration>
                     <to>
-                        <image>suayb/${project.artifactId}:s14</image>
+                        <image>suayb/${project.artifactId}:s17</image>
                     </to>
                 </configuration>
             </plugin>

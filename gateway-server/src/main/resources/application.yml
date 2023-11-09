@@ -12,13 +12,23 @@ spring:
     bootstrap-servers: http://localhost:9092
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: false
-          lower-case-service-id: true
+#      discovery:
+#        locator:
+#          enabled: false
+#          lower-case-service-id: true
       httpclient:
         connect-timeout: 1000
         response-timeout: 5s
+    kubernetes:
+      loadbalancer:
+        mode: service
+      discovery:
+        enabled: true
+        all-namespaces: true
+    discovery:
+      client:
+        health-indicator:
+          enabled: false
   data:
     redis:
       timeout: 1s

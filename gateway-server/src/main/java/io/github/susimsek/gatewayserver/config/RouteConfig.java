@@ -28,7 +28,7 @@ public class RouteConfig {
                     .addResponseHeader("X-Response-Time", Instant.now().toString())
                     .circuitBreaker(config -> config.setName("accountCircuitBreaker")
                         .setFallbackUri("forward:/contactSupport")))
-                .uri("lb://account"))
+                .uri("http://account:8080"))
             .route(p -> p
                 .path("/eazybank/loan/**")
                 .filters(f -> f.rewritePath("/eazybank/loan/(?<segment>.*)", "/${segment}")
@@ -39,14 +39,14 @@ public class RouteConfig {
                             Duration.ofMillis(100),
                             Duration.ofMillis(1000),
                             2,true)))
-                .uri("lb://loan"))
+                .uri("http://loan:8090"))
             .route(p -> p
                 .path("/eazybank/card/**")
                 .filters(f -> f.rewritePath("/eazybank/card/(?<segment>.*)", "/${segment}")
                     .addResponseHeader("X-Response-Time", Instant.now().toString())
                     .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter)
                         .setKeyResolver(userKeyResolver)))
-                .uri("lb://card"))
+                .uri("http://card:9000"))
             .build();
     }
 
