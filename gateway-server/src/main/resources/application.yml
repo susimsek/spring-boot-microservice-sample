@@ -42,6 +42,11 @@ spring:
           jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
 
 management:
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoints:
     web:
       exposure:

@@ -97,6 +97,8 @@ spec:
             {{- include "spring-cloud-kubernetes-discoveryserver.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
+            - configMapRef:
+                name: {{ include "spring-cloud-kubernetes-discoveryserver.fullname" . | quote }}
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "spring-cloud-kubernetes-discoveryserver.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
