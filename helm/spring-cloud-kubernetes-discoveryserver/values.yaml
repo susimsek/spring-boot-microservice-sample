@@ -305,7 +305,7 @@ ingress:
   hostname: spring-cloud-kubernetes-discoveryserver.local
   ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
-  path: "{{ .Values.httpRelativePath }}"
+  path: /
   ## @param ingress.servicePort Backend service port to use
   ## Default is http. Alternative is https.
   ##
