@@ -1,8 +1,17 @@
 package io.github.susimsek.account.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+@Cache(region = "accountCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
 public class Account extends BaseEntity {
