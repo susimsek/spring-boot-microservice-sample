@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: {{ include "spring-cloud-kubernetes-discoveryserver.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "spring-cloud-kubernetes-discoveryserver.fullname" . }}

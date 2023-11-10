@@ -5,15 +5,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.time.Clock;
-import java.time.Instant;
-import java.util.Optional;
 
 @Configuration(proxyBeanMethods = false)
 @OpenAPIDefinition(

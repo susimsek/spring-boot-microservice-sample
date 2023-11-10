@@ -1,6 +1,5 @@
 package io.github.susimsek.account.constants;
 
-import lombok.experimental.UtilityClass;
 
 public final class AccountConstants {
 

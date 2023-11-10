@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2
+apiVersion: {{ include "spring-cloud-kubernetes-discoveryserver.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "spring-cloud-kubernetes-discoveryserver.fullname" . }}
@@ -11,7 +11,7 @@ metadata:
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "spring-cloud-kubernetes-discoveryserver.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     name: {{ template "spring-cloud-kubernetes-discoveryserver.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
