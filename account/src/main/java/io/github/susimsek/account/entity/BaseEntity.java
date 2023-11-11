@@ -20,18 +20,18 @@ import java.time.Instant;
 public class BaseEntity {
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @CreatedBy
-    @Column(nullable = false, updatable = false, length = 20)
+    @Column(name = "created_by",nullable = false, updatable = false, length = 20)
     private String createdBy;
 
     @LastModifiedDate
-    @Column(insertable = false)
+    @Column(name = "updated_at", insertable = false)
     private Instant updatedAt;
 
     @LastModifiedBy
-    @Column(insertable = false, length = 20)
+    @Column(name = "updated_by",insertable = false, length = 20)
     private String updatedBy;
 }

@@ -2,7 +2,7 @@ package io.github.susimsek.account.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(
     name = "Account",
@@ -13,8 +13,7 @@ public record AccountDTO(
     @Schema(
         description = "Account Number of Eazy Bank account", example = "3454433243"
     )
-    @NotEmpty(message = "AccountNumber can not be a null or empty")
-    @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+    @NotNull(message = "AccountNumber can not be a null")
     Long accountNumber,
 
     @Schema(

@@ -4,6 +4,7 @@ import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.susimsek.account.constants.AccountConstants;
 import io.github.susimsek.account.dto.AccountContactInfoDTO;
+import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
 import io.github.susimsek.account.dto.ErrorResponseDTO;
 import io.github.susimsek.account.dto.ResponseDTO;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
@@ -119,6 +122,60 @@ public class AccountController {
     }
 
     @Operation(
+        summary = "Fetch Account Revisions REST API",
+        description = "REST API to fetch Account revisions based on a account number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ErrorResponseDTO.class)
+            )
+        )
+    }
+    )
+    @GetMapping("/account/{accountNumber:[0-9]+}/revisions")
+    public ResponseEntity<List<AccountDTO>> getAccountRevisions(
+        @NotEmpty(message = "AccountNumber can not be a null or empty")
+        @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+        @PathVariable Long accountNumber) {
+        var modelList = accountService.getAccountRevisions(accountNumber);
+        return ResponseEntity.ok(modelList);
+    }
+
+    @Operation(
+        summary = "Fetch Account Creator REST API",
+        description = "REST API to fetch Account creator based on a account number"
+    )
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ErrorResponseDTO.class)
+            )
+        )
+    }
+    )
+    @GetMapping("/account/{accountNumber:[0-9]+}/creator")
+    public ResponseEntity<String> getCreatorUsername(
+        @NotEmpty(message = "AccountNumber can not be a null or empty")
+        @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+        @PathVariable Long accountNumber) {
+        var model = accountService.geCreatorUsername(accountNumber);
+        return ResponseEntity.ok(model);
+    }
+
+    @Operation(
         summary = "Update Account Details REST API",
         description = "REST API to update Customer &  Account details based on a account number"
     )
@@ -148,10 +205,9 @@ public class AccountController {
         )
     }
     )
-    @PutMapping("/account/{accountNumber:[0-9]+}")
+    @PutMapping("/account/{accountNumber:^$|[0-9]{10}}")
     public ResponseEntity<ResponseDTO> updateAccountDetails(
-        @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+        @NotNull(message = "AccountNumber can not be a null")
         @PathVariable Long accountNumber,
         @Valid @RequestBody CustomerDTO customer) {
         boolean isUpdated = accountService.updateAccount(accountNumber, customer);

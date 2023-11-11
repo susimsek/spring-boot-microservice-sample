@@ -5,6 +5,7 @@ import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.AccountsMsgDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
 import io.github.susimsek.account.entity.Account;
+import io.github.susimsek.account.entity.RevisionEntity;
 import io.github.susimsek.account.entity.Customer;
 import io.github.susimsek.account.exception.CustomerAlreadyExistsException;
 import io.github.susimsek.account.exception.ResourceNotFoundException;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -54,6 +56,24 @@ public class AccountServiceImpl implements AccountService {
             () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
         );
        return customerMapper.toDto(customer, account);
+    }
+
+    @Override
+    public List<AccountDTO> getAccountRevisions(Long accountNumber) {
+        return accountRepository.findRevisions(accountNumber)
+            .stream()
+            .map(revision -> accountMapper.toDto(revision.getEntity()))
+            .toList();
+    }
+
+    @Override
+    public String geCreatorUsername(Long accountNumber) {
+        var revision = accountRepository.findRevision(accountNumber, 1).orElseThrow(
+            () -> new ResourceNotFoundException("Revision", "accountNumber", String.valueOf(accountNumber))
+        );
+        var metadata = revision.getMetadata();
+        RevisionEntity revisionEntity = metadata.getDelegate();
+        return revisionEntity.getUsername();
     }
 
     @Override

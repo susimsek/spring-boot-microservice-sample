@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1699727151686-1" author="yapikrediteknolojia.s. (generated)">
+        <addColumn tableName="account">
+            <column name="deleted" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1699727151686-2" author="yapikrediteknolojia.s. (generated)">
+        <addNotNullConstraint columnName="deleted" tableName="account"/>
+    </changeSet>
+    <changeSet id="1699727151686-3" author="yapikrediteknolojia.s. (generated)">
+        <addColumn tableName="account_history">
+            <column name="deleted" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
