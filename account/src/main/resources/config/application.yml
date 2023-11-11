@@ -11,6 +11,12 @@ spring:
     password: root
   liquibase:
     change-log: classpath:config/liquibase/master.xml
+  data:
+    redis:
+      timeout: 1s
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
   jpa:
     hibernate:
       ddl-auto: none

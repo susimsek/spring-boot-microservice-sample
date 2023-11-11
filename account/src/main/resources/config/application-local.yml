@@ -37,11 +37,6 @@ spring:
     config:
       enabled: false
 
-cache:
-  redis:
-    server: redis://localhost:6379
-    cluster: false
-
 #eureka:
 #  instance:
 #    preferIpAddress: true

@@ -28,7 +28,7 @@ resouceserver_enabled: false
 tracing_enabled: true
 kafka_enabled: true
 database_enabled: true
-redis_enabled: false
+redis_enabled: true
 
 global:
   database:
