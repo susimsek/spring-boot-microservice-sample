@@ -13,7 +13,7 @@ public record LoanDTO(
     String mobileNumber,
 
     @Schema(
-        description = "Loan Number of the customer", example = "548732457654"
+        description = "Loan Number of the customer.csv", example = "548732457654"
     )
     String loanNumber,
 

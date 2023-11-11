@@ -58,4 +58,37 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="1699333174982-2-data" author="yapikrediteknolojia.s. (generated)" context="faker">
+        <loadData
+                file="config/liquibase/fake-data/account.csv"
+                separator=";"
+                tableName="account">
+            <column name="account_number" type="numeric"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="string"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="string"/>
+            <column name="customer_id" type="numeric"/>
+            <column name="account_type" type="string"/>
+            <column name="branch_address" type="string"/>
+            <column name="communication_sw" type="boolean"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="1699333174982-3-data" author="yapikrediteknolojia.s. (generated)" context="faker">
+        <loadData
+                file="config/liquibase/fake-data/customer.csv"
+                separator=";"
+                tableName="customer">
+            <column name="customer_id" type="numeric"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="string"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="string"/>
+            <column name="name" type="string"/>
+            <column name="email" type="string"/>
+            <column name="mobile_number" type="string"/>
+        </loadData>
+    </changeSet>
+
 </databaseChangeLog>

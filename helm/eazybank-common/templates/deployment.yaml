@@ -84,6 +84,8 @@ spec:
           value: {{ .Values.global.database.username }}
         - name: SPRING_DATASOURCE_PASSWORD
           value: {{ .Values.global.database.password }}
+        - name: SPRING_LIQUIBASE_CONTEXTS
+          value: {{ .Values.global.liquibaseContexts }}
         {{- end }}
         {{- if .Values.redis_enabled }}
         - name: SPRING_DATA_REDIS_HOST

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(
         name = "REST API for Customer in EazyBank",
-        description = "REST APIs in EazyBank to FETCH customer details"
+        description = "REST APIs in EazyBank to FETCH customer.csv details"
 )
 @RestController
 @RequiredArgsConstructor

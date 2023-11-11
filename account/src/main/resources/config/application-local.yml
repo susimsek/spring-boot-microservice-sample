@@ -18,6 +18,8 @@ spring:
     redis:
       host: localhost
       port: 6379
+  liquibase:
+    contexts: local, faker
   kafka:
     bootstrap-servers: http://localhost:9092
   cloud:

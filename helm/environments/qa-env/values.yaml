@@ -1,6 +1,7 @@
 global:
   configMapName: eazybankqa-configmap
   activeProfile: qa
+  liquibaseContexts: qa
   configServerURL: configserver:http://config-server:8071/
   discoveryServerURL: http://spring-cloud-kubernetes-discoveryserver:80/
   eurekaServerURL: http://eureka-server:8070/eureka/

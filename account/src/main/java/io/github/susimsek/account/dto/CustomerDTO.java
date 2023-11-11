@@ -15,21 +15,21 @@ import jakarta.validation.constraints.Size;
 public record CustomerDTO(
 
     @Schema(
-        description = "Name of the customer", example = "Eazy Bytes"
+        description = "Name of the customer.csv", example = "Eazy Bytes"
     )
     @NotEmpty(message = "Name can not be a null or empty")
-    @Size(min = 5, max = 30, message = "The length of the customer name should be between {min} and {max}")
+    @Size(min = 5, max = 30, message = "The length of the customer.csv name should be between {min} and {max}")
     String name,
 
     @Schema(
-        description = "Email address of the customer", example = "tutor@eazybytes.com"
+        description = "Email address of the customer.csv", example = "tutor@eazybytes.com"
     )
     @NotEmpty(message = "Email address can not be a null or empty")
     @Email(message = "Email address should be a valid value")
     String email,
 
     @Schema(
-        description = "Mobile Number of the customer", example = "9345432123"
+        description = "Mobile Number of the customer.csv", example = "9345432123"
     )
     @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
     String mobileNumber,

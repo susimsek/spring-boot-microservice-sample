@@ -12,11 +12,13 @@ services:
           memory: 700m
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      MANAGEMENT_TRACING_ENABLED: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
 
   microservice-db-config:
     extends:
       service: network-deploy-service
-    image: docker.io/bitnami/postgresql:16.0.0
+    image: docker.io/bitnami/postgresql:15.4.0
     healthcheck:
       test: pg_isready -U postgres
       timeout: 10s
@@ -34,9 +36,15 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_LIQUIBASE_CONTEXTS: prod
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
       SPRING_DATASOURCE_USERNAME: easybank
       SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
+      SPRING_DATA_REDIS_TIMEOUT: 1s
 
   microservice-eureka-config:
     extends:
