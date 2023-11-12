@@ -1,0 +1,51 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loandb
+    username: easybank
+    password: root
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 1
+      pool-name: Hikari
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    contexts: local, faker
+  kafka:
+    bootstrap-servers: http://localhost:9092
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: false
+      config:
+        enabled: false
+    config:
+      enabled: false
+
+logging:
+  level:
+    io:
+      github:
+        susimsek:
+          loan: DEBUG
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+
+build:
+  version: "3.0"
+
+loan:
+  message: "Welcome to EazyBank loan related local APIs "
+  contactDetails:
+    name: "Amaal Grega - Developer"
+    email: "amaal@eazybank.com"
+  onCallSupport:
+    - (452) 456-2176
+    - (546) 764-8934
+

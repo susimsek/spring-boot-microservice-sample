@@ -4,7 +4,7 @@ spring:
   application:
     name: card
   profiles:
-    active: prod
+    active: local
   datasource:
     url: jdbc:postgresql://localhost:5432/carddb
     username: easybank
@@ -14,15 +14,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     show-sql: true
     open-in-view: false
-  config:
-    import: optional:configserver:http://localhost:8071/
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
   kafka:
     bootstrap-servers: http://localhost:9092
   cloud:
