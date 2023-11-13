@@ -1,5 +1,6 @@
 server:
   port: 8090
+  forward-headers-strategy: framework
 spring:
   application:
     name: loan
@@ -25,6 +26,15 @@ spring:
     kubernetes:
       discovery:
         all-namespaces: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
 
 management:
   endpoints:
@@ -80,3 +90,7 @@ logging:
           loan: DEBUG
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+springdoc:
+  cache:
+    disabled: true

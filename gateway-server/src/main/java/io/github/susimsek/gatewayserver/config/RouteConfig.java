@@ -1,20 +1,14 @@
 package io.github.susimsek.gatewayserver.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
-import java.time.Instant;
 
 @Configuration(proxyBeanMethods = false)
 public class RouteConfig {
 
+    /*
     @Bean
     public RouteLocator eazyBankRouteConfig(
         RouteLocatorBuilder routeLocatorBuilder,
@@ -28,7 +22,7 @@ public class RouteConfig {
                     .addResponseHeader("X-Response-Time", Instant.now().toString())
                     .circuitBreaker(config -> config.setName("accountCircuitBreaker")
                         .setFallbackUri("forward:/contactSupport")))
-                .uri("http://account:8080"))
+                .uri("lb://account:8080"))
             .route(p -> p
                 .path("/eazybank/loan/**")
                 .filters(f -> f.rewritePath("/eazybank/loan/(?<segment>.*)", "/${segment}")
@@ -39,21 +33,18 @@ public class RouteConfig {
                             Duration.ofMillis(100),
                             Duration.ofMillis(1000),
                             2,true)))
-                .uri("http://loan:8090"))
+                .uri("lb://loan:8090"))
             .route(p -> p
                 .path("/eazybank/card/**")
                 .filters(f -> f.rewritePath("/eazybank/card/(?<segment>.*)", "/${segment}")
                     .addResponseHeader("X-Response-Time", Instant.now().toString())
                     .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter)
                         .setKeyResolver(userKeyResolver)))
-                .uri("http://card:9000"))
+                .uri("lb://card:9000"))
             .build();
     }
 
-    @Bean
-    public RedisRateLimiter redisRateLimiter() {
-        return new RedisRateLimiter(1, 1, 1);
-    }
+     */
 
     @Bean
     KeyResolver userKeyResolver() {

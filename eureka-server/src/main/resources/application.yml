@@ -1,15 +1,22 @@
+server:
+  port: 8070
 spring:
   application:
     name: eureka-server
-  config:
-    import: optional:configserver:http://localhost:8071/
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+  profiles:
+    active: local
   kafka:
     bootstrap-servers: http://localhost:9092
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetchRegistry: false
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
 
 management:
   endpoints:
@@ -32,8 +39,6 @@ management:
     sampling:
       probability: 1.0
     enabled: false
-server:
-  port: 8070
 
 logging:
   pattern:

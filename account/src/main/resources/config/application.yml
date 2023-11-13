@@ -1,10 +1,11 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
 spring:
   application:
     name: account
   profiles:
-    active: local
+    active: local, dev
   datasource:
     url: jdbc:postgresql://localhost:5432/accountdb
     username: easybank
@@ -153,3 +154,7 @@ resilience4j.ratelimiter:
       timeoutDuration: 1000
       limitRefreshPeriod: 5000
       limitForPeriod: 1
+
+springdoc:
+  cache:
+    disabled: true

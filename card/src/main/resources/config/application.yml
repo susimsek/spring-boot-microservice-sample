@@ -1,5 +1,6 @@
 server:
   port: 9000
+  forward-headers-strategy: framework
 spring:
   application:
     name: card
@@ -80,3 +81,7 @@ logging:
           card: DEBUG
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+springdoc:
+  cache:
+    disabled: true

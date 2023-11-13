@@ -1,17 +1,63 @@
+server:
+  port: 8072
+  forward-headers-strategy: framework
 spring:
   application:
     name: gateway-server
-  config:
-    import: optional:configserver:http://localhost:8071/
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+  profiles:
+    active: local
   kafka:
     bootstrap-servers: http://localhost:9092
   cloud:
     gateway:
+      routes:
+        - id: account-service
+          uri: lb://account
+          predicates:
+            - Path=/account/**, /eazybank/account/**
+          filters:
+            - ContextPathRewritePath=/eazybank/account/(?<path>.*), /$\{path}
+            - RewritePath=/account/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: accountCircuitBreaker
+                fallbackUri: forward:/contactSupport
+        - id: loan-service
+          uri: lb://loan
+          predicates:
+            - Path=/loan/**, /eazybank/loan/**
+          filters:
+            - ContextPathRewritePath=/eazybank/loan/(?<path>.*), /$\{path}
+            - RewritePath=/loan/(?<path>.*), /$\{path}
+            - name: Retry
+              args:
+                retries: 3
+                methods: GET
+                backoff:
+                  firstBackoff: 100ms
+                  maxBackoff: 1000ms
+                  factor: 2
+                  basedOnPreviousValue: true
+        - id: card-service
+          uri: lb://card
+          predicates:
+            - Path=/card/**, /eazybank/card/**
+          filters:
+            - ContextPathRewritePath=/eazybank/card/(?<path>.*), /$\{path}
+            - RewritePath=/card/(?<path>.*), /$\{path}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter:
+                  replenishRate: 1
+                  burstCapacity: 1
+                  requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 #      discovery:
 #        locator:
 #          enabled: false
@@ -19,6 +65,8 @@ spring:
       httpclient:
         connect-timeout: 1000
         response-timeout: 5s
+      default-filters:
+        - RewritePath=/api/v1/.*?/(?<remaining>.*), /$\{remaining}
     kubernetes:
       loadbalancer:
         mode: service
@@ -29,12 +77,6 @@ spring:
       client:
         health-indicator:
           enabled: false
-  data:
-    redis:
-      timeout: 1s
-      connect-timeout: 2s
-      host: localhost
-      port: 6379
   security:
     oauth2:
       resourceserver:
@@ -71,9 +113,6 @@ info:
     description: "Eazy Bank Gateway Server Application"
     version: "1.0.0"
 
-server:
-  port: 8072
-
 logging:
   level:
     io:
@@ -90,3 +129,16 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: account
+        url: /v3/api-docs/account
+      - name: loan
+        url: /v3/api-docs/loan
+      - name: card
+        url: /v3/api-docs/card
+    use-root-path: true
+  cache:
+    disabled: true
