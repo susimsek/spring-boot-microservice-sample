@@ -100,3 +100,6 @@ account:
     - (555) 555-1234
     - (555) 523-1345
 
+springdoc:
+  oAuthFlow:
+    tokenUrl: http://localhost:7080/realms/master/protocol/openid-connect/token

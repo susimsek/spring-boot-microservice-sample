@@ -11,7 +11,13 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import reactor.core.publisher.Mono;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebFluxSecurity
@@ -19,16 +25,30 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(
-        ServerHttpSecurity serverHttpSecurity,
+        ServerHttpSecurity http,
         Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter) {
-        serverHttpSecurity.authorizeExchange(exchanges -> exchanges.pathMatchers(HttpMethod.GET).permitAll()
-                .pathMatchers("/eazybank/account/**").hasRole("ACCOUNT")
-                .pathMatchers("/eazybank/card/**").hasRole("CARD")
-                .pathMatchers("/eazybank/loan/**").hasRole("LOAN"))
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
+        http
+            .securityMatcher(
+                new NegatedServerWebExchangeMatcher(
+                    new OrServerWebExchangeMatcher(
+                        ServerWebExchangeMatchers .pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html"),
+                        ServerWebExchangeMatchers.pathMatchers(HttpMethod.OPTIONS, "/**")
+                )
+            ))
+            .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
+            .cors(withDefaults())
+            .csrf(ServerHttpSecurity.CsrfSpec::disable)
+            .authorizeExchange(exchanges ->
+               exchanges
+                   .pathMatchers("/*/v3/api-docs").permitAll()
+                   .pathMatchers("/*/actuator/**").permitAll()
+                   .pathMatchers(HttpMethod.GET).permitAll()
+                   .pathMatchers("/eazybank/account/**").hasRole("ACCOUNT")
+                   .pathMatchers("/eazybank/card/**").hasRole("CARD")
+                   .pathMatchers("/eazybank/loan/**").hasRole("LOAN"))
+            .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                     .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(jwtAuthenticationConverter)));
-        serverHttpSecurity.csrf(csrfSpec -> csrfSpec.disable());
-        return serverHttpSecurity.build();
+        return http.build();
     }
 
     @Bean
