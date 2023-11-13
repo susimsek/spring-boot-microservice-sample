@@ -338,7 +338,7 @@ services:
       service: microservice-base-config
 
   eureka-server:
-    image: suayb/eureka-server:s14
+    image: suayb/eureka-server:s17
     container_name: eureka-server-ms
     ports:
       - 8070:8070
@@ -356,13 +356,13 @@ services:
       service: microservice-config-server-config
 
   account:
-    image: suayb/account:s14
+    image: suayb/account:s17
     container_name: account-ms
     ports:
       - 8080:8080
     environment:
       SPRING_APPLICATION_NAME: account
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/accountdb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/accountdb
 #      SPRING_RABBITMQ_HOST: rabbitmq
 #      SPRING_RABBITMQ_PORT: 5672
 #      SPRING_RABBITMQ_USERNAME: admin
@@ -371,6 +371,8 @@ services:
       postgresql:
         condition: service_healthy
       kafka:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1
@@ -383,15 +385,17 @@ services:
       service: microservice-eureka-config
 
   loan:
-    image: suayb/loan:s14
+    image: suayb/loan:s17
     container_name: loan-ms
     ports:
       - 8090:8090
     environment:
       SPRING_APPLICATION_NAME: loan
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/loandb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/loandb
     depends_on:
       postgresql:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1
@@ -404,15 +408,17 @@ services:
       service: microservice-eureka-config
 
   card:
-    image: suayb/card:s14
+    image: suayb/card:s17
     container_name: card-ms
     ports:
       - 9000:9000
     environment:
       SPRING_APPLICATION_NAME: card
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/carddb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/carddb
     depends_on:
       postgresql:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1
@@ -443,7 +449,7 @@ services:
       service: network-deploy-service
 
   gateway-server:
-    image: suayb/gateway-server:s14
+    image: suayb/gateway-server:s17
     container_name: gateway-server-ms
     ports:
       - 8072:8072
@@ -458,12 +464,6 @@ services:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: gateway-server
-      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
-      SPRING_DATA_REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
-      SPRING_DATA_REDIS_TIMEOUT: 1s
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: http://keycloak:8080/realms/master/protocol/openid-connect/certs
     extends:
       file: common-config.yml
       service: microservice-eureka-config

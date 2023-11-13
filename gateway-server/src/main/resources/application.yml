@@ -10,54 +10,6 @@ spring:
     bootstrap-servers: http://localhost:9092
   cloud:
     gateway:
-      routes:
-        - id: account-service
-          uri: lb://account
-          predicates:
-            - Path=/account/**, /eazybank/account/**
-          filters:
-            - ContextPathRewritePath=/eazybank/account/(?<path>.*), /$\{path}
-            - RewritePath=/account/(?<path>.*), /$\{path}
-            - name: CircuitBreaker
-              args:
-                name: accountCircuitBreaker
-                fallbackUri: forward:/contactSupport
-        - id: loan-service
-          uri: lb://loan
-          predicates:
-            - Path=/loan/**, /eazybank/loan/**
-          filters:
-            - ContextPathRewritePath=/eazybank/loan/(?<path>.*), /$\{path}
-            - RewritePath=/loan/(?<path>.*), /$\{path}
-            - name: Retry
-              args:
-                retries: 3
-                methods: GET
-                backoff:
-                  firstBackoff: 100ms
-                  maxBackoff: 1000ms
-                  factor: 2
-                  basedOnPreviousValue: true
-        - id: card-service
-          uri: lb://card
-          predicates:
-            - Path=/card/**, /eazybank/card/**
-          filters:
-            - ContextPathRewritePath=/eazybank/card/(?<path>.*), /$\{path}
-            - RewritePath=/card/(?<path>.*), /$\{path}
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter:
-                  replenishRate: 1
-                  burstCapacity: 1
-                  requestedTokens: 1
-                key-resolver: "#{@userKeyResolver}"
-        - id: openapi
-          uri: http://localhost:${server.port}
-          predicates:
-            - Path=/v3/api-docs/**
-          filters:
-            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 #      discovery:
 #        locator:
 #          enabled: false
@@ -67,21 +19,16 @@ spring:
         response-timeout: 5s
       default-filters:
         - RewritePath=/api/v1/.*?/(?<remaining>.*), /$\{remaining}
-    kubernetes:
-      loadbalancer:
-        mode: service
-      discovery:
-        enabled: true
-        all-namespaces: true
-    discovery:
-      client:
-        health-indicator:
-          enabled: false
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
+#    kubernetes:
+#      loadbalancer:
+#        mode: service
+#      discovery:
+#        enabled: true
+#        all-namespaces: true
+#    discovery:
+#      client:
+#        health-indicator:
+#          enabled: false
 
 management:
   health:

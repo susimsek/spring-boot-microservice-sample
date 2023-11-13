@@ -35,16 +35,16 @@ services:
       config-server:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: default, docker
       SPRING_LIQUIBASE_CONTEXTS: dev
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
-      SPRING_DATASOURCE_USERNAME: easybank
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
-      SPRING_DATA_REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
-      SPRING_DATA_REDIS_TIMEOUT: 1s
+#      SPRING_DATASOURCE_USERNAME: easybank
+#      SPRING_DATASOURCE_PASSWORD: root
+#      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: 6379
+#      SPRING_DATA_REDIS_PASSWORD: d41d8cd98f00b204e9800998ecf8427e
+#      SPRING_DATA_REDIS_TIMEOUT: 1s
 
   microservice-eureka-config:
     extends:
