@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -54,6 +55,7 @@ public class CardController {
     @Value("${build.version}")
     private String buildVersion;
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Create Card REST API",
         description = "REST API to create new Card inside EazyBank"
@@ -121,6 +123,7 @@ public class CardController {
         return ResponseEntity.ok(model);
     }
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Update Card Details REST API",
         description = "REST API to update card details based on a card number"
@@ -170,6 +173,7 @@ public class CardController {
     }
 
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Delete Card Details REST API",
         description = "REST API to delete Card details based on a mobile number"

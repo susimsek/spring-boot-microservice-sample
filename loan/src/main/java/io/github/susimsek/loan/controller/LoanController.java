@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -54,6 +55,7 @@ public class LoanController {
     @Value("${build.version}")
     private String buildVersion;
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Create Loan REST API",
         description = "REST API to create new loan inside EazyBank"
@@ -121,6 +123,7 @@ public class LoanController {
         return ResponseEntity.ok(model);
     }
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Update Loan Details REST API",
         description = "REST API to update loan details based on a loan number"
@@ -170,6 +173,7 @@ public class LoanController {
     }
 
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Delete Loan Details REST API",
         description = "REST API to delete Loan details based on a mobile number"
