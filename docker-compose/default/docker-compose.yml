@@ -25,7 +25,7 @@ services:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:22.0.4
     ports:
-      - 7080:8080
+      - 7080:7080
     depends_on:
       postgresql:
         condition: service_healthy
@@ -39,9 +39,9 @@ services:
       KC_HEALTH_ENABLED: true
       KC_METRICS_ENABLED: true
       KC_FEATURES: scripts
-      KC_HTTP_PORT: 8080
+      KC_HTTP_PORT: 7080
       KC_HTTPS_PORT: 9443
-    command: "start-dev"
+    command: "start-dev --import-realm"
     extends:
       file: common-config.yml
       service: network-deploy-service
@@ -52,7 +52,8 @@ services:
       retries: 20
       start_period: 10s
     volumes:
-      - ./keycloak-health-check.sh:/opt/keycloak/health-check.sh
+      - ./realm-config:/opt/keycloak/data/import
+      - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
 
   read:
     container_name: read
@@ -291,7 +292,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+      - ./db/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
       - postgresql:/bitnami/postgresql
     extends:
       file: common-config.yml

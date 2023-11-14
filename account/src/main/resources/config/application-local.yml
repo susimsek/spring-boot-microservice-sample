@@ -102,4 +102,4 @@ account:
 
 springdoc:
   oAuthFlow:
-    tokenUrl: http://localhost:7080/realms/master/protocol/openid-connect/token
+    tokenUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/token
