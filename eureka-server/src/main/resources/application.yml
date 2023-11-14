@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: eureka-server
+  main:
+    allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: always
   profiles:
     active: local
   kafka:

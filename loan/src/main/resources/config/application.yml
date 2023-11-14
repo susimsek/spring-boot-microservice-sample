@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: loan
+  main:
+    allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: always
   profiles:
     active: local
   datasource:

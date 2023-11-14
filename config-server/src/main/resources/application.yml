@@ -1,6 +1,11 @@
 spring:
   application:
     name: config-server
+  main:
+    allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: always
   profiles:
     # active: native
     active: git
