@@ -43,9 +43,9 @@ public class SecurityConfig {
                    .pathMatchers("/*/v3/api-docs").permitAll()
                    .pathMatchers("/*/actuator/**").permitAll()
                    .pathMatchers(HttpMethod.GET).permitAll()
-                   .pathMatchers("/eazybank/account/**").hasRole("ACCOUNT")
-                   .pathMatchers("/eazybank/card/**").hasRole("CARD")
-                   .pathMatchers("/eazybank/loan/**").hasRole("LOAN"))
+                   .pathMatchers("/eazybank/account/**", "/account/**").hasRole("ACCOUNT")
+                   .pathMatchers("/eazybank/card/**", "/card/**" ).hasRole("CARD")
+                   .pathMatchers("/eazybank/loan/**","/loan/**").hasRole("LOAN"))
             .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                     .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(jwtAuthenticationConverter)));
         return http.build();
