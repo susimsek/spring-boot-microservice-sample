@@ -53,3 +53,6 @@ loan:
     - (452) 456-2176
     - (546) 764-8934
 
+springdoc:
+  oAuthFlow:
+    tokenUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/token

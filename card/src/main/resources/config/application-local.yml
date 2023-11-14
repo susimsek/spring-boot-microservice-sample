@@ -62,3 +62,6 @@ card:
     - (412) 419-3491
     - (915) 382-1932
 
+springdoc:
+  oAuthFlow:
+    tokenUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/token
