@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -60,6 +61,7 @@ public class AccountController {
     @Value("${build.version}")
     private String buildVersion;
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Create Account REST API",
         description = "REST API to create new Customer &  Account inside EazyBank"
@@ -175,6 +177,7 @@ public class AccountController {
         return ResponseEntity.ok(model);
     }
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Update Account Details REST API",
         description = "REST API to update Customer &  Account details based on a account number"
@@ -223,6 +226,7 @@ public class AccountController {
     }
 
 
+    @SecurityRequirement(name = "auth")
     @Operation(
         summary = "Delete Account & Customer Details REST API",
         description = "REST API to delete Customer &  Account details based on a mobile number"

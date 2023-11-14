@@ -38,10 +38,21 @@ services:
       KC_DB_PASSWORD: root
       KC_HEALTH_ENABLED: true
       KC_METRICS_ENABLED: true
+      KC_FEATURES: scripts
+      KC_HTTP_PORT: 8080
+      KC_HTTPS_PORT: 9443
     command: "start-dev"
     extends:
       file: common-config.yml
       service: network-deploy-service
+    healthcheck:
+      test: 'bash /opt/keycloak/health-check.sh'
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - ./keycloak-health-check.sh:/opt/keycloak/health-check.sh
 
   read:
     container_name: read
@@ -323,7 +334,7 @@ services:
     ports:
       - 8071:8071
     environment:
-      SPRING_APPLICATION_NAME: eureka-server
+      SPRING_APPLICATION_NAME: config-server
     depends_on:
       kafka:
         condition: service_healthy
@@ -342,6 +353,8 @@ services:
     container_name: eureka-server-ms
     ports:
       - 8070:8070
+    environment:
+      SPRING_APPLICATION_NAME: eureka-server
     depends_on:
       config-server:
         condition: service_healthy
