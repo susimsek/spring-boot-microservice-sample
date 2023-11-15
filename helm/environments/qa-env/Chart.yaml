@@ -55,3 +55,5 @@ dependencies:
   - name: message
     version: 0.1.0
     repository: file://../../eazybank-services/message
+
+icon: https://avatars.githubusercontent.com/u/7815877?s=200&v=4
