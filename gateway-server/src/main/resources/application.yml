@@ -48,6 +48,9 @@ management:
   endpoint:
     gateway:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
