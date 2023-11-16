@@ -4,23 +4,23 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
-Spring Cloud Kubernetes Discovery Server can be accessed through the following DNS name from within your cluster:
+Spring Cloud Kubernetes Config Server can be accessed through the following DNS name from within your cluster:
 
     {{ include "spring-cloud-kubernetes-configserver.fullname" . }}.{{ include "spring-cloud-kubernetes-configserver.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ coalesce .Values.service.ports.http .Values.service.port }})
 
-To access Spring Cloud Kubernetes Discovery Server from outside the cluster execute the following commands:
+To access Spring Cloud Kubernetes Config Server from outside the cluster execute the following commands:
 
 {{- if .Values.ingress.enabled }}
 
-1. Get the Spring Cloud Kubernetes Discovery Server URL and associate its hostname to your cluster external IP:
+1. Get the Spring Cloud Kubernetes Config Server URL and associate its hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Spring Cloud Kubernetes Discovery Server URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ (tpl .Values.ingress.hostname .) }}/"
+   echo "Spring Cloud Kubernetes Config Server URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ (tpl .Values.ingress.hostname .) }}/"
    echo "$CLUSTER_IP  {{ (tpl .Values.ingress.hostname .) }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 
-1. Get the Spring Cloud Kubernetes Discovery Server URL by running these commands:
+1. Get the Spring Cloud Kubernetes Config Server URL by running these commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
