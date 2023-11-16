@@ -1,16 +1,43 @@
-global:
-  configMapName: eazybankprod-configmap
-  activeProfile: prod
-  liquibaseContexts: prod
-  configServerURL: configserver:http://config-server:8071/
-  discoveryServerURL: http://spring-cloud-kubernetes-discoveryserver:80/
-  eurekaServerURL: http://eureka-server:8070/eureka/
-  keyCloakURL: http://keycloak:7080/realms/master/protocol/openid-connect/certs
-  zipkinTracingEndpoint: http://tempo-grafana-tempo-distributor:9411
-  kafkaBrokerURL: kafka:9092
-  redis:
-    host: redis-master
-    port: 6379
-    password: d41d8cd98f00b204e9800998ecf8427e
-    timeout: 1s
-    connectTimeout: 2s
+config-server:
+  enabled: true
+  spring:
+    profiles:
+      active: prod
+
+eureka-server:
+  enabled: true
+  spring:
+    profiles:
+      active: prod
+
+gateway-server:
+  enabled: true
+  spring:
+    profiles:
+      active: prod
+
+account:
+  spring:
+    profiles:
+      active: prod
+    liquibase:
+      contexts: prod
+
+loan:
+  spring:
+    profiles:
+      active: prod
+    liquibase:
+      contexts: prod
+
+card:
+  spring:
+    profiles:
+      active: prod
+    liquibase:
+      contexts: prod
+
+message:
+  spring:
+    profiles:
+      active: prod

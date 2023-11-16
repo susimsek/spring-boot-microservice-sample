@@ -29,12 +29,19 @@ dependencies:
     repository: file://../../eazybank-common
 
   - name: config-server
+    condition: config-server.enabled
     version: 0.1.0
     repository: file://../../eazybank-services/config-server
 
-#  - name: eureka-server
-#    version: 0.1.0
-#    repository: file://../../eazybank-services/eureka-server
+  - name: eureka-server
+    condition: eureka-server.enabled
+    version: 0.1.0
+    repository: file://../../eazybank-services/eureka-server
+
+  - name: gateway-server
+    condition: gateway-server.enabled
+    version: 0.1.0
+    repository: file://../../eazybank-services/gateway-server
 
   - name: account
     version: 0.1.0
@@ -47,10 +54,6 @@ dependencies:
   - name: loan
     version: 0.1.0
     repository: file://../../eazybank-services/loan
-
-  - name: gateway-server
-    version: 0.1.0
-    repository: file://../../eazybank-services/gateway-server
 
   - name: message
     version: 0.1.0

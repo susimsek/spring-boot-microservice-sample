@@ -5,6 +5,12 @@ dependencies:
 - name: config-server
   repository: file://../../eazybank-services/config-server
   version: 0.1.0
+- name: eureka-server
+  repository: file://../../eazybank-services/eureka-server
+  version: 0.1.0
+- name: gateway-server
+  repository: file://../../eazybank-services/gateway-server
+  version: 0.1.0
 - name: account
   repository: file://../../eazybank-services/account
   version: 0.1.0
@@ -14,11 +20,8 @@ dependencies:
 - name: loan
   repository: file://../../eazybank-services/loan
   version: 0.1.0
-- name: gateway-server
-  repository: file://../../eazybank-services/gateway-server
-  version: 0.1.0
 - name: message
   repository: file://../../eazybank-services/message
   version: 0.1.0
-digest: sha256:b93007b11c5b435e817b625bf2efbb7566ecbdd982f57c490ca460e5b6c20ba7
-generated: "2023-11-08T21:02:33.467506+03:00"
+digest: sha256:5b472899e11ddb8087105c48ca61fb138c982c1e5170787e791ae1752e9eccaf
+generated: "2023-11-16T07:47:12.492884+03:00"
