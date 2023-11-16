@@ -1,22 +1,23 @@
 config-server:
   enabled: true
-  spring:
-    profiles:
-      active: prod, k8s
+  fullnameOverride: config-server
 
 eureka-server:
   enabled: true
+  fullnameOverride: eureka-server
   spring:
     profiles:
       active: prod, k8s
 
 gateway-server:
   enabled: true
+  fullnameOverride: gateway-server
   spring:
     profiles:
       active: prod, k8s
 
 account:
+  fullnameOverride: account
   spring:
     profiles:
       active: prod, k8s
@@ -24,6 +25,7 @@ account:
       contexts: prod
 
 loan:
+  fullnameOverride: loan
   spring:
     profiles:
       active: prod, k8s
@@ -31,6 +33,7 @@ loan:
       contexts: prod
 
 card:
+  fullnameOverride: card
   spring:
     profiles:
       active: prod, k8s
@@ -38,6 +41,7 @@ card:
       contexts: prod
 
 message:
+  fullnameOverride: message
   spring:
     profiles:
       active: prod, k8s

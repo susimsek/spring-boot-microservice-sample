@@ -76,7 +76,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: common
+        - name: {{ include "common.fullname" . | quote }}
           image: {{ template "common.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.lifecycleHooks }}

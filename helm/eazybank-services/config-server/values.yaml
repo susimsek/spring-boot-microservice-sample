@@ -2,7 +2,7 @@
 # Declare variables to be passed into your templates.
 spring:
   profiles:
-    active: default, k8s
+    active: git
   zipkin:
     tracingEndpoint: "http://tempo-grafana-tempo-distributor:9411"
   kafka:
