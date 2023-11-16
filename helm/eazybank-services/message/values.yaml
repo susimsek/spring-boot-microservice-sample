@@ -2,7 +2,7 @@
 # Declare variables to be passed into your templates.
 spring:
   profiles:
-    active: default
+    active: default, k8s
   kafka:
     bootstrapServers: "kafka:9092"
 

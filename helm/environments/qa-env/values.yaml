@@ -2,42 +2,42 @@ config-server:
   enabled: true
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
 
 eureka-server:
   enabled: true
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
 
 gateway-server:
   enabled: true
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
 
 account:
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
     liquibase:
       contexts: qa
 
 loan:
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
     liquibase:
       contexts: qa
 
 card:
   spring:
     profiles:
-      active: qa
+      active: qa, k8s
     liquibase:
       contexts: qa
 
 message:
   spring:
     profiles:
-      active: qa
+      active: qa, k8s

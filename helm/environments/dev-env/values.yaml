@@ -2,42 +2,42 @@ config-server:
   enabled: true
   spring:
     profiles:
-      active: default
+      active: default, k8s
 
 eureka-server:
   enabled: true
   spring:
     profiles:
-      active: default
+      active: default, k8s
 
 gateway-server:
   enabled: true
   spring:
     profiles:
-      active: default
+      active: default, k8s
 
 account:
   spring:
     profiles:
-      active: default
+      active: default, k8s
     liquibase:
       contexts: dev
 
 loan:
   spring:
     profiles:
-      active: default
+      active: default, k8s
     liquibase:
       contexts: dev
 
 card:
   spring:
     profiles:
-      active: default
+      active: default, k8s
     liquibase:
       contexts: dev
 
 message:
   spring:
     profiles:
-      active: default
+      active: default, k8s

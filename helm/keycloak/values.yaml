@@ -16,3 +16,17 @@ externalDatabase:
   user: easybank
   password: root
   database: keycloak
+
+extraVolumes:
+  - name: config
+    configMap:
+      name: keycloak-realm
+
+extraVolumeMounts:
+  - name: config
+    mountPath: "/opt/bitnami/keycloak/data/import"
+    readOnly: true
+
+extraEnvVars:
+  - name: KEYCLOAK_EXTRA_ARGS
+    value: "--import-realm"

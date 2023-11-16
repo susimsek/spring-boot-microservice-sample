@@ -2,42 +2,42 @@ config-server:
   enabled: true
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
 
 eureka-server:
   enabled: true
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
 
 gateway-server:
   enabled: true
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
 
 account:
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
     liquibase:
       contexts: prod
 
 loan:
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
     liquibase:
       contexts: prod
 
 card:
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
     liquibase:
       contexts: prod
 
 message:
   spring:
     profiles:
-      active: prod
+      active: prod, k8s
