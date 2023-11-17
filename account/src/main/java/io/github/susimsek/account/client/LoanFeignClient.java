@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name="loan", url = "http://loan:8090",fallback = LoanFallback.class)
+@FeignClient(name = "loan", url = "http://loan:8090", fallback = LoanFallback.class)
 public interface LoanFeignClient {
 
-    @GetMapping(value = "/api/loan",consumes = "application/json")
+    @GetMapping(value = "/api/loan", consumes = "application/json")
     LoanDTO fetchLoanDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam String mobileNumber);

@@ -23,6 +23,8 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<springdoc.version>2.2.0</springdoc.version>
 		<jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
+		<checkstyle.version>10.12.5</checkstyle.version>
+		<maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -193,6 +195,31 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+					<includes>pom.xml,README.md</includes>
+					<excludes>.git/**/*,target/**/*</excludes>
+					<sourceDirectories>./</sourceDirectories>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

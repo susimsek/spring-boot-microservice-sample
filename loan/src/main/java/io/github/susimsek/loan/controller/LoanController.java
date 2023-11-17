@@ -2,8 +2,8 @@ package io.github.susimsek.loan.controller;
 
 import io.github.susimsek.loan.constants.LoanConstants;
 import io.github.susimsek.loan.dto.ErrorResponseDTO;
-import io.github.susimsek.loan.dto.LoanDTO;
 import io.github.susimsek.loan.dto.LoanContactInfoDTO;
+import io.github.susimsek.loan.dto.LoanDTO;
 import io.github.susimsek.loan.dto.ResponseDTO;
 import io.github.susimsek.loan.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class LoanController {
 
@@ -81,12 +81,12 @@ public class LoanController {
     @PostMapping("/loan")
     public ResponseEntity<ResponseDTO> createLoan(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         loanService.createLoan(mobileNumber);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new ResponseDTO(LoanConstants.STATUS_201, LoanConstants.MESSAGE_201));
+            .status(HttpStatus.CREATED)
+            .body(new ResponseDTO(LoanConstants.STATUS_201, LoanConstants.MESSAGE_201));
     }
 
     @Operation(
@@ -115,7 +115,7 @@ public class LoanController {
     public ResponseEntity<LoanDTO> fetchLoanDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         log.debug("fetchLoanDetails method start");
         var model = loanService.fetchLoan(mobileNumber);
@@ -157,15 +157,15 @@ public class LoanController {
     @PutMapping("/loan/{loanNumber}")
     public ResponseEntity<ResponseDTO> updateLoanDetails(
         @NotEmpty(message = "Loan Number can not be a null or empty")
-        @Pattern(regexp="(^$|[0-9]{12})",message = "LoanNumber must be 12 digits")
+        @Pattern(regexp = "(^$|[0-9]{12})", message = "LoanNumber must be 12 digits")
         @PathVariable String loanNumber,
         @Valid @RequestBody LoanDTO loan) {
         boolean isUpdated = loanService.updateLoan(loanNumber, loan);
-        if(isUpdated) {
+        if (isUpdated) {
             return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(LoanConstants.STATUS_200, LoanConstants.MESSAGE_200));
-        } else{
+        } else {
             return ResponseEntity
                 .status(HttpStatus.EXPECTATION_FAILED)
                 .body(new ResponseDTO(LoanConstants.STATUS_417, LoanConstants.MESSAGE_417_UPDATE));
@@ -203,7 +203,7 @@ public class LoanController {
     @DeleteMapping("/loan")
     public ResponseEntity<Void> deleteLoanDetails(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber
     ) {
         loanService.deleteLoan(mobileNumber);
@@ -238,19 +238,20 @@ public class LoanController {
         summary = "Get Java version",
         description = "Get Java versions details that is installed into loan microservice"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
+    @ApiResponses(
+        {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Ok"
+            ),
+            @ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = @Content(
+                    schema = @Schema(implementation = ErrorResponseDTO.class)
+                )
             )
-        )
-    }
+        }
     )
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
@@ -263,19 +264,20 @@ public class LoanController {
         summary = "Get Contact Info",
         description = "Contact Info details that can be reached out in case of any issues"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
+    @ApiResponses(
+        {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Ok"
+            ),
+            @ApiResponse(
+                responseCode = "500",
+                description = "Internal Server Error",
+                content = @Content(
+                    schema = @Schema(implementation = ErrorResponseDTO.class)
+                )
             )
-        )
-    }
+        }
     )
     @GetMapping("/contact-info")
     public ResponseEntity<LoanContactInfoDTO> getContactInfo() {

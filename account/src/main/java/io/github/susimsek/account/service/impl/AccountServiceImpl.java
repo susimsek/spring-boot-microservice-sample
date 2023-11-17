@@ -5,8 +5,8 @@ import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.AccountsMsgDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
 import io.github.susimsek.account.entity.Account;
-import io.github.susimsek.account.entity.RevisionEntity;
 import io.github.susimsek.account.entity.Customer;
+import io.github.susimsek.account.entity.RevisionEntity;
 import io.github.susimsek.account.exception.CustomerAlreadyExistsException;
 import io.github.susimsek.account.exception.ResourceNotFoundException;
 import io.github.susimsek.account.mapper.AccountMapper;
@@ -14,13 +14,12 @@ import io.github.susimsek.account.mapper.CustomerMapper;
 import io.github.susimsek.account.repository.AccountRepository;
 import io.github.susimsek.account.repository.CustomerRepository;
 import io.github.susimsek.account.service.AccountService;
+import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +36,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void createAccount(CustomerDTO customer) {
-        if(customerRepository.existsByMobileNumber(customer.mobileNumber())) {
+        if (customerRepository.existsByMobileNumber(customer.mobileNumber())) {
             throw new CustomerAlreadyExistsException("Customer already registered with given mobileNumber "
-                +customer.mobileNumber());
+                + customer.mobileNumber());
         }
         var customerEntity = customerMapper.toEntity(customer);
         var savedCustomer = customerRepository.save(customerEntity);
@@ -55,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
         var account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
             () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
         );
-       return customerMapper.toDto(customer, account);
+        return customerMapper.toDto(customer, account);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean updateAccount(Long accountNumber, CustomerDTO customer) {
         boolean isUpdated = false;
         AccountDTO accountDTO = customer.account();
-        if(accountDTO !=null ){
+        if (accountDTO != null) {
             var account = accountRepository.findById(accountNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
             );
@@ -96,7 +95,7 @@ public class AccountServiceImpl implements AccountService {
             customerRepository.save(customerEntity);
             isUpdated = true;
         }
-        return  isUpdated;
+        return isUpdated;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateCommunicationStatus(Long accountNumber) {
         boolean isUpdated = false;
-        if(accountNumber !=null ){
+        if (accountNumber != null) {
             Account account = accountRepository.findById(accountNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
             );
@@ -119,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(account);
             isUpdated = true;
         }
-        return  isUpdated;
+        return isUpdated;
     }
 
     private Account createNewAccount(Customer customer) {

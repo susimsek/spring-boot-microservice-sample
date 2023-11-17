@@ -21,11 +21,15 @@ import org.hibernate.envers.Audited;
 @SQLDelete(sql = "UPDATE account SET deleted = true WHERE account_number=?")
 @Where(clause = "deleted=false")
 @Audited
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account extends BaseEntity {
 
     @Id
-    @Column(name="account_number", nullable = false)
+    @Column(name = "account_number", nullable = false)
     private Long accountNumber;
 
     @Column(name = "customer_id", nullable = false)

@@ -1,10 +1,8 @@
 package io.github.susimsek.card.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Value;
-import org.springframework.http.HttpStatus;
-
 import java.time.Instant;
+import org.springframework.http.HttpStatus;
 
 @Schema(
     name = "ErrorResponse",

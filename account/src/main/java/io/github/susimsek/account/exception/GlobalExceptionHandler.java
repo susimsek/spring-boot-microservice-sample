@@ -3,6 +3,10 @@ package io.github.susimsek.account.exception;
 import io.github.susimsek.account.dto.ErrorResponseDTO;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.StreamSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -13,11 +17,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.StreamSupport;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,7 +34,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         });
         return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
-
 
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -82,12 +80,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CustomerAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handleCustomerAlreadyExistsException(
         CustomerAlreadyExistsException exception,
-        WebRequest webRequest){
+        WebRequest webRequest) {
         var errorResponseDTO = new ErrorResponseDTO(
-                webRequest.getDescription(false),
-                HttpStatus.BAD_REQUEST,
-                exception.getMessage(),
-                Instant.now()
+            webRequest.getDescription(false),
+            HttpStatus.BAD_REQUEST,
+            exception.getMessage(),
+            Instant.now()
         );
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }

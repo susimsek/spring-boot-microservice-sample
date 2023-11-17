@@ -2,7 +2,6 @@ package io.github.susimsek.account.service;
 
 import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
-
 import java.util.List;
 
 public interface AccountService {

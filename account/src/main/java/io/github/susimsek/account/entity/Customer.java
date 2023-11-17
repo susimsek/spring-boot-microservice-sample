@@ -16,13 +16,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Cache(region = "customerCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceGenerator")
     @SequenceGenerator(name = "SequenceGenerator", sequenceName = "seq_account", allocationSize = 1)
-    @Column(name="customer_id", nullable = false)
+    @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
     @Column(nullable = false, length = 100)

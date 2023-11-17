@@ -2,8 +2,8 @@ package io.github.susimsek.card.controller;
 
 import io.github.susimsek.card.constants.CardConstants;
 import io.github.susimsek.card.dto.CardContactInfoDTO;
-import io.github.susimsek.card.dto.ErrorResponseDTO;
 import io.github.susimsek.card.dto.CardDTO;
+import io.github.susimsek.card.dto.ErrorResponseDTO;
 import io.github.susimsek.card.dto.ResponseDTO;
 import io.github.susimsek.card.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class CardController {
 
@@ -81,12 +81,12 @@ public class CardController {
     @PostMapping("/card")
     public ResponseEntity<ResponseDTO> createCard(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         cardService.createCard(mobileNumber);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new ResponseDTO(CardConstants.STATUS_201, CardConstants.MESSAGE_201));
+            .status(HttpStatus.CREATED)
+            .body(new ResponseDTO(CardConstants.STATUS_201, CardConstants.MESSAGE_201));
     }
 
     @Operation(
@@ -115,7 +115,7 @@ public class CardController {
     public ResponseEntity<CardDTO> fetchCardDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         log.debug("fetchCardDetails method start");
         var model = cardService.fetchCard(mobileNumber);
@@ -161,11 +161,11 @@ public class CardController {
         @PathVariable String cardNumber,
         @Valid @RequestBody CardDTO card) {
         boolean isUpdated = cardService.updateCard(cardNumber, card);
-        if(isUpdated) {
+        if (isUpdated) {
             return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(CardConstants.STATUS_200, CardConstants.MESSAGE_200));
-        } else{
+        } else {
             return ResponseEntity
                 .status(HttpStatus.EXPECTATION_FAILED)
                 .body(new ResponseDTO(CardConstants.STATUS_417, CardConstants.MESSAGE_417_UPDATE));
@@ -203,7 +203,7 @@ public class CardController {
     @DeleteMapping("/card")
     public ResponseEntity<Void> deleteCardDetails(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber
     ) {
         cardService.deleteCard(mobileNumber);

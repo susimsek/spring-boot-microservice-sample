@@ -1,14 +1,14 @@
 package io.github.susimsek.card.dto;
 
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-import java.util.Map;
-
 @ConfigurationProperties(prefix = "card")
-@Getter @Setter
+@Getter
+@Setter
 public class CardContactInfoDTO {
 
     private String message;

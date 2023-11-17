@@ -24,11 +24,11 @@ public class RevisionEntity {
     @RevisionNumber
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceGenerator")
     @SequenceGenerator(name = "SequenceGenerator", sequenceName = "seq_revision_info", allocationSize = 1)
-    @Column(name="id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @RevisionTimestamp
-    @Column(name="timestamp", nullable = false)
+    @Column(name = "timestamp", nullable = false)
     private long timestamp;
 
     @Column(name = "username", nullable = false, length = 20)

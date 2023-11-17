@@ -3,6 +3,7 @@ package io.github.susimsek.account.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,11 +13,11 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
-
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class BaseEntity {
 
     @CreatedDate
@@ -24,7 +25,7 @@ public class BaseEntity {
     private Instant createdAt;
 
     @CreatedBy
-    @Column(name = "created_by",nullable = false, updatable = false, length = 20)
+    @Column(name = "created_by", nullable = false, updatable = false, length = 20)
     private String createdBy;
 
     @LastModifiedDate
@@ -32,6 +33,6 @@ public class BaseEntity {
     private Instant updatedAt;
 
     @LastModifiedBy
-    @Column(name = "updated_by",insertable = false, length = 20)
+    @Column(name = "updated_by", insertable = false, length = 20)
     private String updatedBy;
 }

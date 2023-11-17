@@ -23,41 +23,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Tag(
-        name = "REST API for Customer in EazyBank",
-        description = "REST APIs in EazyBank to FETCH customer.csv details"
+    name = "REST API for Customer in EazyBank",
+    description = "REST APIs in EazyBank to FETCH customer.csv details"
 )
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class CustomerController {
 
     private final CustomerService customerService;
 
     @Operation(
-            summary = "Fetch Customer Details REST API",
-            description = "REST API to fetch Customer details based on a mobile number"
+        summary = "Fetch Customer Details REST API",
+        description = "REST API to fetch Customer details based on a mobile number"
     )
     @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Ok"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDTO.class)
-                    )
+        @ApiResponse(
+            responseCode = "200",
+            description = "Ok"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(
+                schema = @Schema(implementation = ErrorResponseDTO.class)
             )
+        )
     }
     )
     @GetMapping("/customer-details")
     public ResponseEntity<CustomerDetailsDTO> fetchCustomerDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-        String mobileNumber){
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        String mobileNumber) {
         log.debug("fetchCustomerDetails method start");
         var model = customerService.fetchCustomerDetails(mobileNumber, correlationId);
         log.debug("fetchCustomerDetails method end");

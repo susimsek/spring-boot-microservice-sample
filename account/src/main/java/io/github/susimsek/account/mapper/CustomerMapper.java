@@ -7,7 +7,10 @@ import io.github.susimsek.account.dto.CustomerDetailsDTO;
 import io.github.susimsek.account.dto.LoanDTO;
 import io.github.susimsek.account.entity.Account;
 import io.github.susimsek.account.entity.Customer;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 
 @Mapper(

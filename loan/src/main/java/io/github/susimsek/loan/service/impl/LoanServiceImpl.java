@@ -8,10 +8,9 @@ import io.github.susimsek.loan.exception.ResourceNotFoundException;
 import io.github.susimsek.loan.mapper.LoanMapper;
 import io.github.susimsek.loan.repository.LoanRepository;
 import io.github.susimsek.loan.service.LoanService;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +22,8 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public void createLoan(String mobileNumber) {
-        if(loanRepository.existsByMobileNumber(mobileNumber)) {
-            throw new LoanAlreadyExistsException("Loan already registered with given mobileNumber "+mobileNumber);
+        if (loanRepository.existsByMobileNumber(mobileNumber)) {
+            throw new LoanAlreadyExistsException("Loan already registered with given mobileNumber " + mobileNumber);
         }
         loanRepository.save(createNewLoan(mobileNumber));
     }
@@ -34,13 +33,13 @@ public class LoanServiceImpl implements LoanService {
         var loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
             () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
         );
-       return loanMapper.toDto(loan);
+        return loanMapper.toDto(loan);
     }
 
     @Override
     public boolean updateLoan(String loanNumber, LoanDTO loan) {
         var loanEntity = loanRepository.findByLoanNumber(loanNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "loanNumber", loanNumber.toString())
+            () -> new ResourceNotFoundException("Loan", "loanNumber", loanNumber)
         );
         loanMapper.partialUpdate(loanEntity, loan);
         loanEntity.setLoanNumber(loanNumber);

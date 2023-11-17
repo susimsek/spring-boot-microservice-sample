@@ -1,17 +1,16 @@
 package io.github.susimsek.card.service.impl;
 
-import io.github.susimsek.card.entity.Card;
-import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.constants.CardConstants;
 import io.github.susimsek.card.dto.CardDTO;
+import io.github.susimsek.card.entity.Card;
 import io.github.susimsek.card.exception.CardAlreadyExistsException;
 import io.github.susimsek.card.exception.ResourceNotFoundException;
+import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.repository.CardRepository;
 import io.github.susimsek.card.service.CardService;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +22,8 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void createCard(String mobileNumber) {
-        if(cardRepository.existsByMobileNumber(mobileNumber)) {
-            throw new CardAlreadyExistsException("Card already registered with given mobileNumber "+mobileNumber);
+        if (cardRepository.existsByMobileNumber(mobileNumber)) {
+            throw new CardAlreadyExistsException("Card already registered with given mobileNumber " + mobileNumber);
         }
         cardRepository.save(createNewCard(mobileNumber));
     }
@@ -34,13 +33,13 @@ public class CardServiceImpl implements CardService {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
             () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
         );
-       return cardMapper.toDto(card);
+        return cardMapper.toDto(card);
     }
 
     @Override
     public boolean updateCard(String cardNumber, CardDTO card) {
         var cardEntity = cardRepository.findByCardNumber(cardNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Card", "cardNumber", cardNumber.toString())
+            () -> new ResourceNotFoundException("Card", "cardNumber", cardNumber)
         );
         cardMapper.partialUpdate(cardEntity, card);
         cardEntity.setCardNumber(cardNumber);

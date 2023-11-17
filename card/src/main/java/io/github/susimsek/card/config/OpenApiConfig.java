@@ -29,12 +29,12 @@ import org.springframework.context.annotation.Configuration;
         )
     ),
     externalDocs = @ExternalDocumentation(
-        description =  "EazyBank Card microservice REST API Documentation",
+        description = "EazyBank Card microservice REST API Documentation",
         url = "https://www.susimsek.github.io/swagger-ui.html"
     )
 )
 @SecurityScheme(name = "auth", type = SecuritySchemeType.OAUTH2,
-    flows = @OAuthFlows(clientCredentials  = @OAuthFlow(tokenUrl = "${springdoc.oAuthFlow.tokenUrl}", scopes = {
+    flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${springdoc.oAuthFlow.tokenUrl}", scopes = {
         @OAuthScope(name = "openid", description = "openid"),
         @OAuthScope(name = "email", description = "email"),
         @OAuthScope(name = "profile", description = "profile")

@@ -20,6 +20,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,9 +40,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.concurrent.TimeoutException;
-
 @Slf4j
 @Tag(
     name = "account",
@@ -48,7 +47,7 @@ import java.util.concurrent.TimeoutException;
 )
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class AccountController {
 
@@ -88,8 +87,8 @@ public class AccountController {
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customer) {
         accountService.createAccount(customer);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new ResponseDTO(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201));
+            .status(HttpStatus.CREATED)
+            .body(new ResponseDTO(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201));
     }
 
     @Operation(
@@ -117,7 +116,7 @@ public class AccountController {
     @GetMapping("/account")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         var model = accountService.fetchAccount(mobileNumber);
         return ResponseEntity.ok(model);
@@ -144,7 +143,7 @@ public class AccountController {
     @GetMapping("/account/{accountNumber:[0-9]+}/revisions")
     public ResponseEntity<List<AccountDTO>> getAccountRevisions(
         @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "AccountNumber must be 10 digits")
         @PathVariable Long accountNumber) {
         var modelList = accountService.getAccountRevisions(accountNumber);
         return ResponseEntity.ok(modelList);
@@ -171,7 +170,7 @@ public class AccountController {
     @GetMapping("/account/{accountNumber:[0-9]+}/creator")
     public ResponseEntity<String> getCreatorUsername(
         @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp="(^$|[0-9]{10})",message = "AccountNumber must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "AccountNumber must be 10 digits")
         @PathVariable Long accountNumber) {
         var model = accountService.geCreatorUsername(accountNumber);
         return ResponseEntity.ok(model);
@@ -214,11 +213,11 @@ public class AccountController {
         @PathVariable Long accountNumber,
         @Valid @RequestBody CustomerDTO customer) {
         boolean isUpdated = accountService.updateAccount(accountNumber, customer);
-        if(isUpdated) {
+        if (isUpdated) {
             return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200));
-        } else{
+        } else {
             return ResponseEntity
                 .status(HttpStatus.EXPECTATION_FAILED)
                 .body(new ResponseDTO(AccountConstants.STATUS_417, AccountConstants.MESSAGE_417_UPDATE));
@@ -256,7 +255,7 @@ public class AccountController {
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccountDetails(
         @RequestParam
-        @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
         String mobileNumber
     ) {
         accountService.deleteAccount(mobileNumber);
@@ -281,7 +280,7 @@ public class AccountController {
         )
     }
     )
-    @Retry(name = "getBuildInfo",fallbackMethod = "getBuildInfoFallback")
+    @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallback")
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildInfo() throws TimeoutException {
         log.debug("getBuildInfo() method Invoked");
@@ -315,7 +314,7 @@ public class AccountController {
         )
     }
     )
-    @RateLimiter(name= "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
+    @RateLimiter(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity

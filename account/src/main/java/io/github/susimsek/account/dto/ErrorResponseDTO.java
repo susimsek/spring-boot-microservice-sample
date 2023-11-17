@@ -1,9 +1,8 @@
 package io.github.susimsek.account.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.http.HttpStatus;
-
 import java.time.Instant;
+import org.springframework.http.HttpStatus;
 
 @Schema(
     name = "ErrorResponse",

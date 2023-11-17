@@ -16,7 +16,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Cache(region = "loanCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Loan extends BaseEntity {
 
     @Id
