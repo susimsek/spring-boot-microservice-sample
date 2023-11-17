@@ -1,11 +1,10 @@
 package io.github.susimsek.gatewayserver.filter;
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class FilterUtility {
@@ -21,7 +20,7 @@ public class FilterUtility {
         }
     }
 
-    public boolean hasCorrelationId(HttpHeaders header){
+    public boolean hasCorrelationId(HttpHeaders header) {
         return header.containsKey(CORRELATION_ID);
     }
 

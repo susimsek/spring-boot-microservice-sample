@@ -23,7 +23,7 @@ public class ResponseTraceFilter {
 
             if (!filterUtility.hasCorrelationId(exchange.getResponse().getHeaders())) {
                 log.debug("Updated the correlation id to the outbound headers: {}", correlationId);
-                exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
+                exchange.getResponse().getHeaders().add(FilterUtility.CORRELATION_ID, correlationId);
             }
         }));
     }
