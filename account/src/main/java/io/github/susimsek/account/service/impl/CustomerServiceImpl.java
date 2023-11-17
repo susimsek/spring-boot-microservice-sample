@@ -6,8 +6,8 @@ import io.github.susimsek.account.mapper.CustomerMapper;
 import io.github.susimsek.account.repository.AccountRepository;
 import io.github.susimsek.account.repository.CustomerRepository;
 import io.github.susimsek.account.service.CustomerService;
-import io.github.susimsek.account.service.client.CardFeignClient;
-import io.github.susimsek.account.service.client.LoanFeignClient;
+import io.github.susimsek.account.client.CardFeignClient;
+import io.github.susimsek.account.client.LoanFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

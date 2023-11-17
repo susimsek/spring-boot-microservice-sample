@@ -1,4 +1,4 @@
-package io.github.susimsek.account.service.client;
+package io.github.susimsek.account.client;
 
 import io.github.susimsek.account.dto.LoanDTO;
 import org.springframework.cloud.openfeign.FeignClient;
