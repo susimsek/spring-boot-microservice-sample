@@ -100,9 +100,16 @@
                     <includes>pom.xml,README.md</includes>
                     <excludes>.git/**/*,target/**/*</excludes>
                     <sourceDirectories>./</sourceDirectories>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <violationSeverity>warning</violationSeverity>
+                    <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
