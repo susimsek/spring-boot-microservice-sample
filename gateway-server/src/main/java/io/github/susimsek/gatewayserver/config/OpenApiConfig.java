@@ -1,7 +1,8 @@
 package io.github.susimsek.gatewayserver.config;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
@@ -15,15 +16,14 @@ public class OpenApiConfig {
     @Bean
     @Lazy(false)
     public List<GroupedOpenApi> apis(RouteDefinitionLocator locator) {
-        List<GroupedOpenApi> groups = new ArrayList<>();
-        List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
-        definitions.stream()
+        List<RouteDefinition> definitions = Optional.ofNullable(
+            locator.getRouteDefinitions().collectList().block()).orElse(Collections.emptyList());
+        return definitions.stream()
             .filter(routeDefinition -> routeDefinition.getId().matches(".*-service"))
-            .forEach(routeDefinition -> {
-                String name = routeDefinition.getId().replaceAll("-service", "");
-                GroupedOpenApi.builder().pathsToMatch("/" + name + "/**").group(name).build();
-            });
-        return groups;
+            .map(routeDefinition -> {
+                String name = routeDefinition.getId().replace("-service", "");
+                return GroupedOpenApi.builder().pathsToMatch("/" + name + "/**").group(name).build();
+            }).toList();
     }
 
 }

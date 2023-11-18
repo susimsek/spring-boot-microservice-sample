@@ -1,6 +1,7 @@
 package io.github.susimsek.gatewayserver.filter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,9 @@ public class FilterUtility {
     public static final String CORRELATION_ID = "X-Correlation-Id";
 
     public String getCorrelationId(HttpHeaders requestHeaders) {
-        if (requestHeaders.get(CORRELATION_ID) != null) {
-            List<String> requestHeaderList = requestHeaders.get(CORRELATION_ID);
+        var optionalHeader = Optional.ofNullable(requestHeaders.get(CORRELATION_ID));
+        if (optionalHeader.isPresent()) {
+            List<String> requestHeaderList = optionalHeader.get();
             return requestHeaderList.iterator().next();
         } else {
             return null;

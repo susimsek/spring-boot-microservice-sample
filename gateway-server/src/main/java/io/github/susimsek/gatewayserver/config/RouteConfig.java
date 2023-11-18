@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
 
 @Configuration(proxyBeanMethods = false)
+@SuppressWarnings("java:S125")
 public class RouteConfig {
 
     /*
