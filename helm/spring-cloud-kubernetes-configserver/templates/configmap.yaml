@@ -11,3 +11,4 @@ metadata:
 data:
   SPRING_APPLICATION_NAME: {{ include "spring-cloud-kubernetes-configserver.fullname" . | quote }}
   SPRING_PROFILES_INCLUDE: {{ .Values.spring.profiles.include | quote }}
+  ENCRYPT_KEY: {{ .Values.encrypt.key | quote }}
