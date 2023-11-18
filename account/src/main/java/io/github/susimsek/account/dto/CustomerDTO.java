@@ -31,7 +31,7 @@ public record CustomerDTO(
     @Schema(
         description = "Mobile Number of the customer.csv", example = "9345432123"
     )
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+    @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
     String mobileNumber,
 
     @Schema(

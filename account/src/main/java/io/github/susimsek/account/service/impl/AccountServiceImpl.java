@@ -1,5 +1,9 @@
 package io.github.susimsek.account.service.impl;
 
+import static io.github.susimsek.account.constants.AccountConstants.ACCOUNT_RESOURCE_NAME;
+import static io.github.susimsek.account.constants.AccountConstants.CUSTOMER_RESOURCE_NAME;
+import static io.github.susimsek.account.constants.Constants.RANDOM;
+
 import io.github.susimsek.account.constants.AccountConstants;
 import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.AccountsMsgDTO;
@@ -15,7 +19,6 @@ import io.github.susimsek.account.repository.AccountRepository;
 import io.github.susimsek.account.repository.CustomerRepository;
 import io.github.susimsek.account.service.AccountService;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -49,10 +52,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public CustomerDTO fetchAccount(String mobileNumber) {
         var customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         var account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
-            () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
+            () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "customerId", customer.getCustomerId().toString())
         );
         return customerMapper.toDto(customer, account);
     }
@@ -81,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
         AccountDTO accountDTO = customer.account();
         if (accountDTO != null) {
             var account = accountRepository.findById(accountNumber).orElseThrow(
-                () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
+                () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "AccountNumber", accountNumber.toString())
             );
             accountMapper.partialUpdate(account, accountDTO);
             account.setAccountNumber(accountNumber);
@@ -89,7 +92,7 @@ public class AccountServiceImpl implements AccountService {
 
             Long customerId = account.getCustomerId();
             var customerEntity = customerRepository.findById(customerId).orElseThrow(
-                () -> new ResourceNotFoundException("Customer", "CustomerID", customerId.toString())
+                () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "CustomerID", customerId.toString())
             );
             customerMapper.partialUpdate(customerEntity, customer);
             customerRepository.save(customerEntity);
@@ -101,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deleteAccount(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         accountRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
@@ -112,7 +115,7 @@ public class AccountServiceImpl implements AccountService {
         boolean isUpdated = false;
         if (accountNumber != null) {
             Account account = accountRepository.findById(accountNumber).orElseThrow(
-                () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
+                () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "AccountNumber", accountNumber.toString())
             );
             account.setCommunicationSw(true);
             accountRepository.save(account);
@@ -124,7 +127,7 @@ public class AccountServiceImpl implements AccountService {
     private Account createNewAccount(Customer customer) {
         var newAccount = new Account();
         newAccount.setCustomerId(customer.getCustomerId());
-        long randomAccNumber = 1000000000L + new Random().nextInt(900000000);
+        long randomAccNumber = 1000000000L + RANDOM.nextInt(900000000);
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountConstants.SAVINGS);
         newAccount.setBranchAddress(AccountConstants.ADDRESS);

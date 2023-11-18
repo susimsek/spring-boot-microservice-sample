@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -65,23 +64,20 @@ public class AccountController {
         summary = "Create Account REST API",
         description = "REST API to create new Customer &  Account inside EazyBank"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created"
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Bad Request"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "201",
+        description = "Created"
+    )
+    @ApiResponse(
+        responseCode = "400",
+        description = "Bad Request"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @PostMapping("/account")
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customer) {
@@ -95,28 +91,25 @@ public class AccountController {
         summary = "Fetch Account Details REST API",
         description = "REST API to fetch Customer &  Account details based on a mobile number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Not Found"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
+    )
+    @ApiResponse(
+        responseCode = "404",
+        description = "Not Found"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @GetMapping("/account")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         var model = accountService.fetchAccount(mobileNumber);
         return ResponseEntity.ok(model);
@@ -126,24 +119,21 @@ public class AccountController {
         summary = "Fetch Account Revisions REST API",
         description = "REST API to fetch Account revisions based on a account number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
-    }
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
     )
-    @GetMapping("/account/{accountNumber:[0-9]+}/revisions")
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
+        )
+    )
+    @GetMapping("/account/{accountNumber:\\d+}/revisions")
     public ResponseEntity<List<AccountDTO>> getAccountRevisions(
         @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "AccountNumber must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "AccountNumber must be 10 digits")
         @PathVariable Long accountNumber) {
         var modelList = accountService.getAccountRevisions(accountNumber);
         return ResponseEntity.ok(modelList);
@@ -153,24 +143,21 @@ public class AccountController {
         summary = "Fetch Account Creator REST API",
         description = "REST API to fetch Account creator based on a account number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
-    }
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
     )
-    @GetMapping("/account/{accountNumber:[0-9]+}/creator")
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
+        )
+    )
+    @GetMapping("/account/{accountNumber:\\d+}/creator")
     public ResponseEntity<String> getCreatorUsername(
         @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "AccountNumber must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "AccountNumber must be 10 digits")
         @PathVariable Long accountNumber) {
         var model = accountService.geCreatorUsername(accountNumber);
         return ResponseEntity.ok(model);
@@ -181,33 +168,30 @@ public class AccountController {
         summary = "Update Account Details REST API",
         description = "REST API to update Customer &  Account details based on a account number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Bad Request"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Not Found"
-        ),
-        @ApiResponse(
-            responseCode = "417",
-            description = "Expectation Failed"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
-        )
-    }
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
     )
-    @PutMapping("/account/{accountNumber:^$|[0-9]{10}}")
+    @ApiResponse(
+        responseCode = "400",
+        description = "Bad Request"
+    )
+    @ApiResponse(
+        responseCode = "404",
+        description = "Not Found"
+    )
+    @ApiResponse(
+        responseCode = "417",
+        description = "Expectation Failed"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
+        )
+    )
+    @PutMapping("/account/{accountNumber:^$|\\d{10}}")
     public ResponseEntity<ResponseDTO> updateAccountDetails(
         @NotNull(message = "AccountNumber can not be a null")
         @PathVariable Long accountNumber,
@@ -230,32 +214,29 @@ public class AccountController {
         summary = "Delete Account & Customer Details REST API",
         description = "REST API to delete Customer &  Account details based on a mobile number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "204",
-            description = "No content"
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Bad Request"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Not Found"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "204",
+        description = "No content"
+    )
+    @ApiResponse(
+        responseCode = "400",
+        description = "Bad Request"
+    )
+    @ApiResponse(
+        responseCode = "404",
+        description = "Not Found"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber
     ) {
         accountService.deleteAccount(mobileNumber);
@@ -266,19 +247,16 @@ public class AccountController {
         summary = "Get Build information",
         description = "Get Build information that is deployed into account microservice"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallback")
     @GetMapping("/build-info")
@@ -288,7 +266,7 @@ public class AccountController {
             .ok(buildVersion);
     }
 
-    public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
+    public ResponseEntity<String> getBuildInfoFallback() {
         log.debug("getBuildInfoFallback() method Invoked");
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -300,19 +278,16 @@ public class AccountController {
         summary = "Get Java version",
         description = "Get Java versions details that is installed into account microservice"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @RateLimiter(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
@@ -322,7 +297,7 @@ public class AccountController {
             .body(environment.getProperty("JAVA_HOME"));
     }
 
-    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
+    public ResponseEntity<String> getJavaVersionFallback() {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body("Java 17");
@@ -332,19 +307,13 @@ public class AccountController {
         summary = "Get Contact Info",
         description = "Contact Info details that can be reached out in case of any issues"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(responseCode = "200", description = "Ok")
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @GetMapping("/contact-info")
     public ResponseEntity<AccountContactInfoDTO> getContactInfo() {

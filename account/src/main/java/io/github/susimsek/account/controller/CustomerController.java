@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -38,25 +37,22 @@ public class CustomerController {
         summary = "Fetch Customer Details REST API",
         description = "REST API to fetch Customer details based on a mobile number"
     )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Ok"
-        ),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponseDTO.class)
-            )
+    @ApiResponse(
+        responseCode = "200",
+        description = "Ok"
+    )
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDTO.class)
         )
-    }
     )
     @GetMapping("/customer-details")
     public ResponseEntity<CustomerDetailsDTO> fetchCustomerDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
         log.debug("fetchCustomerDetails method start");
         var model = customerService.fetchCustomerDetails(mobileNumber, correlationId);
