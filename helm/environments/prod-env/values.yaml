@@ -1,9 +1,9 @@
 config-server:
-  enabled: true
+  enabled: false
   fullnameOverride: config-server
 
 eureka-server:
-  enabled: true
+  enabled: false
   fullnameOverride: eureka-server
   spring:
     profiles:

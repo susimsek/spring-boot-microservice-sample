@@ -5,43 +5,9 @@ spring:
     active: default, k8s
   cloud:
     configServer:
-      url: "configserver:http://config-server:8071/"
-    kubernetes:
-      discoveryServer:
-        url: "http://spring-cloud-kubernetes-discoveryserver:80/"
-  zipkin:
-    tracingEndpoint: "http://tempo-grafana-tempo-distributor:9411"
-  kafka:
-    bootstrapServers: "kafka:9092"
-  datasource:
-    url: "jdbc:postgresql://postgresql:5432/accountdb"
-    username: "easybank"
-    password: "root"
-  liquibase:
-    contexts: prod
-  redis:
-    host: "redis-master"
-    port: 6379
-    password: "d41d8cd98f00b204e9800998ecf8427e"
-    timeout: 1s
-    connectTimeout: 2s
+      url: "configserver:http://spring-cloud-kubernetes-configserver:8888/"
 
 configServer:
-  enabled: true
-eurekaServer:
-  enabled: false
-kubernetesDiscoveryServer:
-  enabled: true
-authorizationServer:
-  enabled: false
-tracing:
-  enabled: true
-kafka:
-  enabled: true
-database:
-  enabled: true
-  type: sql
-redis:
   enabled: true
 
 kubeVersion: ""

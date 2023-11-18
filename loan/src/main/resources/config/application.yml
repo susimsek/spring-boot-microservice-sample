@@ -11,10 +11,6 @@ spring:
       enabled: always
   profiles:
     active: local
-  datasource:
-    url: jdbc:postgresql://localhost:5432/loandb
-    username: easybank
-    password: root
   liquibase:
     change-log: classpath:config/liquibase/master.xml
   jpa:
@@ -46,12 +42,6 @@ spring:
       org.hibernate.envers.audit_table_suffix: _history
       org.hibernate.envers.revision_field_name: revision
       org.hibernate.envers.revision_type_field_name: revision_type
-  kafka:
-    bootstrap-servers: http://localhost:9092
-  cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
 
 eureka:
   instance:

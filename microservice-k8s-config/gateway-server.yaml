@@ -56,8 +56,11 @@ data:
       cache:
         disabled: true
     ---
+    
     spring:
-      profiles: k8s
+      config:
+        activate:
+          on-profile: k8s
       kafka:
         bootstrap-servers: http://kafka:9092
       data:

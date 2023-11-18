@@ -5,29 +5,10 @@ spring:
     active: default, k8s
   cloud:
     configServer:
-      url: "configserver:http://config-server:8071/"
-  zipkin:
-    tracingEndpoint: "http://tempo-grafana-tempo-distributor:9411"
-  kafka:
-    bootstrapServers: "kafka:9092"
+      url: "configserver:http://spring-cloud-kubernetes-configserver:8888/"
 
 configServer:
   enabled: true
-eurekaServer:
-  enabled: false
-kubernetesDiscoveryServer:
-  enabled: false
-authorizationServer:
-  enabled: false
-tracing:
-  enabled: true
-kafka:
-  enabled: true
-database:
-  enabled: false
-  type: sql
-redis:
-  enabled: false
 
 kubeVersion: ""
 nameOverride: ""

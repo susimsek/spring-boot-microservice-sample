@@ -55,8 +55,11 @@ data:
       oAuthFlow:
         tokenUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/token
     ---
+    
     spring:
-      profiles: qa
+      config:
+        activate:
+          on-profile: qa
       main:
         allow-bean-definition-overriding: true
       output:
@@ -155,8 +158,11 @@ data:
           probability: 1.0
         enabled: true
     ---
+    
     spring:
-      profiles: k8s
+      config:
+        activate:
+          on-profile: k8s
       datasource:
         url: jdbc:postgresql://postgresql:5432/loandb
         username: easybank

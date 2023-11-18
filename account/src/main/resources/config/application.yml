@@ -10,11 +10,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    active: local, dev
-  datasource:
-    url: jdbc:postgresql://localhost:5432/accountdb
-    username: easybank
-    password: root
+    active: local
   liquibase:
     change-log: classpath:config/liquibase/master.xml
   data:
@@ -52,18 +48,7 @@ spring:
       org.hibernate.envers.revision_type_field_name: revision_type
 #  config:
 #    import: optional:configserver:http://localhost:8071/
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    connection-timeout: 10s
-  kafka:
-    bootstrap-servers: http://localhost:9092
   cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
     openfeign:
       circuitbreaker:
         enabled: true

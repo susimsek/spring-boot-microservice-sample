@@ -11,10 +11,6 @@ spring:
       enabled: always
   profiles:
     active: local
-  datasource:
-    url: jdbc:postgresql://localhost:5432/carddb
-    username: easybank
-    password: root
   liquibase:
     change-log: classpath:config/liquibase/master.xml
   jpa:
@@ -43,12 +39,6 @@ spring:
       hibernate.cache.redisson.query.eviction.max_entries: 10000
       hibernate.cache.redisson.query.eviction.time_to_live: 3600000
       hibernate.cache.redisson.query.eviction.max_idle_time: 1800000
-  kafka:
-    bootstrap-servers: http://localhost:9092
-  cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
 
 management:
   endpoints:
