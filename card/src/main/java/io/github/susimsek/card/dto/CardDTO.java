@@ -15,7 +15,7 @@ public record CardDTO(
         description = "Mobile Number of Customer", example = "4354437687"
     )
     @NotEmpty(message = "Mobile Number can not be a null or empty")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile Number must be 10 digits")
+    @Pattern(regexp = "(^$|\\d{10})", message = "Mobile Number must be 10 digits")
     String mobileNumber,
 
 
@@ -23,7 +23,7 @@ public record CardDTO(
         description = "Card Number of the customer", example = "100646930341"
     )
     @NotEmpty(message = "Card Number can not be a null or empty")
-    @Pattern(regexp = "(^$|[0-9]{12})", message = "CardNumber must be 12 digits")
+    @Pattern(regexp = "(^$|\\d{12})", message = "CardNumber must be 12 digits")
     String cardNumber,
 
     @Schema(

@@ -38,7 +38,7 @@ public class CacheConfig {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
 
         // create "testMap" spring cache with ttl = 24 minutes and maxIdleTime = 12 minutes
-        config.put("testMap", new org.redisson.spring.cache.CacheConfig(24 * 60 * 1000, 12 * 60 * 1000));
+        config.put("testMap", new org.redisson.spring.cache.CacheConfig(24 * 60 * 1000L, 12 * 60 * 1000L));
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 }

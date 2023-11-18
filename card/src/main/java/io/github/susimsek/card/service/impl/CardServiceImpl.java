@@ -1,5 +1,8 @@
 package io.github.susimsek.card.service.impl;
 
+import static io.github.susimsek.card.constants.CardConstants.CARD_RESOURCE_NAME;
+import static io.github.susimsek.card.constants.Constants.RANDOM;
+
 import io.github.susimsek.card.constants.CardConstants;
 import io.github.susimsek.card.dto.CardDTO;
 import io.github.susimsek.card.entity.Card;
@@ -8,7 +11,6 @@ import io.github.susimsek.card.exception.ResourceNotFoundException;
 import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.repository.CardRepository;
 import io.github.susimsek.card.service.CardService;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDTO fetchCard(String mobileNumber) {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         return cardMapper.toDto(card);
     }
@@ -39,7 +41,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public boolean updateCard(String cardNumber, CardDTO card) {
         var cardEntity = cardRepository.findByCardNumber(cardNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Card", "cardNumber", cardNumber)
+            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "cardNumber", cardNumber)
         );
         cardMapper.partialUpdate(cardEntity, card);
         cardEntity.setCardNumber(cardNumber);
@@ -50,14 +52,14 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(String mobileNumber) {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         cardRepository.deleteById(card.getCardId());
     }
 
     private Card createNewCard(String mobileNumber) {
         Card newCard = new Card();
-        long randomCardNumber = 100000000000L + new Random().nextInt(900000000);
+        long randomCardNumber = 100000000000L + RANDOM.nextInt(900000000);
         newCard.setCardNumber(Long.toString(randomCardNumber));
         newCard.setMobileNumber(mobileNumber);
         newCard.setCardType(CardConstants.CREDIT_CARD);

@@ -1,5 +1,8 @@
 package io.github.susimsek.loan.service.impl;
 
+import static io.github.susimsek.loan.constants.Constants.RANDOM;
+import static io.github.susimsek.loan.constants.LoanConstants.LOAN_RESOURCE_NAME;
+
 import io.github.susimsek.loan.constants.LoanConstants;
 import io.github.susimsek.loan.dto.LoanDTO;
 import io.github.susimsek.loan.entity.Loan;
@@ -8,7 +11,6 @@ import io.github.susimsek.loan.exception.ResourceNotFoundException;
 import io.github.susimsek.loan.mapper.LoanMapper;
 import io.github.susimsek.loan.repository.LoanRepository;
 import io.github.susimsek.loan.service.LoanService;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO fetchLoan(String mobileNumber) {
         var loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(LOAN_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         return loanMapper.toDto(loan);
     }
@@ -39,7 +41,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public boolean updateLoan(String loanNumber, LoanDTO loan) {
         var loanEntity = loanRepository.findByLoanNumber(loanNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "loanNumber", loanNumber)
+            () -> new ResourceNotFoundException(LOAN_RESOURCE_NAME, "loanNumber", loanNumber)
         );
         loanMapper.partialUpdate(loanEntity, loan);
         loanEntity.setLoanNumber(loanNumber);
@@ -50,14 +52,14 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public void deleteLoan(String mobileNumber) {
         var loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
+            () -> new ResourceNotFoundException(LOAN_RESOURCE_NAME, "mobileNumber", mobileNumber)
         );
         loanRepository.deleteById(loan.getLoanId());
     }
 
     private Loan createNewLoan(String mobileNumber) {
         Loan newLoan = new Loan();
-        long randomLoanNumber = 100000000000L + new Random().nextInt(900000000);
+        long randomLoanNumber = 100000000000L + RANDOM.nextInt(900000000);
         newLoan.setLoanNumber(Long.toString(randomLoanNumber));
         newLoan.setMobileNumber(mobileNumber);
         newLoan.setLoanType(LoanConstants.HOME_LOAN);
