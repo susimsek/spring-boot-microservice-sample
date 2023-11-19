@@ -72,10 +72,6 @@ data:
           connect-timeout: 2s
       cloud:
         gateway:
-          discovery:
-            locator:
-              enabled: false
-              lower-case-service-id: true
           routes:
             - id: account-service
               uri: http://account:8080
