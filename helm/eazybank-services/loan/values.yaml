@@ -5,7 +5,7 @@ spring:
     active: default, k8s
   cloud:
     configServer:
-      url: "configserver:http://spring-cloud-kubernetes-configserver:8888/"
+      url: "configserver:http://config-server:8071/"
 
 configServer:
   enabled: true

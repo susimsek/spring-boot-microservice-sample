@@ -93,3 +93,7 @@ logging:
           gatewayserver: DEBUG
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+management:
+  tracing:
+    enabled: false
