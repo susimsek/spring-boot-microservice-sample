@@ -10,10 +10,6 @@ services:
       resources:
         limits:
           memory: 700m
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      MANAGEMENT_TRACING_ENABLED: "true"
-      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
 
   microservice-db-config:
     extends:
@@ -36,7 +32,6 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod, docker
-      SPRING_LIQUIBASE_CONTEXTS: prod
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
 #      SPRING_DATASOURCE_USERNAME: easybank
 #      SPRING_DATASOURCE_PASSWORD: root
@@ -52,5 +47,3 @@ services:
     depends_on:
       eureka-server:
         condition: service_healthy
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8070/eureka/
