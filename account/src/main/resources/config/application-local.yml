@@ -27,7 +27,7 @@ spring:
       discovery:
         enabled: false
       config:
-        enabled: false
+        enabled: true
     openfeign:
       circuitbreaker:
         enabled: true
