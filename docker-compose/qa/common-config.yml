@@ -32,7 +32,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: qa, docker
-      SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
+      SPRING_CONFIG_IMPORT: configserver:http://easybank:root@config-server:8071/
 #      SPRING_DATASOURCE_USERNAME: easybank
 #      SPRING_DATASOURCE_PASSWORD: root
 #      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s

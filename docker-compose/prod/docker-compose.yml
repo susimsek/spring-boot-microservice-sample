@@ -336,6 +336,8 @@ services:
       - 8071:8071
     environment:
       SPRING_APPLICATION_NAME: config-server
+      SPRING_SECURITY_USER_NAME: easybank
+      SPRING_SECURITY_USER_PASSWORD: root
     depends_on:
       kafka:
         condition: service_healthy
@@ -476,6 +478,12 @@ services:
         condition: service_healthy
       card:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8072/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: gateway-server
     extends:
