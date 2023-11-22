@@ -46,4 +46,8 @@ data:
   SPRING_DATA_REDIS_TIMEOUT: {{ .Values.spring.redis.timeout | quote }}
   SPRING_DATA_REDIS_CONNECT-TIMEOUT: {{ .Values.spring.redis.connectTimeout | quote }}
   {{- end }}
+  {{- if .Values.security.user.enabled }}
+  SPRING_SECURITY_USER_NAME: {{ .Values.spring.security.user.name | quote }}
+  SPRING_SECURITY_USER_PASSWORD: {{ .Values.spring.security.user.password | quote }}
+  {{- end }}
 {{- end -}}

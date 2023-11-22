@@ -7,6 +7,10 @@ spring:
     tracingEndpoint: "http://tempo-grafana-tempo-distributor:9411"
   kafka:
     bootstrapServers: "kafka:9092"
+  security:
+    user:
+      name: "easybank"
+      password: "root"
 
 configServer:
   enabled: false
@@ -25,6 +29,9 @@ database:
   type: sql
 redis:
   enabled: false
+security:
+  user:
+    enabled: true
 
 kubeVersion: ""
 nameOverride: ""

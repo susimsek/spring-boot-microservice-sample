@@ -29,6 +29,10 @@ spring:
     password: ""
     timeout: 1s
     connectTimeout: 2s
+  security:
+    user:
+      name: ""
+      password: ""
 
 configServer:
   enabled: false
@@ -47,6 +51,9 @@ database:
   type: sql
 redis:
   enabled: false
+security:
+  user:
+    enabled: false
 
 kubeVersion: ""
 nameOverride: ""

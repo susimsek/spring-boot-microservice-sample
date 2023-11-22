@@ -5,7 +5,7 @@ spring:
     active: default, k8s
   cloud:
     configServer:
-      url: "configserver:http://config-server:8071/"
+      url: "configserver:http://easybank:root@config-server:8071/"
 
 configServer:
   enabled: true
