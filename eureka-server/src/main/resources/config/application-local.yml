@@ -4,7 +4,12 @@ spring:
       enabled: false
   kafka:
     bootstrap-servers: http://localhost:9092
-
+  security:
+    user:
+      name: easybank
+      password: root
+      roles: USER, ADMIN
+    content-security-policy: "script-src 'self'"
 
 eureka:
   instance:
