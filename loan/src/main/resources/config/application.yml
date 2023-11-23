@@ -43,15 +43,6 @@ spring:
       org.hibernate.envers.revision_field_name: revision
       org.hibernate.envers.revision_type_field_name: revision_type
 
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
-
 management:
   endpoints:
     web:

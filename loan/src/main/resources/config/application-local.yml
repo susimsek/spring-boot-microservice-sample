@@ -31,6 +31,15 @@ spring:
     config:
       enabled: false
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://easybank:root@localhost:8070/eureka/
+
 logging:
   level:
     io:

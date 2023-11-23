@@ -38,7 +38,7 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+      defaultZone: http://easybank:root@localhost:8070/eureka/
 
 logging:
   level:
