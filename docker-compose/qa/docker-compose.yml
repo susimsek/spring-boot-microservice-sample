@@ -330,7 +330,7 @@ services:
       service: network-deploy-service
 
   config-server:
-    image: suayb/config-server:s14
+    image: suayb/config-server:s17
     container_name: config-server-ms
     ports:
       - 8071:8071
@@ -449,7 +449,7 @@ services:
       service: microservice-eureka-config
 
   message:
-    image: suayb/message:s14
+    image: suayb/message:s17
     container_name: message-ms
     ports:
       - 9010:9010
