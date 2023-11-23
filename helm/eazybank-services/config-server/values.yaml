@@ -33,6 +33,11 @@ security:
   user:
     enabled: true
 
+
+encryption:
+  enabled: true
+  key: 45D81EC1EF61DF9AD8D3E5BB397F9
+
 kubeVersion: ""
 nameOverride: ""
 fullnameOverride: ""

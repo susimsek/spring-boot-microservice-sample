@@ -55,6 +55,10 @@ security:
   user:
     enabled: false
 
+encryption:
+  enabled: false
+  key: ""
+
 kubeVersion: ""
 nameOverride: ""
 fullnameOverride: ""

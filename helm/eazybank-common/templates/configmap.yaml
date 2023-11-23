@@ -50,4 +50,7 @@ data:
   SPRING_SECURITY_USER_NAME: {{ .Values.spring.security.user.name | quote }}
   SPRING_SECURITY_USER_PASSWORD: {{ .Values.spring.security.user.password | quote }}
   {{- end }}
+  {{- if .Values.encryption.enabled }}
+  ENCRYPT_KEY: {{ .Values.encryption.key | quote }}
+  {{- end }}
 {{- end -}}
