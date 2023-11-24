@@ -25,16 +25,16 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
-@EnableConfigurationProperties(SpringSecurityProperties.class)
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfig {
 
-    private final SpringSecurityProperties springSecurityProperties;
+    private final SecurityProperties securityProperties;
 
     @Bean
     public UserDetailsService userDetailsService(
         PasswordEncoder passwordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        var user = springSecurityProperties.getUser();
+        var user = securityProperties.getUser();
         manager.createUser(User.withUsername(user.getName())
             .password(passwordEncoder.encode(user.getPassword()))
             .roles(user.getRoles().toArray(new String[0])).build());
@@ -64,7 +64,7 @@ public class SecurityConfig {
             .headers(headers ->
                 headers
                     .contentSecurityPolicy(csp -> csp.policyDirectives(
-                        springSecurityProperties.getContentSecurityPolicy()))
+                        securityProperties.getContentSecurityPolicy()))
             )
             .authorizeHttpRequests(authorize ->
                 // prettier-ignore
