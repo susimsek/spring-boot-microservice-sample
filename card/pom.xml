@@ -30,6 +30,9 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
         <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
+        <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <detekt.configFile>${project.basedir}/detekt-config.yml</detekt.configFile>
         <detekt.xmlReportFile>${project.build.directory}/detekt-reports/detekt.xml</detekt.xmlReportFile>
         <sonar.kotlin.detekt.reportPaths>${detekt.xmlReportFile}</sonar.kotlin.detekt.reportPaths>
@@ -410,6 +413,78 @@
                         <version>${detekt.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <runOrder>alphabetical</runOrder>
+                    <excludes>
+                        <exclude>**/*IT*</exclude>
+                        <exclude>**/*IntTest*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <runOrder>alphabetical</runOrder>
+                    <includes>
+                        <include>**/*IT*</include>
+                        <include>**/*IntTest*</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-tests</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-tests</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-tests</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
