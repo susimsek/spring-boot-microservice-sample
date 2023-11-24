@@ -1,15 +1,15 @@
-package io.github.susimsek.account
+package io.github.susimsek.loan
 
-import io.github.susimsek.account.dto.AccountContactInfoDTO
+import io.github.susimsek.loan.dto.LoanContactInfoDTO
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @EnableDiscoveryClient
-@EnableConfigurationProperties(value = [AccountContactInfoDTO::class])
+@EnableConfigurationProperties(value = [LoanContactInfoDTO::class])
 @SpringBootApplication
-class AccountApplication
+class LoanApplication
 fun main(args: Array<String>) {
-    runApplication<AccountApplication>(*args)
+    runApplication<LoanApplication>(*args)
 }

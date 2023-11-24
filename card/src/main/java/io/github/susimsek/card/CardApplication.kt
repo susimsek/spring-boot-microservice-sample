@@ -1,15 +1,15 @@
-package io.github.susimsek.account
+package io.github.susimsek.card
 
-import io.github.susimsek.account.dto.AccountContactInfoDTO
+import io.github.susimsek.card.dto.CardContactInfoDTO
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @EnableDiscoveryClient
-@EnableConfigurationProperties(value = [AccountContactInfoDTO::class])
+@EnableConfigurationProperties(value = [CardContactInfoDTO::class])
 @SpringBootApplication
-class AccountApplication
+class CardApplication
 fun main(args: Array<String>) {
-    runApplication<AccountApplication>(*args)
+    runApplication<CardApplication>(*args)
 }
