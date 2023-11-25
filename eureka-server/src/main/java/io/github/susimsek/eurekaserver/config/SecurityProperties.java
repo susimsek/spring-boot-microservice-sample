@@ -9,10 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("spring.security")
 @Getter
 @Setter
-public class SpringSecurityProperties {
+public class SecurityProperties {
 
     private User user = new User();
-    private String contentSecurityPolicy = SpringSecurityDefaults.CONTENT_SECURITY_POLICY;
+    private String contentSecurityPolicy = SecurityDefaults.CONTENT_SECURITY_POLICY;
 
     @Getter
     @Setter
