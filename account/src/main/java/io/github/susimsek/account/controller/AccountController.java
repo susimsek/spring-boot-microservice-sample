@@ -1,5 +1,6 @@
 package io.github.susimsek.account.controller;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.susimsek.account.constants.AccountConstants;
@@ -111,6 +112,9 @@ public class AccountController {
         @RequestParam
         @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
+        var marker = LabelMarker.of("mobileNumber", () ->
+            String.valueOf(mobileNumber));
+        log.info(marker, "account successfully fetched");
         var model = accountService.fetchAccount(mobileNumber);
         return ResponseEntity.ok(model);
     }

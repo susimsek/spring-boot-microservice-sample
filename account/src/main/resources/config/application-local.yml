@@ -42,12 +42,16 @@ spring:
           destination: send-communication
     config:
       enabled: false
+  logging:
+    loki:
+      enabled: false
+      url: http://localhost:3100/loki/api/v1/push
 
 eureka:
   instance:
     preferIpAddress: true
   client:
-    enabled: true
+    enabled: false
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
