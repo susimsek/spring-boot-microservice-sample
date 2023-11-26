@@ -65,15 +65,6 @@ info:
     description: "Eazy Bank Gateway Server Application"
     version: "1.0.0"
 
-logging:
-  level:
-    io:
-      github:
-        susimsek:
-          gatewayserver: DEBUG
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
 resilience4j.circuitbreaker:
   configs:
     default:

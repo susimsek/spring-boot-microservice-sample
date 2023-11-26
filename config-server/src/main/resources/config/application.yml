@@ -59,5 +59,8 @@ encrypt:
   key: 45D81EC1EF61DF9AD8D3E5BB397F9
 
 logging:
+  level:
+    ROOT: INFO
+    io.github.susimsek.configserver: INFO
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

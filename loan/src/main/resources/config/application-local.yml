@@ -46,10 +46,9 @@ eureka:
 
 logging:
   level:
-    io:
-      github:
-        susimsek:
-          loan: DEBUG
+    ROOT: DEBUG
+    org.hibernate.SQL: DEBUG
+    io.github.susimsek.loan: DEBUG
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 

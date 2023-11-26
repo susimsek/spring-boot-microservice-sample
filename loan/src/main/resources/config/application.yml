@@ -88,15 +88,6 @@ info:
     description: "Eazy Bank Loan Application"
     version: "1.0.0"
 
-logging:
-  level:
-    io:
-      github:
-        susimsek:
-          loan: DEBUG
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
 springdoc:
   cache:
     disabled: true

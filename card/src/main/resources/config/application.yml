@@ -85,15 +85,6 @@ info:
     description: "Eazy Bank Card Application"
     version: "1.0.0"
 
-logging:
-  level:
-    io:
-      github:
-        susimsek:
-          card: DEBUG
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
 springdoc:
   cache:
     disabled: true

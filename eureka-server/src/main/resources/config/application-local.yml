@@ -24,3 +24,10 @@ eureka:
     registerWithEureka: false
     serviceUrl:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.susimsek.eurekaserver: DEBUG
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

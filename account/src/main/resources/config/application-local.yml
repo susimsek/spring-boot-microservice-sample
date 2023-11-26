@@ -57,15 +57,6 @@ eureka:
     serviceUrl:
       defaultZone: http://easybank:root@localhost:8070/eureka/
 
-logging:
-  level:
-    io:
-      github:
-        susimsek:
-          account: DEBUG
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
 resilience4j.circuitbreaker:
   configs:
     default:
@@ -112,3 +103,11 @@ springdoc:
 management:
   tracing:
     enabled: false
+
+logging:
+  level:
+    ROOT: DEBUG
+    org.hibernate.SQL: DEBUG
+    io.github.susimsek.account: DEBUG
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'

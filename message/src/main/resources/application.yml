@@ -27,3 +27,10 @@ spring:
     connection-timeout: 10s
   kafka:
     bootstrap-servers: http://localhost:9092
+
+logging:
+  level:
+    ROOT: INFO
+    io.github.susimsek.message: INFO
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
