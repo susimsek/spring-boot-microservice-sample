@@ -1,5 +1,7 @@
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
-##
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+configMap:
+  create: false
 spring:
   profiles:
     active: ""

@@ -1,4 +1,5 @@
 {{- define "common.configmap" -}}
+{{- if .Values.configMap.create }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -57,4 +58,5 @@ data:
   SPRING_LOGGING_LOKI_ENABLED: {{ .Values.logging.loki.enabled | quote }}
   SPRING_LOGGING_LOKI_URL: {{ .Values.spring.logging.loki.url | quote }}
   {{- end }}
+{{- end }}
 {{- end -}}
