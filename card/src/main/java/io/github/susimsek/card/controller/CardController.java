@@ -1,5 +1,6 @@
 package io.github.susimsek.card.controller;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import io.github.susimsek.card.constants.CardConstants;
 import io.github.susimsek.card.dto.CardContactInfoDTO;
 import io.github.susimsek.card.dto.CardDTO;
@@ -110,6 +111,9 @@ public class CardController {
         @RequestParam
         @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
+        var marker = LabelMarker.of("mobileNumber", () ->
+            String.valueOf(mobileNumber));
+        log.info(marker, "card successfully fetched");
         log.debug("fetchCardDetails method start");
         var model = cardService.fetchCard(mobileNumber);
         log.debug("fetchCardDetails method end");

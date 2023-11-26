@@ -1,5 +1,6 @@
 package io.github.susimsek.loan.controller;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import io.github.susimsek.loan.constants.LoanConstants;
 import io.github.susimsek.loan.dto.ErrorResponseDTO;
 import io.github.susimsek.loan.dto.LoanContactInfoDTO;
@@ -110,6 +111,9 @@ public class LoanController {
         @RequestParam
         @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
         String mobileNumber) {
+        var marker = LabelMarker.of("mobileNumber", () ->
+            String.valueOf(mobileNumber));
+        log.info(marker, "loan successfully fetched");
         log.debug("fetchLoanDetails method start");
         var model = loanService.fetchLoan(mobileNumber);
         log.debug("fetchLoanDetails method end");
