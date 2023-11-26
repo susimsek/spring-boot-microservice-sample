@@ -53,4 +53,8 @@ data:
   {{- if .Values.encryption.enabled }}
   ENCRYPT_KEY: {{ .Values.encryption.key | quote }}
   {{- end }}
+  {{- if .Values.logging.loki.enabled }}
+  SPRING_LOGGING_LOKI_ENABLED: {{ .Values.logging.loki.enabled | quote }}
+  SPRING_LOGGING_LOKI_URL: {{ .Values.spring.logging.loki.url | quote }}
+  {{- end }}
 {{- end -}}

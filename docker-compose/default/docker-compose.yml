@@ -340,6 +340,10 @@ services:
       SPRING_SECURITY_USER_PASSWORD: root
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       ENCRYPT_KEY: 45D81EC1EF61DF9AD8D3E5BB397F9
+      MANAGEMENT_TRACING_ENABLED: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://tempo:9411
+      SPRING_LOGGING_LOKI_ENABLED: "true"
+      SPRING_LOGGING_LOKI_URL: http://gateway:3100/loki/api/v1/push
     depends_on:
       kafka:
         condition: service_healthy

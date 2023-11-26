@@ -11,6 +11,9 @@ spring:
     user:
       name: "easybank"
       password: "root"
+  logging:
+    loki:
+      url: "http://loki-grafana-loki-gateway/loki/api/v1/push"
 
 configServer:
   enabled: false
@@ -32,7 +35,9 @@ redis:
 security:
   user:
     enabled: true
-
+logging:
+  loki:
+    enabled: true
 
 encryption:
   enabled: true
