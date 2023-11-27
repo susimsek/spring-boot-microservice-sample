@@ -51,7 +51,7 @@ eureka:
   instance:
     preferIpAddress: true
   client:
-    enabled: true
+    enabled: false
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
