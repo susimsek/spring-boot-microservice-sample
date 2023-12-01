@@ -1,6 +1,6 @@
 package io.github.susimsek.account.config;
 
-import static io.github.susimsek.account.repository.AccountRepository.ACCOUNT_BY_CUSTOMER_ID;
+import static io.github.susimsek.account.repository.AccountRepository.ACCOUNT_BY_CUSTOMER_ID_CACHE;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class CacheConfig {
     public CacheManager cacheManager(
         RedissonClient redissonClient) {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
-        createCache(config,  ACCOUNT_BY_CUSTOMER_ID);
+        createCache(config,  ACCOUNT_BY_CUSTOMER_ID_CACHE);
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 

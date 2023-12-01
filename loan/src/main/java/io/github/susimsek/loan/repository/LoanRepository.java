@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    String LOAN_BY_MOBILE_NUMBER = "loanByMobileNumber";
+    String LOAN_BY_MOBILE_NUMBER_CACHE = "loanByMobileNumber";
 
-    @Cacheable(cacheNames = LOAN_BY_MOBILE_NUMBER)
+    @Cacheable(cacheNames = LOAN_BY_MOBILE_NUMBER_CACHE)
     Optional<Loan> findByMobileNumber(String mobileNumber);
 
     boolean existsByMobileNumber(String mobileNumber);

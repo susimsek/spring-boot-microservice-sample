@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long>,
     RevisionRepository<Account, Long, Integer> {
-    String ACCOUNT_BY_CUSTOMER_ID = "accountByCustomerId";
+    String ACCOUNT_BY_CUSTOMER_ID_CACHE = "accountByCustomerId";
 
-    @Cacheable(cacheNames = ACCOUNT_BY_CUSTOMER_ID)
+    @Cacheable(cacheNames = ACCOUNT_BY_CUSTOMER_ID_CACHE)
     Optional<Account> findByCustomerId(Long customerId);
 
     @Transactional

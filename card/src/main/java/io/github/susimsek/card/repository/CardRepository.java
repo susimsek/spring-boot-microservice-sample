@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
-    String CARD_BY_MOBILE_NUMBER = "cardByMobileNumber";
+    String CARD_BY_MOBILE_NUMBER_CACHE = "cardByMobileNumber";
 
-    @Cacheable(cacheNames = CARD_BY_MOBILE_NUMBER)
+    @Cacheable(cacheNames = CARD_BY_MOBILE_NUMBER_CACHE)
     Optional<Card> findByMobileNumber(String mobileNumber);
 
     boolean existsByMobileNumber(String mobileNumber);
