@@ -37,6 +37,7 @@ spring:
   cache:
     redisson:
       regions:
+        entry.expiration.max_entries: 10000
         entry.expiration.time-to-live: 3600000
         entry.expiration.max_idle_time: 1800000
 

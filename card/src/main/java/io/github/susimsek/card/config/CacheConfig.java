@@ -1,9 +1,9 @@
 package io.github.susimsek.card.config;
 
-import static java.util.stream.Collectors.toMap;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.cfg.AvailableSettings;
 import org.redisson.api.RedissonClient;
@@ -19,10 +19,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
+@RequiredArgsConstructor
 @ConditionalOnClass({RedissonClient.class})
 @EnableCaching
 @EnableConfigurationProperties(CacheProperties.class)
 public class CacheConfig {
+
+    private final CacheProperties cacheProperties;
+    private static final String ENTRY_REGION_NAME = "entry";
 
     @Bean
     @ConditionalOnProperty("spring.jpa.properties.hibernate.cache.use_second_level_cache")
@@ -38,24 +42,22 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager(
-        RedissonClient redissonClient,
-        CacheProperties cacheProperties) {
+        RedissonClient redissonClient) {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
-        var regions = cacheProperties.getRedisson().getRegions();
-        if (!regions.isEmpty()) {
-            config = regions.entrySet().stream().collect(
-                toMap(
-                    Map.Entry::getKey,
-                    entry -> createCache(entry.getValue()),
-                    (first, second) -> first));
-        }
+        createCache(config,  "card");
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 
-    private org.redisson.spring.cache.CacheConfig createCache(
-        CacheProperties.Redisson.Region region) {
+    private void createCache(
+        Map<String, org.redisson.spring.cache.CacheConfig> cacheConfigMap,
+        String cacheName) {
+        var regions = cacheProperties.getRedisson().getRegions();
+        var region = Optional.ofNullable(regions.get(cacheName))
+                .orElse(regions.get(ENTRY_REGION_NAME));
         var expiration = region.getExpiration();
-        return new org.redisson.spring.cache.CacheConfig(
+        var cacheConfig = new org.redisson.spring.cache.CacheConfig(
             expiration.getTimeToLive(), expiration.getMaxIdleTime());
+        cacheConfig.setMaxSize(expiration.getMaxEntries());
+        cacheConfigMap.put(cacheName, cacheConfig);
     }
 }

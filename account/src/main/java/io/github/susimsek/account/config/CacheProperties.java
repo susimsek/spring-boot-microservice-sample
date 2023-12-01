@@ -25,6 +25,7 @@ public class CacheProperties {
             @Getter
             @Setter
             public static class Expiration {
+                private int maxEntries;
                 private long timeToLive;
                 private long maxIdleTime;
             }
