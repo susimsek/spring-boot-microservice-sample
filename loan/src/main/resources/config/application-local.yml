@@ -37,8 +37,8 @@ spring:
   cache:
     redisson:
       regions:
-        testMap.expiration.time-to-live: 3600000
-        testMap.expiration.max_idle_time: 1800000
+        entry.expiration.time-to-live: 3600000
+        entry.expiration.max_idle_time: 1800000
 
 eureka:
   instance:
