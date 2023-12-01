@@ -1,5 +1,7 @@
 package io.github.susimsek.card.config;
 
+import static io.github.susimsek.card.repository.CardRepository.CARD_BY_MOBILE_NUMBER;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class CacheConfig {
     public CacheManager cacheManager(
         RedissonClient redissonClient) {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
-        createCache(config,  "card");
+        createCache(config,  CARD_BY_MOBILE_NUMBER);
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 

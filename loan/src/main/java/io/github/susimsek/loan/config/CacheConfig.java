@@ -1,5 +1,7 @@
 package io.github.susimsek.loan.config;
 
+import static io.github.susimsek.loan.repository.LoanRepository.LOAN_BY_MOBILE_NUMBER;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class CacheConfig {
     public CacheManager cacheManager(
         RedissonClient redissonClient) {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
-        createCache(config,  "loan");
+        createCache(config,  LOAN_BY_MOBILE_NUMBER);
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 
