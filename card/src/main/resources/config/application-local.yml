@@ -34,6 +34,13 @@ spring:
     loki:
       enabled: false
       url: http://localhost:3100/loki/api/v1/push
+  cache:
+    redisson:
+      regions:
+        testMap:
+          expiration:
+            time-to-live: 3600000
+            max_idle_time: 1800000
 
 eureka:
   instance:

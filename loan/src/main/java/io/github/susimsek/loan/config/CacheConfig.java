@@ -1,5 +1,6 @@
 package io.github.susimsek.loan.config;
 
+import static java.util.stream.Collectors.toMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +21,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({RedissonClient.class})
 @EnableCaching
+@EnableConfigurationProperties(CacheProperties.class)
 public class CacheConfig {
 
     @Bean
     @ConditionalOnProperty("spring.jpa.properties.hibernate.cache.use_second_level_cache")
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(RedissonClient redissonClient) {
-        return hibernateProperties -> hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY,
-            new RedissonRegionFactory() {
+        return hibernateProperties ->
+            hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY, new RedissonRegionFactory() {
                 @Override
                 protected RedissonClient createRedissonClient(StandardServiceRegistry registry, Map properties) {
                     return redissonClient;
@@ -34,17 +37,25 @@ public class CacheConfig {
     }
 
     @Bean
-    public CacheManager cacheManager(RedissonClient redissonClient) {
+    public CacheManager cacheManager(
+        RedissonClient redissonClient,
+        CacheProperties cacheProperties) {
         Map<String, org.redisson.spring.cache.CacheConfig> config = new HashMap<>();
-        // create "testMap" spring cache with ttl = 24 minutes and maxIdleTime = 12 minutes
-        createCache(config, "testMap", 3600);
+        var regions = cacheProperties.getRedisson().getRegions();
+        if (!regions.isEmpty()) {
+            config = regions.entrySet().stream().collect(
+                toMap(
+                    Map.Entry::getKey,
+                    entry -> createCache(entry.getValue()),
+                    (first, second) -> first));
+        }
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 
-    private void createCache(
-        Map<String, org.redisson.spring.cache.CacheConfig> config,
-        String cacheName,
-        long ttl) {
-        config.put(cacheName, new org.redisson.spring.cache.CacheConfig(ttl * 1000L, ttl * 500L));
+    private org.redisson.spring.cache.CacheConfig createCache(
+        CacheProperties.Redisson.Region region) {
+        var expiration = region.getExpiration();
+        return new org.redisson.spring.cache.CacheConfig(
+            expiration.getTimeToLive(), expiration.getMaxIdleTime());
     }
 }
