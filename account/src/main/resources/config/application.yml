@@ -82,6 +82,9 @@ management:
     env:
       enabled: true
   metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
     tags:
       application: ${spring.application.name}
   tracing:
