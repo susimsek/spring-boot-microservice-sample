@@ -1,4 +1,4 @@
-name: Account Test, Sonar and build.
+name: Loan Test, Sonar and build.
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ github.workspace }}/account
+        working-directory: ${{ github.workspace }}/loan
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
