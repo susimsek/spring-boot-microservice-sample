@@ -29,7 +29,7 @@ jobs:
       - name: Download Dependencies
         run: mvn dependency:go-offline
       - name: Install Snyk CLI
-          run: |
+        run: |
             curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
             chmod +x snyk
         - name: Snyk test
