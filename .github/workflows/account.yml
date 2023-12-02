@@ -1,4 +1,4 @@
-name: Test, Sonar and deploy.
+name: Account build.
 
 on:
   workflow_dispatch:
@@ -11,8 +11,11 @@ on:
       - main
 
 jobs:
-  build-and-analyse:
+  build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/account
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
