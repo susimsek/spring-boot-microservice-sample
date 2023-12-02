@@ -28,6 +28,11 @@ jobs:
         run:  java -version
       - name: Download Dependencies
         run: mvn dependency:go-offline
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Test
         run: mvn -ntp clean verify
       - name: Quality Analysis
