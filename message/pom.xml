@@ -14,6 +14,21 @@
     <name>message</name>
     <description>message</description>
     <packaging>jar</packaging>
+    <url>https://github.com/susimsek/spring-boot-microservice-sample/</url>
+
+    <developers>
+        <developer>
+            <name>Şuayb Şimşek</name>
+            <email>suaybsimsek58@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/susimsek/spring-boot-microservice-sample.git</url>
+        <connection>scm:git:https://github.com/susimsek/spring-boot-microservice-sample.git</connection>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
@@ -159,6 +174,25 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>deploy-github</id>
+            <activation>
+                <property>
+                    <name>github</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/susimsek/spring-boot-microservice-sample/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/susimsek/spring-boot-microservice-sample/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
 
