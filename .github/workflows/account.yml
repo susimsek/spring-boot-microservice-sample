@@ -30,3 +30,5 @@ jobs:
         run: mvn dependency:go-offline
       - name: Test
         run: mvn -ntp clean verify
+      - name: Quality Analysis
+        run: mvn -ntp -Psonar initialize sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
