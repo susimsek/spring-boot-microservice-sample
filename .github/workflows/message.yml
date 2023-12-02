@@ -16,6 +16,8 @@ jobs:
     defaults:
       run:
         working-directory: ${{ github.workspace }}/account
+    env:
+      SPRING_OUTPUT_ANSI_ENABLED: DETECT
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
