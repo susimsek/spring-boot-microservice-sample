@@ -11,9 +11,25 @@
     <groupId>io.github.susimsek</groupId>
     <artifactId>account</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>account</name>
     <description>account</description>
-    <packaging>jar</packaging>
+    <url>https://github.com/susimsek/spring-boot-microservice-sample/</url>
+
+    <developers>
+        <developer>
+            <name>Şuayb Şimşek</name>
+            <email>suaybsimsek58@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/susimsek/spring-boot-microservice-sample.git</url>
+        <connection>scm:git:https://github.com/susimsek/spring-boot-microservice-sample.git</connection>
+        <tag>HEAD</tag>
+    </scm>
+
+
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.9.20</kotlin.version>
@@ -33,6 +49,7 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
         <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
@@ -533,6 +550,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -588,6 +619,25 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>deploy-github</id>
+            <activation>
+                <property>
+                    <name>github</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/susimsek/spring-boot-microservice-sample/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/susimsek/spring-boot-microservice-sample/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
 
