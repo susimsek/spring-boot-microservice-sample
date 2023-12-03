@@ -7,5 +7,4 @@
 
     <include file="config/liquibase/changelog/2023/11/07-01-baseline-changelog.xml"/>
     <include file="config/liquibase/changelog/2023/11/11-01-revision-changelog.xml"/>
-    <include file="config/liquibase/changelog/2023/11/11-01-soft-delete-changelog.xml"/>
 </databaseChangeLog>

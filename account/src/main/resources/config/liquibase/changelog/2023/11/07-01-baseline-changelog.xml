@@ -5,10 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1699333174982-1" author="yapikrediteknolojia.s. (generated)">
+    <changeSet id="1699333174982-1" author="susimsek (generated)">
         <createSequence incrementBy="1" minValue="1" maxValue="9999999999999999" cycle="false" cacheSize="50000" sequenceName="seq_account" startValue="1"/>
     </changeSet>
-    <changeSet id="1699333174982-2" author="yapikrediteknolojia.s. (generated)">
+    <changeSet id="1699333174982-2" author="susimsek (generated)">
         <createTable tableName="account">
             <column name="account_number" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account"/>
@@ -31,9 +31,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="communication_sw" type="BOOLEAN"/>
+            <column name="deleted" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
-    <changeSet id="1699333174982-3" author="yapikrediteknolojia.s. (generated)">
+
+    <changeSet id="1699333174982-3" author="susimsek (generated)">
         <createTable tableName="customer">
             <column name="customer_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_customer"/>
@@ -58,7 +62,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="1699333174982-2-data" author="yapikrediteknolojia.s. (generated)" context="faker">
+    <changeSet id="1699333174982-2-data" author="susimsek (generated)" context="faker">
         <loadData
                 file="config/liquibase/fake-data/account.csv"
                 separator=";"
@@ -72,10 +76,11 @@
             <column name="account_type" type="string"/>
             <column name="branch_address" type="string"/>
             <column name="communication_sw" type="boolean"/>
+            <column name="deleted" type="boolean"/>
         </loadData>
     </changeSet>
 
-    <changeSet id="1699333174982-3-data" author="yapikrediteknolojia.s. (generated)" context="faker">
+    <changeSet id="1699333174982-3-data" author="susimsek (generated)" context="faker">
         <loadData
                 file="config/liquibase/fake-data/customer.csv"
                 separator=";"
