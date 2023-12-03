@@ -35,7 +35,7 @@ public class Card extends BaseEntity {
     @Column(name = "mobile_number", nullable = false, length = 15)
     private String mobileNumber;
 
-    @Column(name = "card_numbe", nullable = false, length = 100)
+    @Column(name = "card_number", nullable = false, length = 100)
     private String cardNumber;
 
     @Column(name = "card_type", nullable = false, length = 100)
