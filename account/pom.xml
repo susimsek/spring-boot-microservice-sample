@@ -612,6 +612,10 @@
                     <groupId>org.springframework.cloud</groupId>
                     <artifactId>spring-cloud-starter-kubernetes-discoveryclient</artifactId>
                 </dependency>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-kubernetes-fabric8-loadbalancer</artifactId>
+                </dependency>
             </dependencies>
         </profile>
         <profile>
