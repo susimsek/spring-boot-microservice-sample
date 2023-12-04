@@ -1,13 +1,12 @@
 package io.github.susimsek.card.service.impl;
 
-import static io.github.susimsek.card.constants.CardConstants.CARD_RESOURCE_NAME;
 import static io.github.susimsek.card.constants.Constants.RANDOM;
 
 import io.github.susimsek.card.constants.CardConstants;
 import io.github.susimsek.card.dto.CardDTO;
 import io.github.susimsek.card.entity.Card;
 import io.github.susimsek.card.exception.CardAlreadyExistsException;
-import io.github.susimsek.card.exception.ResourceNotFoundException;
+import io.github.susimsek.card.exception.EntityNotFoundException;
 import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.repository.CardRepository;
 import io.github.susimsek.card.service.CardService;
@@ -33,7 +32,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDTO fetchCard(String mobileNumber) {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "mobileNumber", mobileNumber)
+            () -> new EntityNotFoundException(Card.class, "mobileNumber", mobileNumber)
         );
         return cardMapper.toDto(card);
     }
@@ -41,7 +40,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public boolean updateCard(String cardNumber, CardDTO card) {
         var cardEntity = cardRepository.findByCardNumber(cardNumber).orElseThrow(
-            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "cardNumber", cardNumber)
+            () -> new EntityNotFoundException(Card.class, "cardNumber", cardNumber)
         );
         cardMapper.partialUpdate(cardEntity, card);
         cardEntity.setCardNumber(cardNumber);
@@ -52,7 +51,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(String mobileNumber) {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException(CARD_RESOURCE_NAME, "mobileNumber", mobileNumber)
+            () -> new EntityNotFoundException(Card.class, "mobileNumber", mobileNumber)
         );
         cardRepository.deleteById(card.getCardId());
     }
