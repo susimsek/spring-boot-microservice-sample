@@ -52,7 +52,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDetailsDTO> fetchCustomerDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         log.debug("fetchCustomerDetails method start");
         var model = customerService.fetchCustomerDetails(mobileNumber, correlationId);

@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
@@ -110,7 +110,8 @@ public class AccountController {
     @GetMapping("/account")
     public ResponseEntity<CustomerDTO> fetchAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @NotBlank
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         var marker = LabelMarker.of("mobileNumber", () ->
             String.valueOf(mobileNumber));
@@ -136,8 +137,8 @@ public class AccountController {
     )
     @GetMapping("/account/{accountNumber:\\d+}/revisions")
     public ResponseEntity<List<AccountDTO>> getAccountRevisions(
-        @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp = "(^$|\\d{10})", message = "AccountNumber must be 10 digits")
+        @NotBlank
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         @PathVariable Long accountNumber) {
         var modelList = accountService.getAccountRevisions(accountNumber);
         return ResponseEntity.ok(modelList);
@@ -160,8 +161,8 @@ public class AccountController {
     )
     @GetMapping("/account/{accountNumber:\\d+}/creator")
     public ResponseEntity<String> getCreatorUsername(
-        @NotEmpty(message = "AccountNumber can not be a null or empty")
-        @Pattern(regexp = "(^$|\\d{10})", message = "AccountNumber must be 10 digits")
+        @NotBlank
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         @PathVariable Long accountNumber) {
         var model = accountService.geCreatorUsername(accountNumber);
         return ResponseEntity.ok(model);
@@ -197,7 +198,7 @@ public class AccountController {
     )
     @PutMapping("/account/{accountNumber:^$|\\d{10}}")
     public ResponseEntity<ResponseDTO> updateAccountDetails(
-        @NotNull(message = "AccountNumber can not be a null")
+        @NotNull
         @PathVariable Long accountNumber,
         @Valid @RequestBody CustomerDTO customer) {
         boolean isUpdated = accountService.updateAccount(accountNumber, customer);
@@ -240,7 +241,7 @@ public class AccountController {
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber
     ) {
         accountService.deleteAccount(mobileNumber);

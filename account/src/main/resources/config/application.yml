@@ -61,6 +61,11 @@ spring:
           group: ${spring.application.name}
         sendCommunication-out-0:
           destination: send-communication
+  web:
+    locale: en
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
 
 management:
   endpoints:
