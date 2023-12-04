@@ -78,7 +78,7 @@ public class LoanController {
     @PostMapping("/loan")
     public ResponseEntity<ResponseDTO> createLoan(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         loanService.createLoan(mobileNumber);
         return ResponseEntity
@@ -109,7 +109,7 @@ public class LoanController {
     public ResponseEntity<LoanDTO> fetchLoanDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         var marker = LabelMarker.of("mobileNumber", () ->
             String.valueOf(mobileNumber));
@@ -151,7 +151,7 @@ public class LoanController {
     @PutMapping("/loan/{loanNumber}")
     public ResponseEntity<ResponseDTO> updateLoanDetails(
         @NotEmpty(message = "Loan Number can not be a null or empty")
-        @Pattern(regexp = "(^$|\\d{12})", message = "LoanNumber must be 12 digits")
+        @Pattern(regexp = "(^$|\\d{12})", message = "{jakarta.validation.constraint.LoanNumber.Pattern.message}")
         @PathVariable String loanNumber,
         @Valid @RequestBody LoanDTO loan) {
         boolean isUpdated = loanService.updateLoan(loanNumber, loan);
@@ -194,7 +194,7 @@ public class LoanController {
     @DeleteMapping("/loan")
     public ResponseEntity<Void> deleteLoanDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber
     ) {
         loanService.deleteLoan(mobileNumber);

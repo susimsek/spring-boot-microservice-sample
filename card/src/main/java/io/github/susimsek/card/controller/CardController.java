@@ -78,7 +78,7 @@ public class CardController {
     @PostMapping("/card")
     public ResponseEntity<ResponseDTO> createCard(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         cardService.createCard(mobileNumber);
         return ResponseEntity
@@ -109,7 +109,7 @@ public class CardController {
     public ResponseEntity<CardDTO> fetchCardDetails(
         @RequestHeader("X-Correlation-Id") String correlationId,
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
         var marker = LabelMarker.of("mobileNumber", () ->
             String.valueOf(mobileNumber));
@@ -151,7 +151,7 @@ public class CardController {
     @PutMapping("/card/{cardNumber}")
     public ResponseEntity<ResponseDTO> updateCardDetails(
         @NotEmpty(message = "Card Number can not be a null or empty")
-        @Pattern(regexp = "(^$|\\d{12})", message = "CardNumber must be 12 digits")
+        @Pattern(regexp = "(^$|\\d{12})", message = "{jakarta.validation.constraint.CardNumber.Pattern.message}")
         @PathVariable String cardNumber,
         @Valid @RequestBody CardDTO card) {
         boolean isUpdated = cardService.updateCard(cardNumber, card);
@@ -194,7 +194,7 @@ public class CardController {
     @DeleteMapping("/card")
     public ResponseEntity<Void> deleteCardDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|\\d{10})", message = "Mobile number must be 10 digits")
+        @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber
     ) {
         cardService.deleteCard(mobileNumber);

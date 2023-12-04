@@ -1,7 +1,7 @@
 package io.github.susimsek.loan.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -14,36 +14,36 @@ public record LoanDTO(
     @Schema(
         description = "Mobile Number of Customer", example = "4365327698"
     )
-    @NotEmpty(message = "Mobile Number can not be a null or empty")
-    @Pattern(regexp = "(^$|\\d{10})", message = "Mobile Number must be 10 digits")
+    @NotBlank
+    @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
     String mobileNumber,
 
     @Schema(
         description = "Loan Number of the customer", example = "548732457654"
     )
-    @NotEmpty(message = "Loan Number can not be a null or empty")
-    @Pattern(regexp = "(^$|\\d{12})", message = "LoanNumber must be 12 digits")
+    @NotBlank
+    @Pattern(regexp = "(^$|\\d{12})", message = "{jakarta.validation.constraint.LoanNumber.Pattern.message}")
     String loanNumber,
 
     @Schema(
         description = "Type of the loan", example = "Home Loan"
     )
-    @NotEmpty(message = "LoanType can not be a null or empty")
+    @NotBlank
     String loanType,
 
     @Schema(
         description = "Total loan amount", example = "100000"
     )
-    @Positive(message = "Total loan amount should be greater than zero")
+    @Positive
     int totalLoan,
 
     @Schema(
         description = "Total loan amount paid", example = "1000"
     )
-    @PositiveOrZero(message = "Total loan amount paid should be equal or greater than zero")
+    @PositiveOrZero
     int amountPaid,
 
-    @PositiveOrZero(message = "Total outstanding amount should be equal or greater than zero")
+    @PositiveOrZero
     @Schema(
         description = "Total outstanding amount against a loan", example = "99000"
     )

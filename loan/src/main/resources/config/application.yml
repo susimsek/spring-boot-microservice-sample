@@ -42,6 +42,11 @@ spring:
       org.hibernate.envers.audit_table_suffix: _history
       org.hibernate.envers.revision_field_name: revision
       org.hibernate.envers.revision_type_field_name: revision_type
+  web:
+    locale: en
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
 
 management:
   endpoints:

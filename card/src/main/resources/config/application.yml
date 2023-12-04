@@ -39,6 +39,11 @@ spring:
       hibernate.cache.redisson.query.eviction.max_entries: 10000
       hibernate.cache.redisson.query.eviction.time_to_live: 3600000
       hibernate.cache.redisson.query.eviction.max_idle_time: 1800000
+  web:
+    locale: en
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
 
 management:
   endpoints:
