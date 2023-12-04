@@ -1,7 +1,5 @@
 package io.github.susimsek.account.service.impl;
 
-import static io.github.susimsek.account.constants.AccountConstants.ACCOUNT_RESOURCE_NAME;
-import static io.github.susimsek.account.constants.AccountConstants.CUSTOMER_RESOURCE_NAME;
 import static io.github.susimsek.account.constants.Constants.RANDOM;
 
 import io.github.susimsek.account.constants.AccountConstants;
@@ -12,7 +10,7 @@ import io.github.susimsek.account.entity.Account;
 import io.github.susimsek.account.entity.Customer;
 import io.github.susimsek.account.entity.RevisionEntity;
 import io.github.susimsek.account.exception.CustomerAlreadyExistsException;
-import io.github.susimsek.account.exception.ResourceNotFoundException;
+import io.github.susimsek.account.exception.EntityNotFoundException;
 import io.github.susimsek.account.mapper.AccountMapper;
 import io.github.susimsek.account.mapper.CustomerMapper;
 import io.github.susimsek.account.repository.AccountRepository;
@@ -22,6 +20,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.data.history.Revision;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,10 +51,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public CustomerDTO fetchAccount(String mobileNumber) {
         var customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "mobileNumber", mobileNumber)
+            () -> new EntityNotFoundException(Customer.class, "mobileNumber", mobileNumber)
         );
         var account = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
-            () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "customerId", customer.getCustomerId().toString())
+            () -> new EntityNotFoundException(Account.class, "customerId", customer.getCustomerId().toString())
         );
         return customerMapper.toDto(customer, account);
     }
@@ -71,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String geCreatorUsername(Long accountNumber) {
         var revision = accountRepository.findRevision(accountNumber, 1).orElseThrow(
-            () -> new ResourceNotFoundException("Revision", "accountNumber", String.valueOf(accountNumber))
+            () -> new EntityNotFoundException(Revision.class, "accountNumber", String.valueOf(accountNumber))
         );
         var metadata = revision.getMetadata();
         RevisionEntity revisionEntity = metadata.getDelegate();
@@ -84,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
         AccountDTO accountDTO = customer.account();
         if (accountDTO != null) {
             var account = accountRepository.findById(accountNumber).orElseThrow(
-                () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "AccountNumber", accountNumber.toString())
+                () -> new EntityNotFoundException(Account.class, "AccountNumber", accountNumber.toString())
             );
             accountMapper.partialUpdate(account, accountDTO);
             account.setAccountNumber(accountNumber);
@@ -92,7 +91,7 @@ public class AccountServiceImpl implements AccountService {
 
             Long customerId = account.getCustomerId();
             var customerEntity = customerRepository.findById(customerId).orElseThrow(
-                () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "CustomerID", customerId.toString())
+                () -> new EntityNotFoundException(Customer.class, "CustomerID", customerId.toString())
             );
             customerMapper.partialUpdate(customerEntity, customer);
             customerRepository.save(customerEntity);
@@ -104,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deleteAccount(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
-            () -> new ResourceNotFoundException(CUSTOMER_RESOURCE_NAME, "mobileNumber", mobileNumber)
+            () -> new EntityNotFoundException(Customer.class, "mobileNumber", mobileNumber)
         );
         accountRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
@@ -115,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
         boolean isUpdated = false;
         if (accountNumber != null) {
             Account account = accountRepository.findById(accountNumber).orElseThrow(
-                () -> new ResourceNotFoundException(ACCOUNT_RESOURCE_NAME, "AccountNumber", accountNumber.toString())
+                () -> new EntityNotFoundException(Account.class, "AccountNumber", accountNumber.toString())
             );
             account.setCommunicationSw(true);
             accountRepository.save(account);

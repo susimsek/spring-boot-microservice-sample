@@ -1,17 +1,20 @@
 package io.github.susimsek.account.exception;
 
-import io.github.susimsek.account.dto.ErrorResponseDTO;
+import static io.github.susimsek.account.exception.ErrorConstants.ERR_INTERNAL_SERVER;
+import static io.github.susimsek.account.exception.ErrorConstants.ERR_VALIDATION;
+import static io.github.susimsek.account.exception.ErrorConstants.PROBLEM_VIOLATION_KEY;
+import static java.util.stream.Collectors.toList;
+
+import io.github.susimsek.account.dto.Violation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Path;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.StreamSupport;
+import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,83 +22,78 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String, String> validationErrors = new HashMap<>();
-        var validationErrorList = ex.getBindingResult().getAllErrors();
-
-        validationErrorList.forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String validationMsg = error.getDefaultMessage();
-            validationErrors.put(fieldName, validationMsg);
-        });
-        return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, ERR_VALIDATION);
+        var fieldErrors = ex.getFieldErrors().stream().map(Violation::new);
+        var globalErrors = ex.getGlobalErrors().stream().map(Violation::new);
+        var violations = Stream.concat(fieldErrors, globalErrors).collect(toList());
+        problem.setProperty(PROBLEM_VIOLATION_KEY, violations);
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
     }
 
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
-                                                                        WebRequest webRequest) {
-        Map<String, String> validationErrors = new HashMap<>();
-        var validationErrorList = ex.getConstraintViolations();
+                                                                        WebRequest request) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, ERR_VALIDATION);
+        val violations = ex.getConstraintViolations().stream().map(Violation::new);
+        problem.setProperty(PROBLEM_VIOLATION_KEY, violations);
 
-        validationErrorList.forEach(error -> {
-            String fieldName = getField(error.getPropertyPath());
-            String validationMsg = error.getMessage();
-            validationErrors.put(fieldName, validationMsg);
-        });
-
-        return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
     }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleGlobalException(Exception exception,
-                                                                  WebRequest webRequest) {
-        var errorResponseDTO = new ErrorResponseDTO(
-            webRequest.getDescription(false),
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            exception.getMessage(),
-            Instant.now()
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFound(
+        EntityNotFoundException ex,
+        WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(ResourceNotFoundException exception,
-                                                                            WebRequest webRequest) {
-        var errorResponseDTO = new ErrorResponseDTO(
-            webRequest.getDescription(false),
-            HttpStatus.NOT_FOUND,
-            exception.getMessage(),
-            Instant.now()
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFound(
+        jakarta.persistence.EntityNotFoundException ex,
+        WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
 
     @ExceptionHandler(CustomerAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleCustomerAlreadyExistsException(
-        CustomerAlreadyExistsException exception,
+    public ResponseEntity<Object> handleCustomerAlreadyExistsException(
+        CustomerAlreadyExistsException ex,
         WebRequest webRequest) {
-        var errorResponseDTO = new ErrorResponseDTO(
-            webRequest.getDescription(false),
-            HttpStatus.BAD_REQUEST,
-            exception.getMessage(),
-            Instant.now()
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
-    private String getField(Path propertyPath) {
-        var node = StreamSupport.stream(
-                propertyPath.spliterator(), false)
-            .reduce((first, second) -> second)
-            .orElse(null);
-        return node != null ? node.toString() : "";
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
+                                                             Object body, HttpHeaders headers,
+                                                             HttpStatusCode status, WebRequest request) {
+        if (status.is5xxServerError()) {
+            log.error("An exception occured, which will cause a {} response", status, ex);
+            var problem = ProblemDetail.forStatusAndDetail(status, ERR_INTERNAL_SERVER);
+            super.handleExceptionInternal(ex, problem, headers, status, request);
+        } else if (status.is4xxClientError()) {
+            log.warn("An exception occured, which will cause a {} response", status, ex);
+        } else {
+            log.debug("An exception occured, which will cause a {} response", status, ex);
+        }
+        return super.handleExceptionInternal(ex, body, headers, status, request);
     }
-
 }
