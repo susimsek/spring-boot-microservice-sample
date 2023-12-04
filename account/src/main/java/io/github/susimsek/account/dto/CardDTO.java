@@ -15,7 +15,7 @@ public record CardDTO(
 
 
     @Schema(
-        description = "Card Number of the customer.csv", example = "100646930341"
+        description = "Card Number of the customer", example = "100646930341"
     )
     @NotEmpty(message = "Card Number can not be a null or empty")
     String cardNumber,

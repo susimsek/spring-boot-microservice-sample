@@ -7,10 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
     description = "Schema to hold Customer, Account, Card and Loan information"
 )
 public record CustomerDetailsDTO(
-    @Schema(description = "Name of the customer.csv", example = "Eazy Bytes") String name,
-    @Schema(description = "Email address of the customer.csv", example = "tutor@eazybytes.com")
+    @Schema(description = "Name of the customer", example = "Eazy Bytes") String name,
+    @Schema(description = "Email address of the customer", example = "tutor@eazybytes.com")
     String email,
-    @Schema(description = "Mobile Number of the customer.csv", example = "9345432123")
+    @Schema(description = "Mobile Number of the customer", example = "9345432123")
     String mobileNumber,
 
     @Schema(description = "Account details of the Customer")
