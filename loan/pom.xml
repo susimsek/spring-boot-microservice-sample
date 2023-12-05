@@ -209,7 +209,7 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
@@ -292,7 +292,7 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <sourceDir>src/main/kotlin</sourceDir>
                             </sourceDirs>
                             <annotationProcessorPaths>
                                 <annotationProcessorPath>
@@ -322,7 +322,7 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <sourceDir>src/main/kotlin</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -479,7 +479,7 @@
                                       classname="io.gitlab.arturbosch.detekt.cli.Main"
                                       classpathref="maven.plugin.classpath">
                                     <arg value="--input"/>
-                                    <arg value="${project.basedir}/src/main/java"/>
+                                    <arg value="${project.basedir}/src/main/kotlin"/>
                                     <arg value="--report"/>
                                     <arg value="xml:${detekt.xmlReportFile}"/>
                                     <arg value="--config"/>
