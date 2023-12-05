@@ -1,4 +1,4 @@
-package io.github.susimsek.account.dto;
+package io.github.susimsek.account.filter;
 
 import io.github.susimsek.account.entity.Account;
 import io.github.susimsek.account.entity.Account_;
@@ -7,13 +7,19 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.LinkedList;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AccountFilter implements Specification<Account> {
 
     private String accountType;
