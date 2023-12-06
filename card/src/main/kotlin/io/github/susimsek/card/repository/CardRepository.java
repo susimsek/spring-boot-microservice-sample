@@ -4,10 +4,12 @@ import io.github.susimsek.card.entity.Card;
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CardRepository extends JpaRepository<Card, Long> {
+public interface CardRepository extends JpaRepository<Card, Long>,
+    JpaSpecificationExecutor<Card> {
 
     String CARD_BY_MOBILE_NUMBER_CACHE = "cardByMobileNumber";
 
