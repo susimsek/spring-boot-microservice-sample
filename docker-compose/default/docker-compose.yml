@@ -338,10 +338,10 @@ services:
       BOOTSTRAP_SERVERS: kafka:9092
       REST_ADVERTISED_HOST_NAME: connect
       REST_PORT: 8083
-      GROUP_ID: connect-group
-      CONFIG_STORAGE_TOPIC: connect-configs
-      OFFSET_STORAGE_TOPIC: connect-offsets
-      STATUS_STORAGE_TOPIC:  connect-status
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: debezium_connect_configs
+      OFFSET_STORAGE_TOPIC: debezium_connect_offsets
+      STATUS_STORAGE_TOPIC:  debezium_connect_statuses
       KEY_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
       VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONFIG_STORAGE_REPLICATION_FACTOR: 1
