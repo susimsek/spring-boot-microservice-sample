@@ -35,5 +35,5 @@ COPY --from=build /opt/bitnami/postgresql/share/extension/decoderbufs.control /o
 # Copy the custom configuration which will be passed down to the server (using a .sample file is the preferred way of doing it by
 # the base Docker image)
 COPY postgresql.conf /bitnami/postgresql/conf/conf.d/
-
+COPY extension.sql /docker-entrypoint-initdb.d/
 USER 1001
