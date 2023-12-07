@@ -14,7 +14,7 @@ services:
   microservice-db-config:
     extends:
       service: network-deploy-service
-    image: docker.io/bitnami/postgresql:15.4.0
+    image: suayb/bitnami-debezium-postgresql:15.4.0
     healthcheck:
       test: pg_isready -U postgres
       timeout: 10s

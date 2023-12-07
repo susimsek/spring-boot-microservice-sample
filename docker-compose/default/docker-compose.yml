@@ -292,7 +292,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./db/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+      - ./postgresql/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
       - postgresql:/bitnami/postgresql
     extends:
       file: common-config.yml
