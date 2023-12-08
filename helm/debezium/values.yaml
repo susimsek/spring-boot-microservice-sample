@@ -191,7 +191,7 @@ customReadinessProbe: {}
 startupProbe:
   enabled: false
   path: connectors
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 60
@@ -200,7 +200,7 @@ startupProbe:
 readinessProbe:
   enabled: true
   path: connectors
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -209,7 +209,7 @@ readinessProbe:
 livenessProbe:
   enabled: true
   path: connectors
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
