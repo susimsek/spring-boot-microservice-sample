@@ -14,3 +14,7 @@ primary:
         CREATE DATABASE loandb WITH OWNER = easybank ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;
         CREATE DATABASE carddb WITH OWNER = easybank ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;
         CREATE DATABASE keycloak WITH OWNER = easybank ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;
+
+image:
+  repository: suayb/bitnami-debezium-postgresql
+  tag: 15.4.0
