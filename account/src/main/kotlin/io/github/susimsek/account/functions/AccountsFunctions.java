@@ -21,7 +21,7 @@ public class AccountsFunctions {
     }
 
     @Bean
-    public Consumer<DebeziumEventDetails<Account>> consumeAccountDebeziumEvent() {
+    public Consumer<DebeziumEventDetails<Account>> processAccountDebeziumEvent() {
         return debeziumEvent -> {
             log.info("incoming account debezium event: " + debeziumEvent.toString());
         };
