@@ -1,5 +1,7 @@
 package io.github.susimsek.account.entity;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.github.susimsek.account.audit.AuditingRevisionListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +20,7 @@ import org.hibernate.envers.RevisionTimestamp;
 @Entity
 @Table(name = "revision_info")
 @org.hibernate.envers.RevisionEntity(AuditingRevisionListener.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RevisionEntity {
 
     @Id

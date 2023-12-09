@@ -53,11 +53,14 @@ spring:
       circuitbreaker:
         enabled: true
     function:
-      definition: updateCommunication
+      definition: updateCommunication;consumeAccountDebeziumEvent
     stream:
       bindings:
         updateCommunication-in-0:
           destination: communication-sent
+          group: ${spring.application.name}
+        consumeAccountDebeziumEvent-in-0:
+          destination: pg-changes.public.account
           group: ${spring.application.name}
         sendCommunication-out-0:
           destination: send-communication

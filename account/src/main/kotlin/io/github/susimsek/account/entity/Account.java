@@ -1,5 +1,7 @@
 package io.github.susimsek.account.entity;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,6 +30,7 @@ import org.hibernate.envers.Audited;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Account extends BaseEntity {
 
     @Id
