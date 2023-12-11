@@ -130,6 +130,7 @@ public class AccountServiceImpl implements AccountService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountConstants.SAVINGS);
         newAccount.setBranchAddress(AccountConstants.ADDRESS);
+        newAccount.setDeleted(false);
         return newAccount;
     }
 
