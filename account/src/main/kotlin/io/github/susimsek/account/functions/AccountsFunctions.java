@@ -23,7 +23,12 @@ public class AccountsFunctions {
     @Bean
     public Consumer<DebeziumEventDetails<Account>> processAccountDebeziumEvent() {
         return debeziumEvent -> {
-            log.info("incoming account debezium event: " + debeziumEvent.toString());
+            var payload = debeziumEvent.payload();
+            switch (payload.operation()) {
+                case CREATE ->  log.info("created account on debezium event: " + payload.after());
+                case UPDATE ->  log.info("updated account on debezium event: " + payload.after());
+                case DELETE ->  log.info("deleted account on debezium event: " + payload.before());
+            }
         };
     }
 
