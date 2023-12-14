@@ -37,7 +37,20 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="1699333174982-3" author="susimsek (generated)">
+    <changeSet id="1699333174982-3" author="susimsek">
+        <createIndex indexName="idx_account_customer_id"
+                     tableName="account">
+            <column name="customer_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1699333174982-4" author="susimsek">
+        <createIndex indexName="idx_account_deleted"
+                     tableName="account">
+            <column name="deleted"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="1699333174982-5" author="susimsek (generated)">
         <createTable tableName="customer">
             <column name="customer_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_customer"/>
@@ -80,7 +93,7 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="1699333174982-3-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699333174982-5-data" author="susimsek (generated)" context="faker">
         <loadData
                 file="config/liquibase/fake-data/customer.csv"
                 separator=";"

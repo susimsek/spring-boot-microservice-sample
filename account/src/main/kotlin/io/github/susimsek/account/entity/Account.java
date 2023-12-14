@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,10 @@ import org.hibernate.envers.Audited;
 
 @Cache(region = "accountCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-@Table(name = "account")
+@Table(name = "account", indexes = {
+    @Index(name = "idx_account_customer_id", columnList = "customer_id"),
+    @Index(name = "idx_account_deleted", columnList = "deleted")
+})
 @SQLDelete(sql = "UPDATE account SET deleted = true WHERE account_number=?")
 @Where(clause = "deleted=false")
 @Audited
@@ -50,5 +54,5 @@ public class Account extends BaseEntity {
     private Boolean communicationSw;
 
     @Column(name = "deleted", nullable = false)
-    private boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 }
