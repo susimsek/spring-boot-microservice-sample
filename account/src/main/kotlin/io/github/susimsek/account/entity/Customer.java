@@ -30,7 +30,7 @@ public class Customer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceGenerator")
-    @SequenceGenerator(name = "SequenceGenerator", sequenceName = "seq_account", allocationSize = 1)
+    @SequenceGenerator(name = "SequenceGenerator", sequenceName = "seq_customer", allocationSize = 1)
     @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
