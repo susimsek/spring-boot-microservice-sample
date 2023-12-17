@@ -11,7 +11,9 @@
     <logger name="org.redisson" level="WARN" />
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.graphql" level="WARN"/>
     <logger name="liquibase" level="WARN"/>
+    <logger name="graphql" level="WARN"/>
 
     <root level="${log.level}">
         <appender-ref ref="CONSOLE" />

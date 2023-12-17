@@ -46,6 +46,13 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  graphql:
+    graphiql:
+      enabled: true
+      props:
+        variables:
+          headerEditorEnabled: true
+          shouldPersistHeaders: true
 
 eureka:
   instance:

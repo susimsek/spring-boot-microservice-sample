@@ -4,9 +4,9 @@ import io.github.susimsek.card.dto.CardDTO;
 
 public interface CardService {
 
-    void createCard(String mobileNumber);
+    CardDTO createCard(String mobileNumber);
 
-    CardDTO fetchCard(String mobileNumber);
+    CardDTO getCard(String mobileNumber);
 
     boolean updateCard(String cardNumber, CardDTO card);
 

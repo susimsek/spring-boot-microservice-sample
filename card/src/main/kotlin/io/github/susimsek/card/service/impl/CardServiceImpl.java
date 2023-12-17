@@ -22,15 +22,16 @@ public class CardServiceImpl implements CardService {
     private final CardMapper cardMapper;
 
     @Override
-    public void createCard(String mobileNumber) {
+    public CardDTO createCard(String mobileNumber) {
         if (cardRepository.existsByMobileNumber(mobileNumber)) {
             throw new CardAlreadyExistsException("Card already registered with given mobileNumber " + mobileNumber);
         }
-        cardRepository.save(createNewCard(mobileNumber));
+        var card = cardRepository.save(createNewCard(mobileNumber));
+        return cardMapper.toDto(card);
     }
 
     @Override
-    public CardDTO fetchCard(String mobileNumber) {
+    public CardDTO getCard(String mobileNumber) {
         var card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
             () -> new EntityNotFoundException(Card.class, "mobileNumber", mobileNumber)
         );

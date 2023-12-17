@@ -10,8 +10,6 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,10 +21,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -82,6 +79,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         WebRequest webRequest) {
         var problem = ProblemDetail.forStatusAndDetail(
             HttpStatus.BAD_REQUEST, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAll(
+        Exception ex,
+        WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return handleExceptionInternal(ex, problem, null,
             HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }

@@ -84,6 +84,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAll(
+        Exception ex,
+        WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
+    }
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
                                                              Object body, HttpHeaders headers,

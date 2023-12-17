@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
-public class CardController {
+public class CardRestController {
 
     private final CardService cardService;
 
@@ -76,14 +76,14 @@ public class CardController {
         )
     )
     @PostMapping("/card")
-    public ResponseEntity<ResponseDTO> createCard(
+    public ResponseEntity<CardDTO> createCard(
         @RequestParam
         @Pattern(regexp = "(^$|\\d{10})", message = "{jakarta.validation.constraint.MobileNumber.Pattern.message}")
         String mobileNumber) {
-        cardService.createCard(mobileNumber);
+        var cardDTO = cardService.createCard(mobileNumber);
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ResponseDTO(CardConstants.STATUS_201, CardConstants.MESSAGE_201));
+            .body(cardDTO);
     }
 
     @Operation(
@@ -115,7 +115,7 @@ public class CardController {
             String.valueOf(mobileNumber));
         log.info(marker, "card successfully fetched");
         log.debug("fetchCardDetails method start");
-        var model = cardService.fetchCard(mobileNumber);
+        var model = cardService.getCard(mobileNumber);
         log.debug("fetchCardDetails method end");
         return ResponseEntity.ok(model);
     }
