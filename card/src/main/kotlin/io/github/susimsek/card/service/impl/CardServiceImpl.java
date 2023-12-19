@@ -11,6 +11,11 @@ import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.repository.CardRepository;
 import io.github.susimsek.card.service.CardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.ScrollPosition;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Window;
+import org.springframework.graphql.data.query.ScrollSubrange;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,6 +60,15 @@ public class CardServiceImpl implements CardService {
             () -> new EntityNotFoundException(Card.class, "mobileNumber", mobileNumber)
         );
         cardRepository.deleteById(card.getCardId());
+    }
+
+    @Override
+    public Window<CardDTO> getAllCards(ScrollSubrange subrange) {
+        ScrollPosition scrollPosition = subrange.position().orElse(ScrollPosition.offset());
+        Limit limit = Limit.of(subrange.count().orElse(10));
+        Sort sort = Sort.by("cardId").ascending();
+        return cardRepository.findAllBy(scrollPosition, limit, sort)
+            .map(cardMapper::toDto);
     }
 
     private Card createNewCard(String mobileNumber) {

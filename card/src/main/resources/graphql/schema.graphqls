@@ -9,6 +9,7 @@ scalar DateTime
 
 type Query {
     card(mobileNumber: String! @NotBlank @Pattern(regexp: "(^$|\\d{10})")): CardDTO!
+    cards(first: Int,last: Int,before: String,after: String): CardDTOConnection!
 }
 
 type Mutation {
