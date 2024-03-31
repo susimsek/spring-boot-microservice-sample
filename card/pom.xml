@@ -45,8 +45,8 @@
         <jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <jib.from.image>eclipse-temurin:17-jre-focal</jib.from.image>
-        <checkstyle.version>10.12.5</checkstyle.version>
-        <detekt.version>1.23.1</detekt.version>
+        <checkstyle.version>10.14.2</checkstyle.version>
+        <detekt.version>1.23.6</detekt.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
