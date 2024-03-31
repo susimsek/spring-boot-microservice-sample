@@ -1,6 +1,5 @@
 package io.github.susimsek.account.mapper;
 
-
 import io.github.susimsek.account.dto.CardDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
 import io.github.susimsek.account.dto.CustomerDetailsDTO;

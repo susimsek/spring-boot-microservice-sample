@@ -1,6 +1,6 @@
 package io.github.susimsek.account.service.impl;
 
-import io.github.susimsek.account.client.CardFeignClient;
+import io.github.susimsek.account.client.CardGraphQlClient;
 import io.github.susimsek.account.client.LoanFeignClient;
 import io.github.susimsek.account.dto.CustomerDetailsDTO;
 import io.github.susimsek.account.entity.Account;
@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
-    private final CardFeignClient cardFeignClient;
+    private final CardGraphQlClient cardGraphQlClient;
     private final LoanFeignClient loanFeignClient;
 
     private final CustomerMapper customerMapper;
@@ -36,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         var loan = loanFeignClient.fetchLoanDetails(correlationId, mobileNumber);
 
-        var card = cardFeignClient.fetchCardDetails(correlationId, mobileNumber);
+        var card = cardGraphQlClient.fetchCardDetails(mobileNumber);
 
         return customerMapper.toCustomerDetailsDTO(customer, account, loan, card);
     }
