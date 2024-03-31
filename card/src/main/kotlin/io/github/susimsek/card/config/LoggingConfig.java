@@ -6,6 +6,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.loki4j.logback.AbstractLoki4jEncoder;
 import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
+import com.github.loki4j.logback.JsonLayout;
 import com.github.loki4j.logback.Loki4jAppender;
 import io.github.susimsek.card.aspect.LoggingAspect;
 import io.github.susimsek.card.constants.Constants;
@@ -59,11 +60,8 @@ public class LoggingConfig {
         label.setPattern("app=" + appName + ",host=${HOSTNAME},level=%level");
         encoder.setLabel(label);
         encoder.setSortByTime(true);
-        var msg = new AbstractLoki4jEncoder.MessageCfg();
-        msg.setPattern("""
-            {"level":"%level", "class":"%logger{36}", "thread":"%thread", "message": "%message"}
-            """);
-        encoder.setMessage(msg);
+        JsonLayout l = new JsonLayout();
+        encoder.setMessage(l);
         encoder.start();
         return encoder;
     }

@@ -1,10 +1,10 @@
 package io.github.susimsek.loan.constants;
 
-public final class LoanConstants {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private LoanConstants() {
-        // restrict instantiation
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LoanConstants {
 
     public static final String HOME_LOAN = "Home Loan";
     public static final int NEW_LOAN_LIMIT = 1_00_000;

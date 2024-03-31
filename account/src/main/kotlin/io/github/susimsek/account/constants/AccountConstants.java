@@ -1,11 +1,11 @@
 package io.github.susimsek.account.constants;
 
 
-public final class AccountConstants {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private AccountConstants() {
-        // restrict instantiation
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class AccountConstants {
 
     public static final String SAVINGS = "Savings";
     public static final String ADDRESS = "123 Main Street, New York";

@@ -6,14 +6,22 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.loki4j.logback.AbstractLoki4jEncoder;
 import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
+import com.github.loki4j.logback.JsonLayout;
 import com.github.loki4j.logback.Loki4jAppender;
+import io.github.susimsek.gatewayserver.aspect.LoggingAspect;
+import io.github.susimsek.gatewayserver.constants.Constants;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(LoggingProperties.class)
+@EnableAspectJAutoProxy
 public class LoggingConfig {
 
     private static final String LOKI_APPENDER_NAME = "LOKI";
@@ -33,7 +41,7 @@ public class LoggingConfig {
 
     public void addLoki4jAppender(
         LoggerContext context,
-        LoggingProperties.Loki  lokiProperties) {
+        LoggingProperties.Loki lokiProperties) {
         var loki4jAppender = new Loki4jAppender();
         loki4jAppender.setContext(context);
         loki4jAppender.setName(LOKI_APPENDER_NAME);
@@ -54,12 +62,15 @@ public class LoggingConfig {
         label.setPattern("app=" + appName + ",host=${HOSTNAME},level=%level");
         encoder.setLabel(label);
         encoder.setSortByTime(true);
-        var msg = new AbstractLoki4jEncoder.MessageCfg();
-        msg.setPattern("""
-                {"level":"%level", "class":"%logger{36}", "thread":"%thread", "message": "%message"}
-                """);
-        encoder.setMessage(msg);
+        JsonLayout l = new JsonLayout();
+        encoder.setMessage(l);
         encoder.start();
         return encoder;
+    }
+
+    @Bean
+    @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
+    public LoggingAspect loggingAspect(Environment env) {
+        return new LoggingAspect(env);
     }
 }

@@ -1,11 +1,10 @@
 package io.github.susimsek.card.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CardConstants {
-
-    private CardConstants() {
-        // restrict instantiation
-    }
-
     public static final String CREDIT_CARD = "Credit Card";
     public static final int NEW_CARD_LIMIT = 1_00_000;
     public static final String STATUS_201 = "201";

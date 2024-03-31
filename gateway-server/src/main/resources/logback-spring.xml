@@ -5,6 +5,14 @@
     <springProperty name="pattern" source="logging.pattern.level" />
     <springProperty name="log.level" source="logging.level.root" defaultValue="INFO" />
 
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="io.netty" level="WARN"/>
+    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    <logger name="io.swagger.v3" level="INFO"/>
+
     <root level="${log.level}">
         <appender-ref ref="CONSOLE" />
     </root>
