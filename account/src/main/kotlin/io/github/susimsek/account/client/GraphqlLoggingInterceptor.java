@@ -66,7 +66,7 @@ public class GraphqlLoggingInterceptor implements GraphQlClientInterceptor {
         String text,
         String payload) {
         if (StringUtils.hasText(payload)) {
-            log.info("%s: %s ".formatted(text, payload));
+            log.info("%s: \n%s ".formatted(text, payload));
         }
     }
 
