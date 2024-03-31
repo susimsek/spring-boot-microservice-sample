@@ -29,8 +29,8 @@ public class GraphqlLoggingInterceptor implements GraphQlClientInterceptor {
         var writer = om.writerWithDefaultPrettyPrinter();
         return chain.next(request).doOnNext(response -> {
             try {
-                logRequest(request, writer);
-                logResponse(response, writer);
+                logRequest("Request", request, writer);
+                logResponse("Response", response, writer);
             } catch (JsonProcessingException ex) {
                 log.error(
                     "Error while reading the GraphQL client response || Error Details: {}",
@@ -39,23 +39,34 @@ public class GraphqlLoggingInterceptor implements GraphQlClientInterceptor {
         });
     }
 
-    private static void logRequest(ClientGraphQlRequest request,
+    private void logRequest(
+        String text,
+        ClientGraphQlRequest request,
                                    ObjectWriter writer) throws JsonProcessingException {
         var requestData = request.toMap();
         var requestString = writer.writeValueAsString(requestData);
         if (StringUtils.hasText(requestString)) {
-            log.info("Request: %s ".formatted(requestString));
+            logPayload(text, requestString);
         }
     }
 
     private void logResponse(
+        String text,
         ClientGraphQlResponse response,
         ObjectWriter writer) throws JsonProcessingException {
         var responseData = response.toMap();
         var responseString = writer
             .writeValueAsString(responseData);
         if (StringUtils.hasText(responseString)) {
-            log.info("Response: %s ".formatted(responseString));
+            logPayload(text, responseString);
+        }
+    }
+
+    private void logPayload(
+        String text,
+        String payload) {
+        if (StringUtils.hasText(payload)) {
+            log.info("%s: %s ".formatted(text, payload));
         }
     }
 
@@ -64,7 +75,17 @@ public class GraphqlLoggingInterceptor implements GraphQlClientInterceptor {
     public Flux<ClientGraphQlResponse> interceptSubscription(
         @NotNull ClientGraphQlRequest request,
         SubscriptionChain chain) {
-        return chain.next(request);
+        var writer = om.writerWithDefaultPrettyPrinter();
+        return chain.next(request).doOnNext(response -> {
+            try {
+                logRequest("Subscription request", request, writer);
+                logResponse("Subscription response", response, writer);
+            } catch (JsonProcessingException ex) {
+                log.error(
+                    "Error while reading the GraphQL subscription client response || Error Details: {}",
+                    ex.getMessage());
+            }
+        });
     }
 
 }
