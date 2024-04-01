@@ -16,7 +16,7 @@ public class CardGraphQlClient {
 
     public CardDTO fetchCardDetails(String mobileNumber) {
         return client.documentName("getCardDetails")
-            .variable("mobileNumber", "4354437681")
+            .variable("mobileNumber", mobileNumber)
             .retrieve("card")
             .toEntity(CardDTO.class)  // possibly also generated or imported if available
             .block();
