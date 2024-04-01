@@ -7,23 +7,27 @@ import static java.util.stream.Collectors.toList;
 
 import io.github.susimsek.account.dto.Violation;
 import jakarta.validation.ConstraintViolationException;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.graphql.ResponseError;
+import org.springframework.graphql.client.FieldAccessException;
+import org.springframework.graphql.client.GraphQlClientException;
+import org.springframework.graphql.execution.ErrorType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -84,6 +88,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
+    @ExceptionHandler(FieldAccessException.class)
+    public ResponseEntity<Object> handleFieldAccessException(
+        FieldAccessException ex,
+        WebRequest webRequest) {
+        var responseErrorOptional = Optional.of(ex.getResponse()
+                .getErrors())
+            .filter(responseErrors -> !CollectionUtils.isEmpty(responseErrors))
+            .map(responseErrors -> responseErrors.get(0));
+        if (responseErrorOptional.isPresent()) {
+            var responseError = responseErrorOptional.get();
+            return handleGraphQlClientException(ex, responseError, webRequest);
+        }
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAll(
         Exception ex,
@@ -108,5 +131,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             log.debug("An exception occured, which will cause a {} response", status, ex);
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    protected ResponseEntity<Object> handleGraphQlClientException(
+        GraphQlClientException ex,
+        ResponseError responseError,
+        WebRequest webRequest) {
+        var extensions = responseError.getExtensions();
+        var classification = extensions.get("classification");
+        var problem =  Arrays.stream(ErrorType.values())
+            .filter(errorType -> errorType.name().equals(classification))
+            .findFirst()
+            .map(errorType -> switch (errorType) {
+                case BAD_REQUEST -> ProblemDetail.forStatusAndDetail(
+                    HttpStatus.BAD_REQUEST, ex.getMessage());
+                case NOT_FOUND -> ProblemDetail.forStatusAndDetail(
+                    HttpStatus.NOT_FOUND, ex.getMessage());
+                default ->  ProblemDetail.forStatusAndDetail(
+                    HttpStatus.INTERNAL_SERVER_ERROR, ERR_INTERNAL_SERVER);
+            }).orElse(ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, ERR_INTERNAL_SERVER));
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 }

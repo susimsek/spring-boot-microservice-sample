@@ -5,7 +5,6 @@ import graphql.schema.GraphQLScalarType;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.graphql.client.GraphQlClientInterceptor;
 import org.springframework.graphql.client.HttpGraphQlClient;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,10 +28,8 @@ public class GraphQLConfig {
     }
 
     @Bean
-    public HttpGraphQlClient.Builder<?> httpGraphQlClient(
-        WebClient.Builder  loadBalancedWebClientBuilder,
-        GraphQlClientInterceptor graphqlLoggingInterceptor) {
-        return HttpGraphQlClient.builder(loadBalancedWebClientBuilder)
-            .interceptor(graphqlLoggingInterceptor);
+    public HttpGraphQlClient.Builder<?> httpGraphQlClientBuilder(
+        WebClient.Builder  loadBalancedWebClientBuilder) {
+        return HttpGraphQlClient.builder(loadBalancedWebClientBuilder);
     }
 }

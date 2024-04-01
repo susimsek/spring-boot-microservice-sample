@@ -9,8 +9,8 @@ public class CardGraphQlClient {
 
     private final HttpGraphQlClient client;
 
-    public CardGraphQlClient(HttpGraphQlClient.Builder<?> builder) {
-        client = builder.url("http://card/graphql")
+    public CardGraphQlClient(HttpGraphQlClient.Builder<?> httpGraphQlClientBuilder) {
+        client = httpGraphQlClientBuilder.url("http://card/graphql")
             .build();
     }
 
