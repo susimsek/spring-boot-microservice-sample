@@ -63,6 +63,7 @@ spring:
       enabled: true
   jackson:
     serialization:
+      write-dates-as-timestamps: false
       indent-output: true
     deserialization:
       fail-on-unknown-properties: false
