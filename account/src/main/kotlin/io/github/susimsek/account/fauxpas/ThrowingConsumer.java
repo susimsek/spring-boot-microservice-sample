@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 import lombok.SneakyThrows;
 
 @FunctionalInterface
+@SuppressWarnings("checkstyle:InterfaceTypeParameterName")
 public interface ThrowingConsumer<T, X extends Throwable> extends Consumer<T> {
 
     void tryAccept(T t) throws X;

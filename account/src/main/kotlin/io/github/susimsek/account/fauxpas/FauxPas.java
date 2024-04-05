@@ -22,4 +22,14 @@ public class FauxPas {
         final ThrowingSupplier<T, X> supplier) {
         return supplier;
     }
+
+    public static <T, X extends Throwable> ThrowingUnaryOperator<T, X> throwingUnaryOperator(
+        final ThrowingUnaryOperator<T, X> operator) {
+        return operator;
+    }
+
+    public static <T, X extends Throwable> ThrowingPredicate<T, X> throwingPredicate(
+        final ThrowingPredicate<T, X> predicate) {
+        return predicate;
+    }
 }
