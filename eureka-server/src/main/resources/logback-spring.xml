@@ -5,6 +5,8 @@
     <springProperty name="pattern" source="logging.pattern.level" />
     <springProperty name="log.level" source="logging.level.root" defaultValue="INFO" />
 
+    <logger name="org.apache" level="WARN"/>
+
     <root level="${log.level}">
         <appender-ref ref="CONSOLE" />
     </root>

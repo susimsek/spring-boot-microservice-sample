@@ -19,6 +19,11 @@ record RemoteResponse(
     }
 
     @Override
+    public int status() {
+        return status;
+    }
+
+    @Override
     public String getProtocolVersion() {
         return "HTTP/1.1";
     }
