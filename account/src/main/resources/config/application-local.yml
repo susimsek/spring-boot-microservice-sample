@@ -61,6 +61,12 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  jackson:
+    serialization:
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
 
 eureka:
   instance:
@@ -125,5 +131,6 @@ logging:
     org.hibernate.SQL: DEBUG
     io.github.susimsek.account: DEBUG
     reactor.netty.http.client: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
