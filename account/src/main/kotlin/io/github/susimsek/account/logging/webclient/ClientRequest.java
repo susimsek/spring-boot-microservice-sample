@@ -38,15 +38,15 @@ final class ClientRequest implements HttpRequest {
     @Override
     public String getPath() {
         return Optional.of(request.url())
-                .map(URI::getPath)
-                .orElse("");
+            .map(URI::getPath)
+            .orElse("");
     }
 
     @Override
     public String getQuery() {
         return Optional.of(request.url())
-                .map(URI::getQuery)
-                .orElse("");
+            .map(URI::getQuery)
+            .orElse("");
     }
 
     @Override

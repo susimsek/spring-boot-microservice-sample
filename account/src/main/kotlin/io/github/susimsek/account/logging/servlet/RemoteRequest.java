@@ -91,7 +91,7 @@ public class RemoteRequest extends HttpServletRequestWrapper implements HttpRequ
 
     @Override
     public byte[] body() {
-        return  body;
+        return body;
     }
 
     @Override
@@ -102,7 +102,8 @@ public class RemoteRequest extends HttpServletRequestWrapper implements HttpRequ
     }
 
     @Override
-    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)
+        throws IllegalStateException {
         final AsyncContext asyncContext = super.startAsync(servletRequest, servletResponse);
         asyncListener.ifPresent(asyncContext::addListener);
         return asyncContext;
