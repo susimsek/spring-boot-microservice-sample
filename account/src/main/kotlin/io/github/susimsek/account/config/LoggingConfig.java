@@ -31,6 +31,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.web.reactive.function.client.ExchangeFunction;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(LoggingProperties.class)
@@ -108,6 +109,7 @@ public class LoggingConfig {
 
     @Bean
     @ConditionalOnMissingBean(name = CUSTOMIZER_NAME)
+    @ConditionalOnClass(ExchangeFunction.class)
     public LoggingExchangeFilterFunction loggingClientExchangeFunction(Sink sink) {
         return new LoggingExchangeFilterFunction(sink);
     }
