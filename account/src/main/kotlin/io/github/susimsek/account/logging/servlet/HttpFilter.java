@@ -21,12 +21,9 @@ interface HttpFilter extends Filter {
     default void doFilter(final ServletRequest request, final ServletResponse response,
                           final FilterChain chain) throws ServletException, IOException {
 
-        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)) {
+        if (!(request instanceof HttpServletRequest httpRequest) || !(response instanceof HttpServletResponse httpResponse)) {
             throw new IllegalArgumentException(getClass().getSimpleName() + " only supports HTTP");
         }
-
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         doFilter(httpRequest, httpResponse, chain);
     }

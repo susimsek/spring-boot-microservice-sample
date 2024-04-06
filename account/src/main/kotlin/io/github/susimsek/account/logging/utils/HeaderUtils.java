@@ -33,7 +33,7 @@ public final class HeaderUtils {
     }
 
     public HttpHeaders toHeadersWithEnumHeaders(
-        Enumeration<String>  headerNames,
+        Enumeration<String> headerNames,
         Function<String, Enumeration<String>> getHeaders,
         Function<String, String> getHeader) {
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +51,7 @@ public final class HeaderUtils {
     }
 
     public HttpHeaders toHeaders(
-        Collection<String>  headerNames,
+        Collection<String> headerNames,
         Function<String, Collection<String>> getHeaders,
         Function<String, String> getHeader) {
         HttpHeaders headers = new HttpHeaders();

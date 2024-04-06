@@ -1,9 +1,9 @@
 package io.github.susimsek.account.logging.feign;
 
 import feign.Response;
-import io.github.susimsek.account.logging.utils.HeaderUtils;
 import io.github.susimsek.account.logging.core.HttpResponse;
 import io.github.susimsek.account.logging.core.Origin;
+import io.github.susimsek.account.logging.utils.HeaderUtils;
 import org.springframework.http.HttpHeaders;
 
 record RemoteResponse(

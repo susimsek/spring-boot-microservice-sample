@@ -24,7 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServletServerHttpRequest;
 
 public class RemoteRequest extends HttpServletRequestWrapper implements HttpRequest {
-    private Optional<AsyncListener> asyncListener = Optional.empty();
+    private final Optional<AsyncListener> asyncListener = Optional.empty();
 
     private final HttpHeaders headers;
 
