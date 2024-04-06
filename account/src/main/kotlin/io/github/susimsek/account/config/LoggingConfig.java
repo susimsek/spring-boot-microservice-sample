@@ -16,6 +16,7 @@ import io.github.susimsek.account.constants.Constants;
 import io.github.susimsek.account.logging.core.Sink;
 import io.github.susimsek.account.logging.feign.DefaultFeignLogger;
 import io.github.susimsek.account.logging.servlet.LoggingFilter;
+import io.github.susimsek.account.logging.webclient.LoggingExchangeFilterFunction;
 import jakarta.servlet.Filter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,7 @@ public class LoggingConfig {
     private static final String LOKI_APPENDER_NAME = "LOKI";
     private final String appName;
 
+    static final String CUSTOMIZER_NAME = "loggingClientExchangeFunction";
     private static final String FILTER_NAME = "logging.filter";
 
     public LoggingConfig(
@@ -102,6 +104,12 @@ public class LoggingConfig {
     @ConditionalOnClass(Logger.class)
     public Logger defaultFeignLogger(Sink sink) {
         return new DefaultFeignLogger(sink);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = CUSTOMIZER_NAME)
+    public LoggingExchangeFilterFunction loggingClientExchangeFunction(Sink sink) {
+        return new LoggingExchangeFilterFunction(sink);
     }
 
     static FilterRegistrationBean<?> newFilter(final Filter filter, final String filterName, final int order) {
