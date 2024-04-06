@@ -19,6 +19,9 @@ import io.github.susimsek.account.logging.servlet.LoggingFilter;
 import jakarta.servlet.Filter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -86,12 +89,17 @@ public class LoggingConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(name = FILTER_NAME)
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+    @ConditionalOnClass(jakarta.servlet.Servlet.class)
     public FilterRegistrationBean<?> loggingFilter(Sink sink) {
         var filter = new LoggingFilter(sink);
         return newFilter(filter, FILTER_NAME, Ordered.LOWEST_PRECEDENCE);
     }
 
     @Bean
+    @ConditionalOnMissingBean(Logger.class)
+    @ConditionalOnClass(Logger.class)
     public Logger defaultFeignLogger(Sink sink) {
         return new DefaultFeignLogger(sink);
     }

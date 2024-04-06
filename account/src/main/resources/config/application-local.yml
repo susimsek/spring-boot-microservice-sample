@@ -64,7 +64,6 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
-      indent-output: true
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
