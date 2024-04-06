@@ -2,6 +2,7 @@ package io.github.susimsek.account.logging.core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -17,8 +18,11 @@ public interface HttpMessage {
     HttpHeaders headers();
 
     @Nullable
-    default MediaType getContentType() {
-        return headers().getContentType();
+    default String getContentType() {
+        return
+            Optional.ofNullable(headers().getContentType())
+                .map(MediaType::toString)
+                .orElse(null);
     }
 
 

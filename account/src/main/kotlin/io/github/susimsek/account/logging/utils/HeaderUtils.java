@@ -1,15 +1,18 @@
 package io.github.susimsek.account.logging.utils;
 
+import static java.util.Collections.list;
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
-import java.util.Map.Entry;
 
 @UtilityClass
 public final class HeaderUtils {
@@ -25,6 +28,41 @@ public final class HeaderUtils {
 
         for (final Entry<String, String> entry : entries) {
             append(headers, entry);
+        }
+        return headers;
+    }
+
+    public HttpHeaders toHeadersWithEnumHeaders(
+        Enumeration<String>  headerNames,
+        Function<String, Enumeration<String>> getHeaders,
+        Function<String, String> getHeader) {
+        HttpHeaders headers = new HttpHeaders();
+        while (headerNames.hasMoreElements()) {
+            final String name = headerNames.nextElement();
+            var previous = headers.get(name);
+            if (previous == null) {
+                headers.put(name, list(getHeaders.apply(name)));
+            } else {
+                previous.add(getHeader.apply(name));
+                headers.put(name, previous);
+            }
+        }
+        return headers;
+    }
+
+    public HttpHeaders toHeaders(
+        Collection<String>  headerNames,
+        Function<String, Collection<String>> getHeaders,
+        Function<String, String> getHeader) {
+        HttpHeaders headers = new HttpHeaders();
+        for (final String name : headerNames) {
+            var previous = headers.get(name);
+            if (previous == null) {
+                headers.put(name, new ArrayList<>(getHeaders.apply(name)));
+            } else {
+                previous.add(getHeader.apply(name));
+                headers.put(name, previous);
+            }
         }
         return headers;
     }

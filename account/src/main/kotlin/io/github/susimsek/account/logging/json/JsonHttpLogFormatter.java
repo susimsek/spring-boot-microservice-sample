@@ -22,7 +22,7 @@ public final class JsonHttpLogFormatter implements StructuredHttpLogFormatter {
         if (body.isEmpty()) {
             return Optional.empty();
         }
-        if (contentType != null && contentType.equals(MediaType.APPLICATION_JSON)) {
+        if (contentType != null && contentType.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
             return Optional.of(mapper.readValue(body, Object.class));
         } else {
             return Optional.of(body);

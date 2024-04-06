@@ -6,8 +6,6 @@ import io.github.susimsek.account.logging.core.Origin;
 import io.github.susimsek.account.logging.utils.HeaderUtils;
 import java.net.URI;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
 
 public record LocalRequest(
     URI uri,
@@ -64,12 +62,6 @@ public record LocalRequest(
     @Override
     public HttpHeaders headers() {
         return headers;
-    }
-
-    @Nullable
-    @Override
-    public MediaType getContentType() {
-        return headers.getContentType();
     }
 
     @Override

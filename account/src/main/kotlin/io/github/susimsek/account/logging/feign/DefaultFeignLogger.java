@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public final class DefaultFeignLogger extends feign.Logger {
 

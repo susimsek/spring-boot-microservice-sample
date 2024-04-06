@@ -1,5 +1,7 @@
 package io.github.susimsek.account.config;
 
+import static jakarta.servlet.DispatcherType.ASYNC;
+import static jakarta.servlet.DispatcherType.REQUEST;
 import static org.slf4j.Logger.ROOT_LOGGER_NAME;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -8,15 +10,22 @@ import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
 import com.github.loki4j.logback.JsonLayout;
 import com.github.loki4j.logback.Loki4jAppender;
+import feign.Logger;
 import io.github.susimsek.account.aspect.LoggingAspect;
 import io.github.susimsek.account.constants.Constants;
+import io.github.susimsek.account.logging.core.Sink;
+import io.github.susimsek.account.logging.feign.DefaultFeignLogger;
+import io.github.susimsek.account.logging.servlet.LoggingFilter;
+import jakarta.servlet.Filter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 
 @Configuration(proxyBeanMethods = false)
@@ -26,6 +35,8 @@ public class LoggingConfig {
 
     private static final String LOKI_APPENDER_NAME = "LOKI";
     private final String appName;
+
+    private static final String FILTER_NAME = "logging.filter";
 
     public LoggingConfig(
         @Value("${spring.application.name}") String appName,
@@ -72,5 +83,24 @@ public class LoggingConfig {
     @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
     public LoggingAspect loggingAspect(Environment env) {
         return new LoggingAspect(env);
+    }
+
+    @Bean
+    public FilterRegistrationBean<?> loggingFilter(Sink sink) {
+        var filter = new LoggingFilter(sink);
+        return newFilter(filter, FILTER_NAME, Ordered.LOWEST_PRECEDENCE);
+    }
+
+    @Bean
+    public Logger defaultFeignLogger(Sink sink) {
+        return new DefaultFeignLogger(sink);
+    }
+
+    static FilterRegistrationBean<?> newFilter(final Filter filter, final String filterName, final int order) {
+        final FilterRegistrationBean<?> registration = new FilterRegistrationBean<>(filter);
+        registration.setName(filterName);
+        registration.setDispatcherTypes(REQUEST, ASYNC);
+        registration.setOrder(order);
+        return registration;
     }
 }

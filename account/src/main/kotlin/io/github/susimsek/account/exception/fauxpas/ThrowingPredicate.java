@@ -1,4 +1,4 @@
-package io.github.susimsek.account.fauxpas;
+package io.github.susimsek.account.exception.fauxpas;
 
 import java.util.function.Predicate;
 import lombok.SneakyThrows;
