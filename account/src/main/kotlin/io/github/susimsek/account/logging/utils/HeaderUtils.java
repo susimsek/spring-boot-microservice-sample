@@ -2,6 +2,8 @@ package io.github.susimsek.account.logging.utils;
 
 import static java.util.Collections.list;
 import static java.util.Collections.singletonList;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +18,11 @@ import org.springframework.util.CollectionUtils;
 
 @UtilityClass
 public final class HeaderUtils {
+
+    private static final List<String> SUPPORTED_CONTENT_TYPES = List.of(
+        APPLICATION_JSON_VALUE,
+        APPLICATION_PROBLEM_JSON_VALUE);
+
     public HttpHeaders toHeaders(Map<String, Collection<String>> feignHeaders) {
         HttpHeaders headers = new HttpHeaders();
         feignHeaders.keySet()
@@ -84,6 +91,11 @@ public final class HeaderUtils {
             previous.add(entry.getValue());
             headers.put(entry.getKey(), previous);
         }
+    }
+
+    public boolean isContentTypeSupported(String contentType) {
+        return SUPPORTED_CONTENT_TYPES.stream()
+            .anyMatch(contentType::startsWith);
     }
 
 }

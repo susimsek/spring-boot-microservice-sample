@@ -1,25 +1,19 @@
 package io.github.susimsek.account.logging.json;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.github.susimsek.account.logging.core.HttpMessage;
 import io.github.susimsek.account.logging.core.StructuredHttpLogFormatter;
+import io.github.susimsek.account.logging.utils.HeaderUtils;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class JsonHttpLogFormatter implements StructuredHttpLogFormatter {
 
-    private static final List<String> SUPPORTED_CONTENT_TYPES = List.of(
-        APPLICATION_JSON_VALUE,
-        APPLICATION_PROBLEM_JSON_VALUE);
+
 
     private final ObjectMapper om;
 
@@ -35,9 +29,8 @@ public final class JsonHttpLogFormatter implements StructuredHttpLogFormatter {
         if (body.isEmpty()) {
             return Optional.empty();
         }
-        Predicate<String> contentTypePredicate = (c) -> SUPPORTED_CONTENT_TYPES.stream()
-            .anyMatch(c::startsWith);
-        if (contentType != null && contentTypePredicate.test(contentType)) {
+
+        if (contentType != null && HeaderUtils.isContentTypeSupported(contentType)) {
             return Optional.of(om.readValue(body, Object.class));
         } else {
             return Optional.of(body);
