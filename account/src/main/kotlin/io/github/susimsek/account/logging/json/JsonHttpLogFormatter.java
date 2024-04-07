@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public final class JsonHttpLogFormatter implements StructuredHttpLogFormatter {
 
-
-
     private final ObjectMapper om;
 
     public JsonHttpLogFormatter(ObjectMapper mapper) {
