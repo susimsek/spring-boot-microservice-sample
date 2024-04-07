@@ -33,6 +33,7 @@ public interface StructuredHttpLogFormatter extends HttpLogFormatter {
         content.put("remote", request.getRemote());
         content.put("method", request.getMethod());
         content.put("uri", request.getRequestUri());
+        content.put("host", request.getHost());
         content.put("path", request.getPath());
 
         prepareHeaders(request).ifPresent(headers -> content.put("headers", headers));
