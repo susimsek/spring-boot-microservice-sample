@@ -150,3 +150,17 @@ resilience4j.ratelimiter:
 springdoc:
   cache:
     disabled: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+
+httpclient:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        writeTimeout: 10000
