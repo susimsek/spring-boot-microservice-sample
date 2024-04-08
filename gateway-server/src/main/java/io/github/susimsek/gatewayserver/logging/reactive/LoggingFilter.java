@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
+@SuppressWarnings({"NullableProblems"})
 public class LoggingFilter implements WebFilter, Ordered {
 
     private final Sink sink;
