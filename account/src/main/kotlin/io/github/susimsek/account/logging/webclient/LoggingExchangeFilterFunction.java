@@ -37,8 +37,8 @@ public class LoggingExchangeFilterFunction implements ExchangeFilterFunction {
                     .just(response)
                     .flatMap(it -> {
                         HttpHeaders responseHeaders = response.headers().asHttpHeaders();
-                        if (clientResponse.shouldBuffer() && (responseHeaders.getContentLength() > 0 ||
-                            responseHeaders.containsKey(TRANSFER_ENCODING))) {
+                        if (clientResponse.shouldBuffer() && (responseHeaders.getContentLength() > 0
+                            || responseHeaders.containsKey(TRANSFER_ENCODING))) {
                             return it
                                 .bodyToMono(byte[].class)
                                 .doOnNext(clientResponse::buffer)
