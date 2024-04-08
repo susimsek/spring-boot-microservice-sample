@@ -10,14 +10,21 @@ import com.github.loki4j.logback.JsonLayout;
 import com.github.loki4j.logback.Loki4jAppender;
 import io.github.susimsek.gatewayserver.aspect.LoggingAspect;
 import io.github.susimsek.gatewayserver.constants.Constants;
+import io.github.susimsek.gatewayserver.logging.core.Sink;
+import io.github.susimsek.gatewayserver.logging.reactive.LoggingFilter;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.server.WebFilter;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(LoggingProperties.class)
@@ -26,6 +33,8 @@ public class LoggingConfig {
 
     private static final String LOKI_APPENDER_NAME = "LOKI";
     private final String appName;
+
+    private static final String FILTER_NAME = "loggingServerFilter";
 
     public LoggingConfig(
         @Value("${spring.application.name}") String appName,
@@ -72,5 +81,13 @@ public class LoggingConfig {
     @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
     public LoggingAspect loggingAspect(Environment env) {
         return new LoggingAspect(env);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = FILTER_NAME)
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+    @ConditionalOnClass(WebFluxConfigurer.class)
+    public WebFilter loggingServerFilter(Sink sink) {
+        return new LoggingFilter(sink);
     }
 }
