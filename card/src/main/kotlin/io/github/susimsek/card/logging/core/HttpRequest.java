@@ -1,6 +1,8 @@
 package io.github.susimsek.card.logging.core;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 public interface HttpRequest extends HttpMessage {
@@ -28,5 +30,9 @@ public interface HttpRequest extends HttpMessage {
         return Optional.of(getRequestUri())
             .map(URI::getQuery)
             .orElse("");
+    }
+
+    default Map<String, Object> getAdditionalContent() {
+        return Collections.EMPTY_MAP;
     }
 }

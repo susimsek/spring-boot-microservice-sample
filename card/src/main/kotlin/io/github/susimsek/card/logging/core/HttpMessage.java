@@ -2,8 +2,6 @@ package io.github.susimsek.card.logging.core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -36,9 +34,5 @@ public interface HttpMessage {
 
     default String getBodyAsString() throws IOException {
         return new String(body(), StandardCharsets.UTF_8);
-    }
-
-    default Map<String, Object> getAdditionalContent() {
-        return Collections.EMPTY_MAP;
     }
 }
