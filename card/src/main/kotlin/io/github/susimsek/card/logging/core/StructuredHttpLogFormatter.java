@@ -37,10 +37,14 @@ public interface StructuredHttpLogFormatter extends HttpLogFormatter {
         content.put("path", request.getPath());
 
         prepareHeaders(request).ifPresent(headers -> content.put("headers", headers));
+        if (!request.getAdditionalContent().isEmpty()) {
+            content.putAll(request.getAdditionalContent());
+        }
         prepareBody(request).ifPresent(body -> content.put("body", body));
-
+        content.put("path", request.getPath());
         return content;
     }
+
 
 
     default Map<String, Object> prepare(final HttpResponse response) throws IOException {
@@ -52,6 +56,9 @@ public interface StructuredHttpLogFormatter extends HttpLogFormatter {
         content.put("status", response.status());
 
         prepareHeaders(response).ifPresent(headers -> content.put("headers", headers));
+        if (!response.getAdditionalContent().isEmpty()) {
+            content.putAll(response.getAdditionalContent());
+        }
         prepareBody(response).ifPresent(body -> content.put("body", body));
 
         return content;
