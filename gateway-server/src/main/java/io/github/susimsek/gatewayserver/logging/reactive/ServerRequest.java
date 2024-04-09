@@ -1,7 +1,5 @@
 package io.github.susimsek.gatewayserver.logging.reactive;
 
-import static java.util.Optional.ofNullable;
-
 import io.github.susimsek.gatewayserver.logging.core.HttpRequest;
 import io.github.susimsek.gatewayserver.logging.core.Origin;
 import java.net.InetSocketAddress;
@@ -48,16 +46,6 @@ public class ServerRequest implements HttpRequest {
     @Override
     public URI getRequestUri() {
         return uri;
-    }
-
-    @Override
-    public String getPath() {
-        return request.getPath().value();
-    }
-
-    @Override
-    public String getQuery() {
-        return ofNullable(request.getURI().getQuery()).orElse("");
     }
 
     boolean shouldBuffer() {
