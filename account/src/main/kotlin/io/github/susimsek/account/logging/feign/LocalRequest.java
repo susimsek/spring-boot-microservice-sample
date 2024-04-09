@@ -40,16 +40,6 @@ public record LocalRequest(
     }
 
     @Override
-    public String getPath() {
-        return uri.getPath() == null ? "" : uri.getPath();
-    }
-
-    @Override
-    public String getQuery() {
-        return uri.getQuery() == null ? "" : uri.getQuery();
-    }
-
-    @Override
     public String getProtocolVersion() {
         return "HTTP/1.1";
     }

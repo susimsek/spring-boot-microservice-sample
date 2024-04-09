@@ -63,16 +63,6 @@ public class RemoteRequest extends HttpServletRequestWrapper implements HttpRequ
     }
 
     @Override
-    public String getPath() {
-        return getRequestURI();
-    }
-
-    @Override
-    public String getQuery() {
-        return Optional.ofNullable(getQueryString()).orElse("");
-    }
-
-    @Override
     public HttpHeaders headers() {
         return headers;
     }

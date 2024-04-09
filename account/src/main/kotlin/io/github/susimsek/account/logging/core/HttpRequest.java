@@ -17,8 +17,16 @@ public interface HttpRequest extends HttpMessage {
             .orElse("");
     }
 
+    default String getPath() {
+        return Optional.of(getRequestUri())
+            .map(URI::getPath)
+            .orElse("");
+    }
 
-    String getPath();
+    default String getQuery() {
+        return Optional.of(getRequestUri())
+            .map(URI::getQuery)
+            .orElse("");
+    }
 
-    String getQuery();
 }

@@ -3,7 +3,6 @@ package io.github.susimsek.account.logging.webclient;
 import io.github.susimsek.account.logging.core.HttpRequest;
 import io.github.susimsek.account.logging.core.Origin;
 import java.net.URI;
-import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 
 final class ClientRequest implements HttpRequest {
@@ -33,20 +32,6 @@ final class ClientRequest implements HttpRequest {
     @Override
     public URI getRequestUri() {
         return uri;
-    }
-
-    @Override
-    public String getPath() {
-        return Optional.of(request.url())
-            .map(URI::getPath)
-            .orElse("");
-    }
-
-    @Override
-    public String getQuery() {
-        return Optional.of(request.url())
-            .map(URI::getQuery)
-            .orElse("");
     }
 
     @Override

@@ -6,9 +6,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 import lombok.experimental.UtilityClass;
+import org.springframework.util.SerializationUtils;
 
 @UtilityClass
 public final class ByteStreams {
+
+    public byte[] toByteArray(final Object data) {
+        return SerializationUtils.serialize(data);
+    }
 
     public byte[] toByteArray(final InputStream in) throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
