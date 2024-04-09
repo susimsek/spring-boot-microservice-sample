@@ -8,15 +8,21 @@ import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
 import com.github.loki4j.logback.JsonLayout;
 import com.github.loki4j.logback.Loki4jAppender;
+import graphql.GraphQL;
 import io.github.susimsek.card.aspect.LoggingAspect;
 import io.github.susimsek.card.constants.Constants;
+import io.github.susimsek.card.logging.core.Sink;
+import io.github.susimsek.card.logging.graphql.LoggingInterceptor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.graphql.server.WebGraphQlInterceptor;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(LoggingProperties.class)
@@ -24,6 +30,8 @@ public class LoggingConfig {
 
     private static final String LOKI_APPENDER_NAME = "LOKI";
     private final String appName;
+
+    static final String CUSTOMIZER_NAME = "loggingGraphQlInterceptor";
 
     public LoggingConfig(
         @Value("${spring.application.name}") String appName,
@@ -70,5 +78,12 @@ public class LoggingConfig {
     @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
     public LoggingAspect loggingAspect(Environment env) {
         return new LoggingAspect(env);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = CUSTOMIZER_NAME)
+    @ConditionalOnClass(GraphQL.class)
+    public WebGraphQlInterceptor loggingGraphQlInterceptor(Sink sink) {
+        return new LoggingInterceptor(sink);
     }
 }
