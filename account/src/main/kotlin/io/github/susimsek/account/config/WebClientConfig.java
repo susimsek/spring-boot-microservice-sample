@@ -1,6 +1,7 @@
 package io.github.susimsek.account.config;
 
 import io.github.susimsek.account.logging.webclient.LoggingExchangeFilterFunction;
+import io.micrometer.observation.ObservationRegistry;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
@@ -30,9 +31,11 @@ public class WebClientConfig {
     @LoadBalanced
     public WebClient.Builder loadBalancedWebClientBuilder(
         HttpClient httpClient,
-        LoggingExchangeFilterFunction loggingExchangeFilterFunction) {
+        LoggingExchangeFilterFunction loggingExchangeFilterFunction,
+        ObservationRegistry observationRegistry) {
         return WebClient.builder()
             .clientConnector(new ReactorClientHttpConnector(httpClient))
+            .observationRegistry(observationRegistry)
             .filter(loggingExchangeFilterFunction);
     }
 }

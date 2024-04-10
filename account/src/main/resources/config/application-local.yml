@@ -123,7 +123,7 @@ springdoc:
 
 management:
   tracing:
-    enabled: false
+    enabled: true
 
 logging:
   level:
