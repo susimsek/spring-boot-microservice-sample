@@ -1,11 +1,13 @@
 package io.github.susimsek.account.config;
 
 import io.github.susimsek.account.logging.webclient.LoggingExchangeFilterFunction;
-import io.micrometer.observation.ObservationRegistry;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +30,16 @@ public class WebClientConfig {
     }
 
     @Bean
+    @ConditionalOnClass(WebClient.class)
     @LoadBalanced
     public WebClient.Builder loadBalancedWebClientBuilder(
         HttpClient httpClient,
         LoggingExchangeFilterFunction loggingExchangeFilterFunction,
-        ObservationRegistry observationRegistry) {
-        return WebClient.builder()
+        ObjectProvider<WebClientCustomizer> customizerProvider) {
+        var builder = WebClient.builder()
             .clientConnector(new ReactorClientHttpConnector(httpClient))
-            .observationRegistry(observationRegistry)
             .filter(loggingExchangeFilterFunction);
+        customizerProvider.orderedStream().forEach(customizer -> customizer.customize(builder));
+        return builder;
     }
 }
