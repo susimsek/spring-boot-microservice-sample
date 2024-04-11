@@ -69,6 +69,8 @@ spring:
   messages:
     basename: i18n/messages
     fallback-to-system-locale: false
+  reactor:
+    context-propagation: auto
 
 management:
   endpoints:

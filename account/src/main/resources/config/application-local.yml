@@ -67,6 +67,8 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
+  reactor:
+    context-propagation: auto
 
 eureka:
   instance:
@@ -123,7 +125,7 @@ springdoc:
 
 management:
   tracing:
-    enabled: true
+    enabled: false
 
 logging:
   level:

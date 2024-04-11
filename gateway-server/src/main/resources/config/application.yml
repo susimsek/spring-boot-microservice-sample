@@ -22,6 +22,8 @@ spring:
         response-timeout: 5s
       default-filters:
         - RewritePath=/api/v1/.*?/(?<remaining>.*), /$\{remaining}
+  reactor:
+    context-propagation: auto
 #    kubernetes:
 #      loadbalancer:
 #        mode: service

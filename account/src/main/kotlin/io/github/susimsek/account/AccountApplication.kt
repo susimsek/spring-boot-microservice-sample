@@ -5,13 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
-import reactor.core.publisher.Hooks
 
 @EnableDiscoveryClient
 @EnableConfigurationProperties(value = [AccountContactInfoDTO::class])
 @SpringBootApplication
 class AccountApplication
-fun main(args: Array<String>) {
-    Hooks.enableAutomaticContextPropagation();
+fun main(args: Array<String>) {;
     runApplication<AccountApplication>(*args)
 }
