@@ -124,7 +124,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (status.is5xxServerError()) {
             log.error("An exception occured, which will cause a {} response", status, ex);
             var problem = ProblemDetail.forStatusAndDetail(status, ERR_INTERNAL_SERVER);
-            super.handleExceptionInternal(ex, problem, headers, status, request);
+           return super.handleExceptionInternal(ex, problem, headers, status, request);
         } else if (status.is4xxClientError()) {
             log.warn("An exception occured, which will cause a {} response", status, ex);
         } else {
