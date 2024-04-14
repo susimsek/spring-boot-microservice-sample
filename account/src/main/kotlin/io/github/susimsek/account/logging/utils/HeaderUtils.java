@@ -15,7 +15,6 @@ import java.util.function.Function;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.MimeTypeUtils;
 
 @UtilityClass
 public final class HeaderUtils {
@@ -98,9 +97,4 @@ public final class HeaderUtils {
         return HTTP_MESSAGE_JSON_CONTENT_TYPES.stream()
             .anyMatch(contentType::startsWith);
     }
-
-    public boolean isMessageInJsonFormat(String contentType) {
-        return contentType.startsWith(MimeTypeUtils.APPLICATION_JSON_VALUE);
-    }
-
 }
