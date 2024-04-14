@@ -79,6 +79,9 @@ spring:
     loki:
       enabled: false
       url: http://localhost:3100/loki/api/v1/push
+  webflux:
+    problemdetails:
+      enabled: true
 
 eureka:
   instance:

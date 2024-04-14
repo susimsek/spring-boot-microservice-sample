@@ -3,12 +3,14 @@ package io.github.susimsek.account.exception;
 import static io.github.susimsek.account.exception.ErrorConstants.ERR_INTERNAL_SERVER;
 import static io.github.susimsek.account.exception.ErrorConstants.ERR_VALIDATION;
 import static io.github.susimsek.account.exception.ErrorConstants.PROBLEM_VIOLATION_KEY;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 import io.github.susimsek.account.dto.Violation;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,6 +34,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
+                                                                         HttpHeaders headers, HttpStatusCode status,
+                                                                         WebRequest request) {
+        var methods = Set.of(ex.getSupportedMethods());
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage());
+        if (CollectionUtils.isEmpty(methods)) {
+            return handleExceptionInternal(ex, problem, null,
+                HttpStatusCode.valueOf(problem.getStatus()), request);
+        }
+        headers.setAllow(requireNonNull(ex.getSupportedHttpMethods()));
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -124,7 +144,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (status.is5xxServerError()) {
             log.error("An exception occured, which will cause a {} response", status, ex);
             var problem = ProblemDetail.forStatusAndDetail(status, ERR_INTERNAL_SERVER);
-           return super.handleExceptionInternal(ex, problem, headers, status, request);
+            return super.handleExceptionInternal(ex, problem, headers, status, request);
         } else if (status.is4xxClientError()) {
             log.warn("An exception occured, which will cause a {} response", status, ex);
         } else {
@@ -139,7 +159,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         WebRequest webRequest) {
         var extensions = responseError.getExtensions();
         var classification = extensions.get("classification");
-        var problem =  Arrays.stream(ErrorType.values())
+        var problem = Arrays.stream(ErrorType.values())
             .filter(errorType -> errorType.name().equals(classification))
             .findFirst()
             .map(errorType -> switch (errorType) {
@@ -147,7 +167,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     HttpStatus.BAD_REQUEST, ex.getMessage());
                 case NOT_FOUND -> ProblemDetail.forStatusAndDetail(
                     HttpStatus.NOT_FOUND, ex.getMessage());
-                default ->  ProblemDetail.forStatusAndDetail(
+                default -> ProblemDetail.forStatusAndDetail(
                     HttpStatus.INTERNAL_SERVER_ERROR, ERR_INTERNAL_SERVER);
             }).orElse(ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR, ERR_INTERNAL_SERVER));
