@@ -15,6 +15,7 @@ import io.github.susimsek.account.aspect.LoggingAspect;
 import io.github.susimsek.account.constants.Constants;
 import io.github.susimsek.account.logging.core.Sink;
 import io.github.susimsek.account.logging.feign.DefaultFeignLogger;
+import io.github.susimsek.account.logging.messaging.LoggingInterceptor;
 import io.github.susimsek.account.logging.servlet.LoggingFilter;
 import io.github.susimsek.account.logging.webclient.LoggingExchangeFilterFunction;
 import jakarta.servlet.Filter;
@@ -25,12 +26,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.stream.config.BindingServiceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.integration.config.GlobalChannelInterceptor;
+import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 
 @Configuration(proxyBeanMethods = false)
@@ -41,8 +45,9 @@ public class LoggingConfig {
     private static final String LOKI_APPENDER_NAME = "LOKI";
     private final String appName;
 
-    static final String CUSTOMIZER_NAME = "loggingClientExchangeFunction";
+    private static final String CUSTOMIZER_NAME = "loggingClientExchangeFunction";
     private static final String FILTER_NAME = "logging.filter";
+    private static final String INTERCEPTOR_NAME = "loggingInterceptor";
 
     public LoggingConfig(
         @Value("${spring.application.name}") String appName,
@@ -112,6 +117,16 @@ public class LoggingConfig {
     @ConditionalOnClass(ExchangeFunction.class)
     public LoggingExchangeFilterFunction loggingClientExchangeFunction(Sink sink) {
         return new LoggingExchangeFilterFunction(sink);
+    }
+
+    @Bean
+    @GlobalChannelInterceptor
+    @ConditionalOnMissingBean(name = INTERCEPTOR_NAME)
+    @ConditionalOnClass(ChannelInterceptor.class)
+    public ChannelInterceptor loggingInterceptor(
+        Sink sink,
+        BindingServiceProperties bindingServiceProperties) {
+        return new LoggingInterceptor(sink, bindingServiceProperties);
     }
 
     static FilterRegistrationBean<?> newFilter(final Filter filter, final String filterName, final int order) {

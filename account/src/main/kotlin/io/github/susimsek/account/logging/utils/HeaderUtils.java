@@ -15,11 +15,12 @@ import java.util.function.Function;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MimeTypeUtils;
 
 @UtilityClass
 public final class HeaderUtils {
 
-    private static final List<String> SUPPORTED_CONTENT_TYPES = List.of(
+    private static final List<String> HTTP_MESSAGE_JSON_CONTENT_TYPES = List.of(
         APPLICATION_JSON_VALUE,
         APPLICATION_PROBLEM_JSON_VALUE);
 
@@ -93,9 +94,13 @@ public final class HeaderUtils {
         }
     }
 
-    public boolean isContentTypeSupported(String contentType) {
-        return SUPPORTED_CONTENT_TYPES.stream()
+    public boolean isHttpMessageInJsonFormat(String contentType) {
+        return HTTP_MESSAGE_JSON_CONTENT_TYPES.stream()
             .anyMatch(contentType::startsWith);
+    }
+
+    public boolean isMessageInJsonFormat(String contentType) {
+        return contentType.startsWith(MimeTypeUtils.APPLICATION_JSON_VALUE);
     }
 
 }

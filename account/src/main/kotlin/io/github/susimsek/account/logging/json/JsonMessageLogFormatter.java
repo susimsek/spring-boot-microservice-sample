@@ -2,8 +2,8 @@ package io.github.susimsek.account.logging.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.github.susimsek.account.logging.core.HttpMessage;
-import io.github.susimsek.account.logging.core.StructuredHttpLogFormatter;
+import io.github.susimsek.account.logging.core.Message;
+import io.github.susimsek.account.logging.core.StructuredMessageLogFormatter;
 import io.github.susimsek.account.logging.utils.HeaderUtils;
 import java.io.IOException;
 import java.util.Map;
@@ -11,28 +11,27 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class JsonHttpLogFormatter implements StructuredHttpLogFormatter {
+public final class JsonMessageLogFormatter implements StructuredMessageLogFormatter {
 
     private final ObjectMapper om;
 
-    public JsonHttpLogFormatter(ObjectMapper mapper) {
+    public JsonMessageLogFormatter(ObjectMapper mapper) {
         var om = mapper.copy();
         om.enable(SerializationFeature.INDENT_OUTPUT);
         this.om = om;
     }
 
     @Override
-    public Optional<Object> prepareBody(final HttpMessage message) throws IOException {
+    public Optional<Object> preparePayload(final Message message) throws IOException {
         var contentType = message.getContentType();
-        var body = message.getBodyAsString();
-        if (body.isEmpty()) {
+        var payload = message.getPayloadAsString();
+        if (payload.isEmpty()) {
             return Optional.empty();
         }
-
-        if (contentType != null && HeaderUtils.isHttpMessageInJsonFormat(contentType)) {
-            return Optional.of(om.readValue(body, Object.class));
+        if (contentType != null && HeaderUtils.isMessageInJsonFormat(contentType)) {
+            return Optional.of(om.readValue(payload, Object.class));
         } else {
-            return Optional.of(body);
+            return Optional.of(payload);
         }
     }
 

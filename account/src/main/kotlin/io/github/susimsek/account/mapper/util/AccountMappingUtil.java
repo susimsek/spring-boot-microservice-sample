@@ -5,9 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Map;
+import lombok.experimental.UtilityClass;
 import org.mapstruct.Named;
 import org.mapstruct.Qualifier;
 
+@UtilityClass
 public class AccountMappingUtil {
 
     @Qualifier
