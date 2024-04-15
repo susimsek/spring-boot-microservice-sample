@@ -21,10 +21,8 @@ public class GraphQLConfig {
     public RuntimeWiringConfigurer graphqlConfigurer(
         List<GraphQLScalarType> graphQLScalarTypes
     ) {
-        return builder -> {
-            graphQLScalarTypes.forEach(
-                builder::scalar);
-        };
+        return builder -> graphQLScalarTypes.forEach(
+            builder::scalar);
     }
 
     @Bean
