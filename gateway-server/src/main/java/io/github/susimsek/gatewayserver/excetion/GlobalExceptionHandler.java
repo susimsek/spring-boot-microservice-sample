@@ -23,12 +23,36 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.server.NotAcceptableStatusException;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 import reactor.core.publisher.Mono;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected Mono<ResponseEntity<Object>> handleNotAcceptableStatusException(NotAcceptableStatusException ex,
+                                                                              HttpHeaders headers,
+                                                                              HttpStatusCode status,
+                                                                              ServerWebExchange exchange) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_ACCEPTABLE, ex.getMessage());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), exchange);
+    }
+
+    @Override
+    protected Mono<ResponseEntity<Object>> handleUnsupportedMediaTypeStatusException(
+        UnsupportedMediaTypeStatusException ex, HttpHeaders headers, HttpStatusCode status,
+        ServerWebExchange exchange) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
+        headers.setAccept(ex.getSupportedMediaTypes());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), exchange);
+    }
 
     @Override
     protected Mono<ResponseEntity<Object>> handleMethodNotAllowedException(MethodNotAllowedException ex,

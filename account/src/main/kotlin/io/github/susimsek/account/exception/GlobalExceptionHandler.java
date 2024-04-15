@@ -24,6 +24,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +36,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
+                                                                      HttpHeaders headers, HttpStatusCode status,
+                                                                      WebRequest request) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_ACCEPTABLE, ex.getMessage());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
+                                                                     HttpHeaders headers, HttpStatusCode status,
+                                                                     WebRequest request) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
+        headers.setAccept(ex.getSupportedMediaTypes());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,

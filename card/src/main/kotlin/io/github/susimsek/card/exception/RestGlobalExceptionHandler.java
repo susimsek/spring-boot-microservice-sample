@@ -3,10 +3,12 @@ package io.github.susimsek.card.exception;
 import static io.github.susimsek.card.exception.ErrorConstants.ERR_INTERNAL_SERVER;
 import static io.github.susimsek.card.exception.ErrorConstants.ERR_VALIDATION;
 import static io.github.susimsek.card.exception.ErrorConstants.PROBLEM_VIOLATION_KEY;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 import io.github.susimsek.card.dto.Violation;
 import jakarta.validation.ConstraintViolationException;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -15,6 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,6 +30,43 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 @RestControllerAdvice
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
+                                                                      HttpHeaders headers, HttpStatusCode status,
+                                                                      WebRequest request) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_ACCEPTABLE, ex.getMessage());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
+                                                                     HttpHeaders headers, HttpStatusCode status,
+                                                                     WebRequest request) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
+        headers.setAccept(ex.getSupportedMediaTypes());
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
+                                                                         HttpHeaders headers, HttpStatusCode status,
+                                                                         WebRequest request) {
+        var methods = Set.of(ex.getSupportedMethods());
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage());
+        if (CollectionUtils.isEmpty(methods)) {
+            return handleExceptionInternal(ex, problem, null,
+                HttpStatusCode.valueOf(problem.getStatus()), request);
+        }
+        headers.setAllow(requireNonNull(ex.getSupportedHttpMethods()));
+        return handleExceptionInternal(ex, problem, headers,
+            HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
