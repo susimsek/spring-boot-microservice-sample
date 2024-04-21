@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
+import org.hibernate.proxy.HibernateProxy;
 
 @Cache(region = "accountCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -55,4 +57,32 @@ public class Account extends BaseEntity {
 
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = Boolean.FALSE;
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        Class<?> objEffectiveClass = obj instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
+            : obj.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass() :
+            this.getClass();
+        if (thisEffectiveClass != objEffectiveClass) {
+            return false;
+        }
+        Account account = (Account) obj;
+        return getAccountNumber() != null && Objects.equals(getAccountNumber(), account.getAccountNumber());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy hibernateProxy
+            ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass().hashCode()
+            : getClass().hashCode();
+    }
 }
