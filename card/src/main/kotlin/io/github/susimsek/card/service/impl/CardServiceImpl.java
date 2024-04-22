@@ -3,6 +3,7 @@ package io.github.susimsek.card.service.impl;
 import static io.github.susimsek.card.constants.Constants.RANDOM;
 
 import io.github.susimsek.card.constants.CardConstants;
+import io.github.susimsek.card.consumer.CardPublisher;
 import io.github.susimsek.card.dto.CardDTO;
 import io.github.susimsek.card.entity.Card;
 import io.github.susimsek.card.exception.CardAlreadyExistsException;
@@ -10,6 +11,7 @@ import io.github.susimsek.card.exception.EntityNotFoundException;
 import io.github.susimsek.card.mapper.CardMapper;
 import io.github.susimsek.card.repository.CardRepository;
 import io.github.susimsek.card.service.CardService;
+import io.reactivex.rxjava3.core.Flowable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.ScrollPosition;
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
 public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
+
+    private final CardPublisher cardPublisher;
 
     private final CardMapper cardMapper;
 
@@ -69,6 +73,11 @@ public class CardServiceImpl implements CardService {
         Sort sort = Sort.by("cardId").ascending();
         return cardRepository.findAllBy(scrollPosition, limit, sort)
             .map(cardMapper::toDto);
+    }
+
+    @Override
+    public Flowable<CardDTO> onNewCard() {
+        return cardPublisher.getPublisher();
     }
 
     private Card createNewCard(String mobileNumber) {

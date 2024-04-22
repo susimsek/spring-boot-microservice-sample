@@ -4,10 +4,12 @@ import io.github.susimsek.card.dto.CardDTO;
 import io.github.susimsek.card.service.CardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
 import org.springframework.data.domain.Window;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.graphql.data.query.ScrollSubrange;
 
 @Slf4j
@@ -29,12 +31,17 @@ public class CardGraphQLController {
 
     @MutationMapping
     public CardDTO createCard(@Argument String mobileNumber) {
-        return  cardService.createCard(mobileNumber);
+        return cardService.createCard(mobileNumber);
     }
 
     @MutationMapping
     public String deleteCard(@Argument String mobileNumber) {
         cardService.deleteCard(mobileNumber);
         return mobileNumber;
+    }
+
+    @SubscriptionMapping
+    public Publisher<CardDTO> onNewCard() {
+        return cardService.onNewCard();
     }
 }

@@ -17,6 +17,10 @@ type Mutation {
     deleteCard(mobileNumber: String! @NotBlank @Pattern(regexp: "(^$|\\d{10})")): String!
 }
 
+type Subscription {
+    onNewCard: CardDTO!
+}
+
 type CardDTO{
     mobileNumber: String!
     cardNumber: String!
