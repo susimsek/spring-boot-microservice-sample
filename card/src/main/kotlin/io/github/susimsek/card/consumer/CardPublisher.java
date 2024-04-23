@@ -33,15 +33,16 @@ public class CardPublisher {
     }
 
     @Bean
-    public Consumer<DebeziumEventDetails<Card>> receive() {
+    public Consumer<DebeziumEventDetails<Card>> processCardDebeziumEvent() {
         return debeziumEvent -> {
-            var payload = debeziumEvent.payload();
-            Card entity = switch (payload.operation()) {
-                case CREATE, UPDATE -> payload.after();
-                default -> payload.before();
-            };
             if (emitter != null) {
-                emitter.onNext(cardMapper.toDto(entity));
+                var payload = debeziumEvent.payload();
+                var entity = switch (payload.operation()) {
+                    case DELETE ->  payload.before();
+                    default -> payload.after();
+                };
+                var dto = cardMapper.toDto(entity);
+                emitter.onNext(dto);
             }
         };
     }

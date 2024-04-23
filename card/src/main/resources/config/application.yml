@@ -44,6 +44,18 @@ spring:
   messages:
     basename: i18n/messages
     fallback-to-system-locale: false
+  graphql:
+    websocket:
+      path: /graphql
+      connection-init-timeout: 60s
+  cloud:
+    function:
+      definition: processCardDebeziumEvent
+    stream:
+      bindings:
+        processCardDebeziumEvent-in-0:
+          destination: pg-changes.public.card
+          group: ${spring.application.name}
 
 management:
   endpoints:

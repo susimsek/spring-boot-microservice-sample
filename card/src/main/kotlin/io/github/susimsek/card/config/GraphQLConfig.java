@@ -42,5 +42,4 @@ public class GraphQLConfig {
                 schemaDirective.getName(), schemaDirective.getDirective()));
         };
     }
-
 }
