@@ -1,6 +1,6 @@
 package io.github.susimsek.account.functions;
 
-import io.github.susimsek.account.debezium.DebeziumEventDetails;
+import io.github.susimsek.account.debezium.data.DebeziumEventDetails;
 import io.github.susimsek.account.entity.Account;
 import io.github.susimsek.account.service.AccountService;
 import java.util.function.Consumer;

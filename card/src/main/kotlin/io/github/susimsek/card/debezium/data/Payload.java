@@ -1,13 +1,13 @@
-package io.github.susimsek.card.debezium;
+package io.github.susimsek.card.debezium.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 import java.util.Map;
 
-public record DebeziumEventPayload<T extends Object>(
+public record Payload<T extends Object>(
     T before,
     T after,
     Map<String, Object> source,
-    @JsonProperty("op") DebeziumEventPayloadOperation operation,
+    @JsonProperty("op") Operation operation,
     @JsonProperty("ts_ms") Instant date) {
 }

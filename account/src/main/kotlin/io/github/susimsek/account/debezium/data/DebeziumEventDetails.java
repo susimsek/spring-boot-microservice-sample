@@ -1,8 +1,8 @@
-package io.github.susimsek.account.debezium;
+package io.github.susimsek.account.debezium.data;
 
 import java.util.Map;
 
 public record DebeziumEventDetails<T extends Object>(
     Map<String, Object> schema,
-    DebeziumEventPayload<T> payload) {
+    Payload<T> payload) {
 }

@@ -1,11 +1,11 @@
-package io.github.susimsek.account.debezium;
+package io.github.susimsek.account.debezium.data;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum DebeziumEventPayloadOperation {
+public enum Operation {
     CREATE("c"),
     UPDATE("u"),
     DELETE("r");

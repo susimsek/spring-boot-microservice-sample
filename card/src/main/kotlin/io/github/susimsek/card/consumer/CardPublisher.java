@@ -1,6 +1,6 @@
 package io.github.susimsek.card.consumer;
 
-import io.github.susimsek.card.debezium.DebeziumEventDetails;
+import io.github.susimsek.card.debezium.data.DebeziumEventDetails;
 import io.github.susimsek.card.dto.CardDTO;
 import io.github.susimsek.card.entity.Card;
 import io.github.susimsek.card.mapper.CardMapper;
