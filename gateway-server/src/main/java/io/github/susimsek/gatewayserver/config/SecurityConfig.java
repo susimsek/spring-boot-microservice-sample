@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(
         ServerHttpSecurity http,
-        Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter,
+        Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter,
         SecurityProblemSupport problemSupport) {
         http
             .securityMatcher(
@@ -55,15 +55,14 @@ public class SecurityConfig {
                     .pathMatchers("/eazybank/account/**", "/account/**").hasRole("ACCOUNT")
                     .pathMatchers("/eazybank/card/**", "/card/**").hasRole("CARD")
                     .pathMatchers("/eazybank/loan/**", "/loan/**").hasRole("LOAN"))
-            .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
-                .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(jwtAuthenticationConverter))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter))
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport));
         return http.build();
     }
 
     @Bean
-    public Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+    public Converter<Jwt, Mono<AbstractAuthenticationToken>> authenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
