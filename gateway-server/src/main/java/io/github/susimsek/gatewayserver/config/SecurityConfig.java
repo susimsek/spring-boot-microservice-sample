@@ -3,6 +3,7 @@ package io.github.susimsek.gatewayserver.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import io.github.susimsek.gatewayserver.excetion.security.SecurityProblemSupport;
+import io.github.susimsek.gatewayserver.security.oauth2.JwtGrantedAuthorityConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -63,8 +64,8 @@ public class SecurityConfig {
 
     @Bean
     public Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
-        return new ReactiveJwtAuthenticationConverterAdapter(converter);
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
 }
