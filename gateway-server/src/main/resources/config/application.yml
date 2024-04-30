@@ -21,6 +21,7 @@ spring:
         connect-timeout: 1000
         response-timeout: 5s
       default-filters:
+        - TokenRelay
         - RewritePath=/api/v1/.*?/(?<remaining>.*), /$\{remaining}
   reactor:
     context-propagation: auto
