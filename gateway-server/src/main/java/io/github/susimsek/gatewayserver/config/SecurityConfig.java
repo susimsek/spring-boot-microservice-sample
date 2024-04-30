@@ -56,6 +56,7 @@ public class SecurityConfig {
                 authz
                     .pathMatchers("/*/v3/api-docs/**").permitAll()
                     .pathMatchers("/*/actuator/**").permitAll()
+                    .pathMatchers(HttpMethod.GET).permitAll()
                     .pathMatchers("/eazybank/account/**", "/account/**").hasAuthority(AuthoritiesConstants.ACCOUNT)
                     .pathMatchers("/eazybank/card/**", "/card/**").hasAuthority(AuthoritiesConstants.CARD)
                     .pathMatchers("/eazybank/loan/**", "/loan/**").hasAuthority(AuthoritiesConstants.LOAN))
