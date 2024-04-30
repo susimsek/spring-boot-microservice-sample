@@ -14,4 +14,10 @@ public final class AuthoritiesConstants {
     public static final String USER = "ROLE_USER";
 
     public static final String ANONYMOUS = "ROLE_ANONYMOUS";
+
+    public static final String ACCOUNT = "ROLE_ACCOUNT";
+
+    public static final String CARD = "ROLE_CARD";
+
+    public static final String LOAN = "ROLE_LOAN";
 }

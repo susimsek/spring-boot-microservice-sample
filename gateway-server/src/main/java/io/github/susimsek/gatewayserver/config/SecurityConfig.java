@@ -1,8 +1,10 @@
 package io.github.susimsek.gatewayserver.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode.DENY;
 
 import io.github.susimsek.gatewayserver.excetion.security.SecurityProblemSupport;
+import io.github.susimsek.gatewayserver.security.AuthoritiesConstants;
 import io.github.susimsek.gatewayserver.security.oauth2.JwtGrantedAuthorityConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,17 +46,20 @@ public class SecurityConfig {
             .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .cors(withDefaults())
             .csrf(ServerHttpSecurity.CsrfSpec::disable)
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp.policyDirectives("script-src 'self'"))
+                .frameOptions(frameOptions -> frameOptions.mode(DENY)))
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport))
-            .authorizeExchange(exchanges ->
-                exchanges
-                    .pathMatchers("/*/v3/api-docs").permitAll()
+            .authorizeExchange(authz ->
+                authz
+                    .pathMatchers("/*/v3/api-docs/**").permitAll()
                     .pathMatchers("/*/actuator/**").permitAll()
                     .pathMatchers(HttpMethod.GET).permitAll()
-                    .pathMatchers("/eazybank/account/**", "/account/**").hasRole("ACCOUNT")
-                    .pathMatchers("/eazybank/card/**", "/card/**").hasRole("CARD")
-                    .pathMatchers("/eazybank/loan/**", "/loan/**").hasRole("LOAN"))
+                    .pathMatchers("/eazybank/account/**", "/account/**").hasAuthority(AuthoritiesConstants.ACCOUNT)
+                    .pathMatchers("/eazybank/card/**", "/card/**").hasAuthority(AuthoritiesConstants.CARD)
+                    .pathMatchers("/eazybank/loan/**", "/loan/**").hasAuthority(AuthoritiesConstants.LOAN))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter))
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport));
