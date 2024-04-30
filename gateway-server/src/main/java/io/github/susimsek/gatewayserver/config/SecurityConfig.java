@@ -54,7 +54,6 @@ public class SecurityConfig {
                 .accessDeniedHandler(problemSupport))
             .authorizeExchange(authz ->
                 authz
-                    .pathMatchers("/*/v3/api-docs/**").permitAll()
                     .pathMatchers("/*/actuator/**").permitAll()
                     .pathMatchers(HttpMethod.GET).permitAll()
                     .pathMatchers("/eazybank/account/**", "/account/**").hasAuthority(AuthoritiesConstants.ACCOUNT)

@@ -69,6 +69,11 @@ spring:
     default-property-inclusion: non_null
   reactor:
     context-propagation: auto
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:7080/realms/eazybank/protocol/openid-connect/certs
 
 eureka:
   instance:

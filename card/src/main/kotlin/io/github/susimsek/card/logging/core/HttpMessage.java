@@ -33,6 +33,8 @@ public interface HttpMessage {
     }
 
     default String getBodyAsString() throws IOException {
-        return new String(body(), StandardCharsets.UTF_8);
+        return Optional.ofNullable(body())
+            .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+            .orElse("");
     }
 }

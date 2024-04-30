@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean.class)
 @EnableJpaAuditing(
     dateTimeProviderRef = "dateTimeProvider",
-    auditorAwareRef = "auditAwareImpl")
+    auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 public class DatabaseConfig {
 

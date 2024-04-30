@@ -16,11 +16,11 @@
             <column name="created_at" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_by" type="VARCHAR(20)">
+            <column name="created_by" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="updated_at" type="DATETIME"/>
-            <column name="updated_by" type="VARCHAR(20)"/>
+            <column name="updated_by" type="VARCHAR(50)"/>
             <column name="mobile_number" type="VARCHAR(15)">
                 <constraints nullable="false"/>
             </column>

@@ -1,6 +1,5 @@
 package io.github.susimsek.account.repository;
 
-import io.github.susimsek.account.audit.AuditAwareImpl;
 import io.github.susimsek.account.config.DatabaseConfig;
 import io.github.susimsek.account.entity.Account;
 import jakarta.persistence.EntityManager;
