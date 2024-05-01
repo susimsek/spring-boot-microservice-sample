@@ -46,7 +46,7 @@ spring:
     fallback-to-system-locale: false
   graphql:
     websocket:
-      path: /graphql
+      path: /subscriptions
       connection-init-timeout: 60s
   cloud:
     function:
