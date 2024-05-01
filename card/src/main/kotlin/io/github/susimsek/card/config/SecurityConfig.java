@@ -48,7 +48,8 @@ public class SecurityConfig {
                 authz
                     .requestMatchers(mvc.pattern("/*/actuator/**")).permitAll()
                     .requestMatchers(HttpMethod.GET).permitAll()
-                    .requestMatchers(mvc.pattern("/api/card/**")).hasAuthority(AuthoritiesConstants.CARD))
+                    .requestMatchers(mvc.pattern("/api/card/**")).hasAuthority(AuthoritiesConstants.CARD)
+                    .anyRequest().authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter))
                 .authenticationEntryPoint(problemSupport)

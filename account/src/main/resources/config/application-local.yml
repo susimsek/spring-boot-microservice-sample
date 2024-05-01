@@ -34,6 +34,9 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+      oauth2:
+        enabled: true
+        clientRegistrationId: eazybank-client
     function:
       definition: updateCommunication;processAccountDebeziumEvent
     stream:
@@ -74,6 +77,26 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:7080/realms/eazybank/protocol/openid-connect/certs
+      client:
+        provider:
+          keycloak:
+            token-uri: http://localhost:7080/realms/eazybank/protocol/openid-connect/token
+        registration:
+          eazybank-client:
+            provider: keycloak
+            client-id: eazybank-callcenter
+            client-secret: MS39GUVz3NDaIfY5aBM3U9kw4Kw6MvsF
+            authorization-grant-type: client_credentials
+            scope: openid, profile, email
+  webclient:
+    httpclient:
+      config:
+        connect-timeout: 5000
+        read-timeout: 10000
+        write-timeout: 10000
+    oauth2:
+      clientRegistrationId: eazybank-client
+
 
 eureka:
   instance:

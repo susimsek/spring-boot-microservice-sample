@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HttpClientDefaults {
+public class WebClientDefaults {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Config {
