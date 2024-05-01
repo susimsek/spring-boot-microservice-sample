@@ -16,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @Slf4j
 @GraphQLController
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority(T(io.github.susimsek.card.security.AuthoritiesConstants).ADMIN)")
+@PreAuthorize("hasAuthority(T(io.github.susimsek.card.security.AuthoritiesConstants).CARD)")
 public class CardGraphQLController {
 
     private final CardService cardService;

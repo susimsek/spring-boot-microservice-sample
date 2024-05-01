@@ -16,7 +16,7 @@ public abstract class AbstractGraphQLExceptionHandler {
         return handleExceptionInternal(ex, ErrorType.BAD_REQUEST, env );
     }
 
-    protected GraphQLError handleExceptionInternal(Exception ex,
+    protected GraphQLError handleExceptionInternal(Throwable ex,
                                                    ErrorType errorType,
                                                    DataFetchingEnvironment env) {
         if (errorType == ErrorType.INTERNAL_ERROR) {
