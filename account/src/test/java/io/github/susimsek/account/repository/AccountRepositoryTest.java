@@ -2,6 +2,7 @@ package io.github.susimsek.account.repository;
 
 import io.github.susimsek.account.config.DatabaseConfig;
 import io.github.susimsek.account.entity.Account;
+import io.github.susimsek.account.security.SpringSecurityAuditorAware;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import({
     DatabaseConfig.class,
-    AuditAwareImpl.class
+    SpringSecurityAuditorAware.class
 })
 class AccountRepositoryTest {
 
