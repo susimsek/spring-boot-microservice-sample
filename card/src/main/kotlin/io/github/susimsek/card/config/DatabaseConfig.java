@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = "io.github.susimsek.card.repository")
 @EnableJpaAuditing(
     dateTimeProviderRef = "dateTimeProvider",
-    auditorAwareRef = "auditAwareImpl")
+    auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 public class DatabaseConfig {
 

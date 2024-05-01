@@ -46,6 +46,11 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:7080/realms/eazybank/protocol/openid-connect/certs
 
 eureka:
   instance:
