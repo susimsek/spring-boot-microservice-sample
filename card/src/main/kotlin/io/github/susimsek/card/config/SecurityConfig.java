@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(problemSupport))
             .authorizeHttpRequests(authz ->
                 authz
+                    .requestMatchers("/graphql", "/subscription").permitAll()
                     .requestMatchers(mvc.pattern("/*/actuator/**")).permitAll()
                     .requestMatchers(HttpMethod.GET).permitAll()
                     .requestMatchers(mvc.pattern("/api/card/**")).hasAuthority(AuthoritiesConstants.CARD)

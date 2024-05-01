@@ -11,10 +11,12 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.graphql.data.query.ScrollSubrange;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Slf4j
 @GraphQLController
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority(T(io.github.susimsek.card.security.AuthoritiesConstants).ADMIN)")
 public class CardGraphQLController {
 
     private final CardService cardService;

@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -92,6 +94,24 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, null,
             HttpStatusCode.valueOf(problem.getStatus()), request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    protected ResponseEntity<Object> handleAuthentication(AuthenticationException ex,
+                                                                        WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex,
+                                                                   WebRequest webRequest) {
+        var problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.FORBIDDEN, ex.getMessage());
+        return handleExceptionInternal(ex, problem, null,
+            HttpStatusCode.valueOf(problem.getStatus()), webRequest);
     }
 
 
