@@ -24,13 +24,13 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GraphQlWsAuthenticationInterceptor implements WebSocketGraphQlInterceptor {
+public class GraphQLWsAuthenticationInterceptor implements WebSocketGraphQlInterceptor {
 
     private static final String AUTHORIZATION_CONNECTION_INIT_PAYLOAD_VALUE_PREFIX = "Bearer ";
 
     private static final String AUTHORIZATION_CONNECTION_INIT_PAYLOAD_KEY_NAME = "Authorization";
     private static final String AUTHENTICATION_SESSION_ATTRIBUTE_KEY =
-        GraphQlWsAuthenticationInterceptor.class.getCanonicalName() + ".authentication";
+        GraphQLWsAuthenticationInterceptor.class.getCanonicalName() + ".authentication";
 
     private final AuthenticationProvider authenticationProvider;
 
