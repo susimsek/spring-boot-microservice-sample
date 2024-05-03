@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,8 +26,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class GraphQLWsAuthenticationInterceptor implements WebSocketGraphQlInterceptor {
-
-    private static final String AUTHORIZATION_CONNECTION_INIT_PAYLOAD_VALUE_PREFIX = "Bearer ";
 
     private static final String AUTHORIZATION_CONNECTION_INIT_PAYLOAD_KEY_NAME = "Authorization";
     private static final String AUTHENTICATION_SESSION_ATTRIBUTE_KEY =
@@ -76,8 +75,8 @@ public class GraphQLWsAuthenticationInterceptor implements WebSocketGraphQlInter
     private String resolveTokenFromPayload(Map<String, Object> connectionInitPayload) {
         String tokenFromPayload = (String) connectionInitPayload.get(AUTHORIZATION_CONNECTION_INIT_PAYLOAD_KEY_NAME);
         if (tokenFromPayload != null
-            && tokenFromPayload.startsWith(AUTHORIZATION_CONNECTION_INIT_PAYLOAD_VALUE_PREFIX)) {
-            return tokenFromPayload.substring(AUTHORIZATION_CONNECTION_INIT_PAYLOAD_VALUE_PREFIX.length());
+            && tokenFromPayload.startsWith(OAuth2AccessToken.TokenType.BEARER.getValue())) {
+            return tokenFromPayload.substring(OAuth2AccessToken.TokenType.BEARER.getValue().length());
         }
         return null;
     }
