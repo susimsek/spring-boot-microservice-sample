@@ -1,5 +1,7 @@
 package io.github.susimsek.card.config;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 import io.github.susimsek.card.exception.security.SecurityProblemSupport;
 import io.github.susimsek.card.security.AuthoritiesConstants;
 import io.github.susimsek.card.security.oauth2.JwtGrantedAuthorityConverter;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -44,13 +47,15 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .headers(headers -> headers
-                .contentSecurityPolicy(csp -> csp.policyDirectives("script-src 'self'")))
+                .contentSecurityPolicy(csp -> csp.policyDirectives("script-src 'self' 'unsafe-inline'"))
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport))
             .authorizeHttpRequests(authz ->
                 authz
-                    .requestMatchers("/graphql", "/subscription").permitAll()
+                    .requestMatchers(mvc.pattern("/graphql"), mvc.pattern("/subscription")).permitAll()
+                    .requestMatchers(toH2Console()).permitAll()
                     .requestMatchers(mvc.pattern("/*/actuator/**")).permitAll()
                     .requestMatchers(HttpMethod.GET).permitAll()
                     .requestMatchers(mvc.pattern("/api/card/**")).hasAuthority(AuthoritiesConstants.CARD)
