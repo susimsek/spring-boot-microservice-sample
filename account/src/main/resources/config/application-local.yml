@@ -64,6 +64,16 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  task:
+    execution:
+      thread-name-prefix: account-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      pool:
+        size: 2
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -150,6 +160,7 @@ account:
 springdoc:
   oAuthFlow:
     tokenUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/token
+    authorizationUrl: http://localhost:7080/realms/eazybank/protocol/openid-connect/auth
 
 management:
   tracing:

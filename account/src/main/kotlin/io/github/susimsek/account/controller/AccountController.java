@@ -82,10 +82,11 @@ public class AccountController {
     )
     @PostMapping("/account")
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customer) {
-        accountService.createAccount(customer);
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(new ResponseDTO(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201));
+        return accountService.createAccount(customer)
+            .thenApply(ignore -> ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ResponseDTO(AccountConstants.STATUS_201, AccountConstants.MESSAGE_201)))
+            .join();
     }
 
     @Operation(

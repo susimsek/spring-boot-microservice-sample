@@ -3,10 +3,11 @@ package io.github.susimsek.account.service;
 import io.github.susimsek.account.dto.AccountDTO;
 import io.github.susimsek.account.dto.CustomerDTO;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface AccountService {
 
-    void createAccount(CustomerDTO customer);
+    CompletableFuture<Void> createAccount(CustomerDTO customer);
 
     CustomerDTO fetchAccount(String mobileNumber);
 

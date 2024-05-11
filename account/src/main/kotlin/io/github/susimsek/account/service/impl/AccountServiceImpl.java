@@ -17,10 +17,12 @@ import io.github.susimsek.account.repository.AccountRepository;
 import io.github.susimsek.account.repository.CustomerRepository;
 import io.github.susimsek.account.service.AccountService;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.history.Revision;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,15 +39,17 @@ public class AccountServiceImpl implements AccountService {
     private final StreamBridge streamBridge;
 
     @Override
-    public void createAccount(CustomerDTO customer) {
+    @Async
+    public CompletableFuture<Void> createAccount(CustomerDTO customer) {
         if (customerRepository.existsByMobileNumber(customer.mobileNumber())) {
             throw new CustomerAlreadyExistsException("Customer already registered with given mobileNumber "
                 + customer.mobileNumber());
         }
         var customerEntity = customerMapper.toEntity(customer);
         var savedCustomer = customerRepository.save(customerEntity);
-        var savedAccount = accountRepository.save(createNewAccount(savedCustomer));
-        sendCommunication(savedAccount, savedCustomer);
+        return CompletableFuture.completedFuture(
+            accountRepository.save(createNewAccount(savedCustomer)))
+            .thenAccept(savedAccount ->   sendCommunication(savedAccount, savedCustomer));
     }
 
     @Override

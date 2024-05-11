@@ -11,6 +11,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -128,6 +129,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus.NOT_FOUND, ex.getMessage());
         return handleExceptionInternal(ex, problem, null,
             HttpStatusCode.valueOf(problem.getStatus()), webRequest);
+    }
+
+    @ExceptionHandler(CompletionException.class)
+    public ResponseEntity<Object> handleCompletionException(
+        CompletionException ex,
+        WebRequest webRequest) {
+        if (ex.getCause() instanceof CustomerAlreadyExistsException e) {
+            return handleCustomerAlreadyExistsException(e, webRequest);
+        }
+        return handleAll(ex, webRequest);
     }
 
     @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
