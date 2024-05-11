@@ -46,6 +46,16 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  task:
+    execution:
+      thread-name-prefix: account-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      pool:
+        size: 2
   security:
     oauth2:
       resourceserver:
