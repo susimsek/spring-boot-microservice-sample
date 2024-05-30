@@ -15,6 +15,7 @@ import io.github.susimsek.account.aspect.LoggingAspect;
 import io.github.susimsek.account.constants.Constants;
 import io.github.susimsek.account.logging.core.Sink;
 import io.github.susimsek.account.logging.feign.DefaultFeignLogger;
+import io.github.susimsek.account.logging.restclient.LoggingInterceptor;
 import io.github.susimsek.account.logging.servlet.LoggingFilter;
 import io.github.susimsek.account.logging.webclient.LoggingExchangeFilterFunction;
 import jakarta.servlet.Filter;
@@ -31,6 +32,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
+import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 
 @Configuration(proxyBeanMethods = false)
@@ -42,6 +44,7 @@ public class LoggingConfig {
     private final String appName;
 
     private static final String CUSTOMIZER_NAME = "loggingClientExchangeFunction";
+    private static final String INTERCEPTOR_NAME = "loggingInterceptor";
     private static final String FILTER_NAME = "logging.filter";
 
     public LoggingConfig(
@@ -112,6 +115,13 @@ public class LoggingConfig {
     @ConditionalOnClass(ExchangeFunction.class)
     public LoggingExchangeFilterFunction loggingClientExchangeFunction(Sink sink) {
         return new LoggingExchangeFilterFunction(sink);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = INTERCEPTOR_NAME)
+    @ConditionalOnClass(ClientHttpRequestExecution.class)
+    public LoggingInterceptor loggingInterceptor(Sink sink) {
+        return new LoggingInterceptor(sink);
     }
 
     static FilterRegistrationBean<?> newFilter(final Filter filter, final String filterName, final int order) {
